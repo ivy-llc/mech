@@ -11,6 +11,44 @@ from ivy_mech.orientation import quaternion as _ivy_q
 MIN_DENOMINATOR = 1e-12
 
 
+def rot_mat_to_axis_angle(rot_mat,  dev=None, f=None):
+    """
+    Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to rotation axis unit vector
+    :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
+
+    :param rot_mat: Rotation matrix *[batch_shape,3,3]*
+    :type rot_mat: array
+    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev: str, optional
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: Rotation axis unit vector and angle *[batch_shape,4]*
+    """
+    quat = _ivy_q.rot_mat_to_quaternion(rot_mat, f)
+    return quaternion_to_axis_angle(quat, dev, f)
+
+
+def euler_to_axis_angle(euler_angles, convention='zyx', batch_shape=None, dev=None, f=None):
+    """
+    Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation axis unit vector
+    :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
+
+    :param euler_angles: Input euler angles *[batch_shape,3]*
+    :type euler_angles: array
+    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
+    :type convention: str, optional
+    :param batch_shape: Shape of batch. Inferred from inputs if None.
+    :type batch_shape: sequence of ints, optional
+    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev: str, optional
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: Rotation axis unit vector and angle *[batch_shape,4]*
+    """
+    quat = _ivy_q.euler_to_quaternion(euler_angles, convention, batch_shape, f)
+    return quaternion_to_axis_angle(quat, dev, f)
+
+
 def quaternion_to_axis_angle(quaternion, dev=None, f=None):
     """
     Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation axis unit vector
@@ -104,3 +142,21 @@ def quaternion_to_rotation_vector(quaternion, dev=None, f=None):
 
     # BS x 3
     return vector_and_angle[..., :-1] * vector_and_angle[..., -1:]
+
+
+def get_random_axis_angle(f, batch_shape=None):
+    """
+    Generate random axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
+    and rotation angle :math:`θ`
+    :param f: Machine learning framework.
+    :type f: ml_framework
+    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
+    :type batch_shape: sequence of ints, optional
+    :return: Random rotation axis unit vector and angle *[batch_shape,4]*
+    """
+
+    if f is None:
+        raise Exception('framework f must be specified for calling ivy.get_random_euler()')
+
+    return quaternion_to_axis_angle(
+        _ivy_q.get_random_quaternion(f, batch_shape=batch_shape))

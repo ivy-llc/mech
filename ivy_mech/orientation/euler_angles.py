@@ -3,6 +3,7 @@ Collection of Rotation Conversion Functions to Euler Angles Format
 """
 
 # global
+import math as _math
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -410,3 +411,43 @@ def quaternion_to_euler(quaternion, convention='zyx', f=None):
 
     # BS x 3
     return rot_mat_to_euler(_ivy_rot_mat.quaternion_to_rot_mat(quaternion, f=f), convention, f=f)
+
+
+def axis_angle_to_euler(axis_angle, convention='zyx', f=None):
+    """
+    Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    rotation angle :math:`θ` to :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
+
+    :param axis_angle: Input axis_angle *[batch_shape,4]*
+    :type axis_angle: array
+    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
+    :type convention: str, optional
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: zyx Euler angles *[batch_shape,3]*
+    """
+
+    f = _get_framework(axis_angle, f=f)
+
+    # BS x 3
+    return rot_mat_to_euler(_ivy_rot_mat.axis_angle_to_rot_mat(axis_angle, f=f), convention, f=f)
+
+
+def get_random_euler(f, batch_shape=None):
+    """
+    Generate random :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
+    :param f: Machine learning framework.
+    :type f: ml_framework
+    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
+    :type batch_shape: sequence of ints, optional
+    :return: Random euler *[batch_shape,3]*
+    """
+
+    if f is None:
+        raise Exception('framework f must be specified for calling ivy.get_random_euler()')
+
+    if batch_shape is None:
+        batch_shape = []
+
+    # BS x 3
+    return f.random_uniform(0.0, _math.pi * 2, list(batch_shape) + [3])

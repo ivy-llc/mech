@@ -13,6 +13,16 @@ from ivy_mech_tests.test_pose.pose_data import PoseTestData
 ptd = PoseTestData()
 
 
+def test_axis_angle_pose_to_quaternion_pose():
+    for lib, call in helpers.calls:
+        if call is helpers.mx_graph_call:
+            # mxnet symbolic does not fully support array slicing
+            continue
+        assert np.allclose(call(ivy_mech.axis_angle_pose_to_quaternion_pose, ptd.axis_angle_pose), ptd.quaternion_pose, atol=1e-6)
+        assert np.allclose(call(ivy_mech.axis_angle_pose_to_quaternion_pose, ptd.batched_axis_angle_pose)[0],
+                           ptd.quaternion_pose, atol=1e-6)
+
+
 def test_mat_pose_to_quaternion_pose():
     for lib, call in helpers.calls:
         if call is helpers.mx_graph_call:

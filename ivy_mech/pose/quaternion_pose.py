@@ -10,6 +10,28 @@ from ivy_mech.orientation import quaternion as _ivy_quat
 from ivy_mech.pose import matrix_pose as _ivy_mat_pose
 
 
+def axis_angle_pose_to_quaternion_pose(axis_angle_pose, f=None):
+    """
+    Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]`
+    to quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`.
+
+    :param axis_angle_pose: Axis-angle pose *[batch_shape,7]*
+    :type axis_angle_pose: array
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: Quaternion pose *[batch_shape,7]*
+    """
+
+    f = _get_framework(axis_angle_pose, f=f)
+
+    # BS x 3
+    translation = axis_angle_pose[..., :3]
+
+    # BS x 7
+    return f.concatenate((translation, _ivy_quat.axis_angle_to_quaternion(
+        axis_angle_pose[..., 3:], f=f)), -1)
+
+
 def mat_pose_to_quaternion_pose(matrix, f=None):
     """
     Convert matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}` to quaternion pose

@@ -245,3 +245,36 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev=No
 
     # BS x 3 x 3
     return f.pinv(f.concatenate((x, y, z), -2))
+
+
+def axis_angle_to_rot_mat(axis_angle, f=None):
+    """
+    Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    rotation angle :math:`θ` to rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
+
+    :param axis_angle: Axis-angle *[batch_shape,4]*
+    :type axis_angle: array
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: Rotation matrix *[batch_shape,3,3]*
+    """
+
+    return quaternion_to_rot_mat(
+        _ivy_quat.axis_angle_to_quaternion(axis_angle, f=f), f)
+
+
+def get_random_rot_mat(f, batch_shape=None):
+    """
+    Generate random rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
+    :param f: Machine learning framework.
+    :type f: ml_framework
+    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
+    :type batch_shape: sequence of ints, optional
+    :return: Random rotation matrix *[batch_shape,3,3]*
+    """
+
+    if f is None:
+        raise Exception('framework f must be specified for calling ivy.get_random_euler()')
+
+    return quaternion_to_rot_mat(
+        _ivy_quat.get_random_quaternion(f, batch_shape=batch_shape))

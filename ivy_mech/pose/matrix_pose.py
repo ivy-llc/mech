@@ -88,3 +88,25 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose, f=None):
 
     # BS x 3 x 4
     return f.concatenate((rot_mat, f.expand_dims(rot_vec_pose[..., 0:3], -1)), -1)
+
+
+def axis_angle_pose_to_mat_pose(axis_angle_pose, f=None):
+    """
+    Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]` to
+    matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.
+
+    :param axis_angle_pose: Quaternion pose *[batch_shape,7]*
+    :type axis_angle_pose: array
+    :param f: Machine learning framework. Inferred from inputs if None.
+    :type f: ml_framework, optional
+    :return: Matrix pose *[batch_shape,3,4]*
+    """
+
+    f = _get_framework(axis_angle_pose, f=f)
+
+    # BS x 3 x 3
+    rot_mat = _ivy_rot_mat.axis_angle_to_rot_mat(axis_angle_pose[..., 3:])
+
+    # BS x 3 x 4
+    return f.concatenate(
+        (rot_mat, f.expand_dims(axis_angle_pose[..., :3], -1)), -1)

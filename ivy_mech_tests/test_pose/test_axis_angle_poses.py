@@ -13,6 +13,15 @@ from ivy_mech_tests.test_pose.pose_data import PoseTestData
 ptd = PoseTestData()
 
 
+def test_euler_pose_to_axis_angle_pose():
+    for lib, call in helpers.calls:
+        if call is helpers.mx_graph_call:
+            # mxnet symbolic does not fully support array slicing
+            continue
+        assert np.allclose(call(ivy_mech.euler_pose_to_axis_angle_pose, ptd.euler_pose), ptd.axis_angle_pose, atol=1e-6)
+        assert np.allclose(call(ivy_mech.euler_pose_to_axis_angle_pose, ptd.batched_euler_pose)[0], ptd.axis_angle_pose, atol=1e-6)
+
+
 def test_mat_pose_to_rot_vec_pose():
     for lib, call in helpers.calls:
         if call is helpers.mx_graph_call:
