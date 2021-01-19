@@ -1,0 +1,26 @@
+name: pypi-tests
+on: [push]
+jobs:
+  run-pypi-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️Ivy Mech
+        uses: actions/checkout@v2
+        with:
+          path: ivy_mech
+          persist-credentials: false
+
+      - name: Install Dependencies
+        run: |
+          pip3 install --upgrade pip
+          pip3 install wheel setuptools pytest
+          pip3 install -r ivy_mech/requirements.txt
+          pip3 install -r ivy_mech/demos/requirements.txt
+          pip3 install jax jaxlib tensorflow tensorflow-addons torch mxnet
+          pip3 install torch-scatter -f https://pytorch-geometric.com/whl/torch-1.7.0+cu102.html
+          pip3 install ivy-mech
+
+      - name: Run Tests
+        run: |
+          mv ivy_mech/ivy_mech_tests ivy_mech_tests
+          python3 -m pytest ivy_mech_tests/ --ignore ivy_mech_tests/test_demos.py
