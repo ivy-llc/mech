@@ -3,6 +3,7 @@ Collection of Pose Conversion Functions to Axis-Angle Pose Format
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -30,7 +31,7 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
     """
     f = _get_framework(euler_pose, f=f)
     aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, dev, f)
-    return f.concatenate([euler_pose[..., :3], aa], -1)
+    return ivy.concatenate([euler_pose[..., :3], aa], -1, f=f)
 
 
 # noinspection PyUnresolvedReferences
@@ -59,7 +60,7 @@ def mat_pose_to_rot_vec_pose(matrix, f=None):
     rot_vector = _ivy_aa.quaternion_to_rotation_vector(quaternion, f=f)
 
     # BS x 6
-    return f.concatenate((translation, rot_vector), -1)
+    return ivy.concatenate((translation, rot_vector), -1, f=f)
 
 
 # noinspection PyUnresolvedReferences
@@ -85,4 +86,4 @@ def quaternion_pose_to_rot_vec_pose(quat_pose, f=None):
     rot_vec = vector_and_angle[..., :-1] * vector_and_angle[..., -1:]
 
     # BS x 6
-    return f.concatenate((quat_pose[..., 0:3], rot_vec), -1)
+    return ivy.concatenate((quat_pose[..., 0:3], rot_vec), -1, f=f)

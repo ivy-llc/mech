@@ -3,6 +3,7 @@ Collection of Pose Conversion Functions to Matrix Format
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -29,10 +30,10 @@ def quaternion_pose_to_mat_pose(quat_pose, f=None):
     rot_mat = _ivy_rot_mat.quaternion_to_rot_mat(quat_pose[..., 3:], f=f)
 
     # BS x 3 x 1
-    rhs = f.expand_dims(quat_pose[..., 0:3], -1)
+    rhs = ivy.expand_dims(quat_pose[..., 0:3], -1, f=f)
 
     # BS x 3 x 4
-    return f.concatenate((rot_mat, rhs), -1)
+    return ivy.concatenate((rot_mat, rhs), -1, f=f)
 
 
 def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None, f=None):
@@ -62,7 +63,7 @@ def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None, f=Non
     rot_mat = _ivy_rot_mat.euler_to_rot_mat(euler_pose[..., 3:], convention, batch_shape, f=f)
 
     # BS x 3 x 4
-    return f.concatenate((rot_mat, f.expand_dims(euler_pose[..., 0:3], -1)), -1)
+    return ivy.concatenate((rot_mat, ivy.expand_dims(euler_pose[..., 0:3], -1, f=f)), -1, f=f)
 
 
 def rot_vec_pose_to_mat_pose(rot_vec_pose, f=None):
@@ -87,7 +88,7 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose, f=None):
     rot_mat = _ivy_rot_mat.quaternion_to_rot_mat(quaternion, f=f)
 
     # BS x 3 x 4
-    return f.concatenate((rot_mat, f.expand_dims(rot_vec_pose[..., 0:3], -1)), -1)
+    return ivy.concatenate((rot_mat, ivy.expand_dims(rot_vec_pose[..., 0:3], -1, f=f)), -1, f=f)
 
 
 def axis_angle_pose_to_mat_pose(axis_angle_pose, f=None):
@@ -108,5 +109,5 @@ def axis_angle_pose_to_mat_pose(axis_angle_pose, f=None):
     rot_mat = _ivy_rot_mat.axis_angle_to_rot_mat(axis_angle_pose[..., 3:])
 
     # BS x 3 x 4
-    return f.concatenate(
-        (rot_mat, f.expand_dims(axis_angle_pose[..., :3], -1)), -1)
+    return ivy.concatenate(
+        (rot_mat, ivy.expand_dims(axis_angle_pose[..., :3], -1, f=f)), -1, f=f)

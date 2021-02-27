@@ -3,6 +3,7 @@ Collection of Pose Conversion Functions to Quaternion Pose Format
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -28,8 +29,8 @@ def axis_angle_pose_to_quaternion_pose(axis_angle_pose, f=None):
     translation = axis_angle_pose[..., :3]
 
     # BS x 7
-    return f.concatenate((translation, _ivy_quat.axis_angle_to_quaternion(
-        axis_angle_pose[..., 3:], f=f)), -1)
+    return ivy.concatenate((translation, _ivy_quat.axis_angle_to_quaternion(
+        axis_angle_pose[..., 3:], f=f)), -1, f=f)
 
 
 def mat_pose_to_quaternion_pose(matrix, f=None):
@@ -48,8 +49,8 @@ def mat_pose_to_quaternion_pose(matrix, f=None):
     f = _get_framework(matrix, f=f)
 
     # BS x 7
-    return f.concatenate((matrix[..., 0:3, -1],
-                             _ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3, 0:3], f=f)), -1)
+    return ivy.concatenate((matrix[..., 0:3, -1],
+                             _ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3, 0:3], f=f)), -1, f=f)
 
 
 def euler_pose_to_quaternion_pose(euler_pose, convention='zyx', batch_shape=None, f=None):
@@ -107,4 +108,4 @@ def increment_quaternion_pose_with_velocity(quat_pose, quat_vel, delta_t, f=None
     new_quaternion = _ivy_quat.hamilton_product(current_quaternion, quaternion_transform, f=f)
 
     # BS x 7
-    return f.concatenate((quat_pose[..., 0:3] + quat_vel[..., 0:3] * delta_t, new_quaternion), -1)
+    return ivy.concatenate((quat_pose[..., 0:3] + quat_vel[..., 0:3] * delta_t, new_quaternion), -1, f=f)

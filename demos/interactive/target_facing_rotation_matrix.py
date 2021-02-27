@@ -55,13 +55,13 @@ class Simulator(BaseSimulator):
                 self._vision_sensors[i].remove()
                 self._vision_sensor_bodies[i].remove()
                 [item.remove() for item in self._vision_sensor_rays[i]]
-            self._vision_sensor_0.set_position([-1, 0.6, 1.45])
-            self._vision_sensor_0.set_orientation([i*math.pi/180 for i in [-145, -25, -180]])
+            self._vision_sensor_body_0.set_position([-1, 0.6, 1.45])
+            self._vision_sensor_body_0.set_orientation([i*math.pi/180 for i in [-145, -25, -180]])
             self._default_camera.set_position(np.array([-1.1013, -2.1, 1.9484]))
             self._default_camera.set_orientation(np.array([i*np.pi/180 for i in [-114.69, 13.702, -173.78]]))
 
             # public objects
-            self.cam = SimObj(self._vision_sensor_0, f)
+            self.cam = SimObj(self._vision_sensor_body_0, f)
             self.target = SimObj(self._plant, f)
 
             # prompt input
@@ -97,10 +97,10 @@ def main(interactive=True, try_use_sim=True, f=None):
     f = choose_random_framework() if f is None else f
     sim = Simulator(interactive, try_use_sim, f)
     cam_pos = sim.cam.get_pos()
-    iteratiosn = 250 if sim.with_pyrep else 1
+    iterations = 250 if sim.with_pyrep else 1
     msg = 'tracking plant pot for 250 simulator steps...' if sim.with_pyrep else ''
     print(msg)
-    for i in range(iteratiosn):
+    for i in range(iterations):
         target_pos = sim.target.get_pos()
         tfrm = ivy_mech.target_facing_rotation_matrix(cam_pos, target_pos)
         sim.cam.set_rot_mat(tfrm)

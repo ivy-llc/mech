@@ -3,6 +3,7 @@ Collection of Pose Conversion Functions to Euler Pose Format
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -34,7 +35,7 @@ def mat_pose_to_euler_pose(matrix, convention='zyx', f=None):
     euler_angles = _ivy_ea.rot_mat_to_euler(matrix[..., 0:3], convention, f=f)
 
     # BS x 6
-    return f.concatenate((translation, euler_angles), -1)
+    return ivy.concatenate((translation, euler_angles), -1, f=f)
 
 
 # noinspection PyUnresolvedReferences
@@ -62,7 +63,7 @@ def quaternion_pose_to_euler_pose(quaternion_pose, convention='zyx', f=None):
     euler_angles = _ivy_ea.quaternion_to_euler(quaternion_pose[..., 3:], convention, f=f)
 
     # BS x 6
-    return f.concatenate((translation, euler_angles), -1)
+    return ivy.concatenate((translation, euler_angles), -1, f=f)
 
 
 # noinspection PyUnresolvedReferences
@@ -89,4 +90,4 @@ def axis_angle_pose_to_euler_pose(axis_angle_pose, convention='zyx', f=None):
     euler_angles = _ivy_ea.axis_angle_to_euler(axis_angle_pose[..., 3:], convention, f=f)
 
     # BS x 6
-    return f.concatenate((translation, euler_angles), -1)
+    return ivy.concatenate((translation, euler_angles), -1, f=f)

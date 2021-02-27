@@ -3,6 +3,7 @@ Collection of Position Co-ordinate Conversion Functions
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 MIN_DENOMINATOR = 1e-12
@@ -28,12 +29,12 @@ def polar_to_cartesian_coords(polar_coords, f=None):
     theta = polar_coords[..., 1:2]
     r = polar_coords[..., 2:3]
 
-    x = r * f.sin(theta) * f.cos(phi)
-    y = r * f.sin(theta) * f.sin(phi)
-    z = r * f.cos(theta)
+    x = r * ivy.sin(theta, f=f) * ivy.cos(phi, f=f)
+    y = r * ivy.sin(theta, f=f) * ivy.sin(phi, f=f)
+    z = r * ivy.cos(theta, f=f)
 
     # BS x 3
-    return f.concatenate((x, y, z), -1)
+    return ivy.concatenate((x, y, z), -1, f=f)
 
 
 def cartesian_to_polar_coords(cartesian_coords, f=None):
@@ -57,8 +58,8 @@ def cartesian_to_polar_coords(cartesian_coords, f=None):
     z = cartesian_coords[..., 2:3]
 
     r = (x**2 + y**2 + z**2)**0.5
-    phi = f.atan2(y, x)
-    theta = f.acos(z / (r + MIN_DENOMINATOR))
+    phi = ivy.atan2(y, x, f=f)
+    theta = ivy.acos(z / (r + MIN_DENOMINATOR), f=f)
 
     # BS x 3
-    return f.concatenate((phi, theta, r), -1)
+    return ivy.concatenate((phi, theta, r), -1, f=f)

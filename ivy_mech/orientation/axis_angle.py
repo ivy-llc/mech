@@ -3,6 +3,7 @@ Collection of Rotation Conversion Functions to Axis-Angle Format
 """
 
 # global
+import ivy
 from ivy.framework_handler import get_framework as _get_framework
 
 # local
@@ -24,8 +25,9 @@ def rot_mat_to_axis_angle(rot_mat,  dev=None, f=None):
     :type f: ml_framework, optional
     :return: Rotation axis unit vector and angle *[batch_shape,4]*
     """
-    quat = _ivy_q.rot_mat_to_quaternion(rot_mat, f)
-    return quaternion_to_axis_angle(quat, dev, f)
+    f = _get_framework(rot_mat, f=f)
+    quat = _ivy_q.rot_mat_to_quaternion(rot_mat, f=f)
+    return quaternion_to_axis_angle(quat, dev, f=f)
 
 
 def euler_to_axis_angle(euler_angles, convention='zyx', batch_shape=None, dev=None, f=None):
@@ -45,8 +47,9 @@ def euler_to_axis_angle(euler_angles, convention='zyx', batch_shape=None, dev=No
     :type f: ml_framework, optional
     :return: Rotation axis unit vector and angle *[batch_shape,4]*
     """
-    quat = _ivy_q.euler_to_quaternion(euler_angles, convention, batch_shape, f)
-    return quaternion_to_axis_angle(quat, dev, f)
+    f = _get_framework(euler_angles, f=f)
+    quat = _ivy_q.euler_to_quaternion(euler_angles, convention, batch_shape, f=f)
+    return quaternion_to_axis_angle(quat, dev, f=f)
 
 
 def quaternion_to_axis_angle(quaternion, dev=None, f=None):
@@ -67,7 +70,7 @@ def quaternion_to_axis_angle(quaternion, dev=None, f=None):
     f = _get_framework(quaternion, f=f)
 
     if dev is None:
-        dev = f.get_device(quaternion)
+        dev = ivy.get_device(quaternion, f=f)
 
     # BS x 1
     e1 = quaternion[..., 0:1]
@@ -76,16 +79,16 @@ def quaternion_to_axis_angle(quaternion, dev=None, f=None):
     n = quaternion[..., 3:4]
 
     # BS x 1
-    theta = 2 * f.acos(f.clip(n, 0, 1))
-    vector_x = f.where(theta != 0, e1 / (f.sin(theta / 2) + MIN_DENOMINATOR),
-                          f.zeros_like(theta, dev=dev))
-    vector_y = f.where(theta != 0, e2 / (f.sin(theta / 2) + MIN_DENOMINATOR),
-                          f.zeros_like(theta, dev=dev))
-    vector_z = f.where(theta != 0, e3 / (f.sin(theta / 2) + MIN_DENOMINATOR),
-                          f.zeros_like(theta, dev=dev))
+    theta = 2 * ivy.acos(ivy.clip(n, 0, 1, f=f), f=f)
+    vector_x = ivy.where(theta != 0, e1 / (ivy.sin(theta / 2, f=f) + MIN_DENOMINATOR),
+                          ivy.zeros_like(theta, dev=dev, f=f), f=f)
+    vector_y = ivy.where(theta != 0, e2 / (ivy.sin(theta / 2, f=f) + MIN_DENOMINATOR),
+                          ivy.zeros_like(theta, dev=dev, f=f), f=f)
+    vector_z = ivy.where(theta != 0, e3 / (ivy.sin(theta / 2, f=f) + MIN_DENOMINATOR),
+                          ivy.zeros_like(theta, dev=dev, f=f), f=f)
 
     # BS x 4
-    return f.concatenate((vector_x, vector_y, vector_z, theta), -1)
+    return ivy.concatenate((vector_x, vector_y, vector_z, theta), -1, f=f)
 
 
 def quaternion_to_polar_axis_angle(quaternion, dev=None, f=None):
@@ -106,17 +109,17 @@ def quaternion_to_polar_axis_angle(quaternion, dev=None, f=None):
     f = _get_framework(quaternion, f=f)
 
     if dev is None:
-        dev = f.get_device(quaternion)
+        dev = ivy.get_device(quaternion, f=f)
 
     # BS x 4
     vector_and_angle = quaternion_to_axis_angle(quaternion, dev)
 
     # BS x 1
-    theta = f.acos(vector_and_angle[..., 2:3])
-    phi = f.atan2(vector_and_angle[..., 1:2], vector_and_angle[..., 0:1])
+    theta = ivy.acos(vector_and_angle[..., 2:3], f=f)
+    phi = ivy.atan2(vector_and_angle[..., 1:2], vector_and_angle[..., 0:1], f=f)
 
     # BS x 3
-    return f.concatenate((theta, phi, vector_and_angle[..., -1:]), -1)
+    return ivy.concatenate((theta, phi, vector_and_angle[..., -1:]), -1, f=f)
 
 
 # noinspection PyUnusedLocal
@@ -135,7 +138,7 @@ def quaternion_to_rotation_vector(quaternion, dev=None, f=None):
     """
 
     if dev is None:
-        dev = f.get_device(quaternion)
+        dev = ivy.get_device(quaternion, f=f)
 
     # BS x 4
     vector_and_angle = quaternion_to_axis_angle(quaternion, dev)
