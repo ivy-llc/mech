@@ -3,9 +3,8 @@ Collection of Rotation Conversion Functions to Quaternion Format
 """
 
 # global
-import ivy
+import ivy as _ivy
 import math as _math
-from ivy.framework_handler import get_framework as _get_framework
 
 # local
 from ivy_mech.orientation import rotation_matrix as _ivy_rot_mat
@@ -18,36 +17,30 @@ MIN_DENOMINATOR = 1e-12
 # ---------------------------#
 
 
-def axis_angle_to_quaternion(axis_angle, f=None):
+def axis_angle_to_quaternion(axis_angle):
     """
     Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_
 
-    :param axis: Axis to rotate about *[batch_shape,3]*
-    :type axis: array
-    :param angle: Angle to rotate about the rotation axis *[batch_shape,1]*
-    :type angle: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
+    :param axis_angle: Axis to rotate about and angle to rotate *[batch_shape,4]*
+    :type axis_angle: array
     :return: Quaternion *[batch_shape,4]*
     """
 
-    f = _get_framework(axis_angle, f=f)
-
     # BS x 1
     angle = axis_angle[..., -1:]
-    n = ivy.cos(angle / 2, f=f)
-    e1 = ivy.sin(angle / 2, f=f) * axis_angle[..., 0:1]
-    e2 = ivy.sin(angle / 2, f=f) * axis_angle[..., 1:2]
-    e3 = ivy.sin(angle / 2, f=f) * axis_angle[..., 2:3]
+    n = _ivy.cos(angle / 2)
+    e1 = _ivy.sin(angle / 2) * axis_angle[..., 0:1]
+    e2 = _ivy.sin(angle / 2) * axis_angle[..., 1:2]
+    e3 = _ivy.sin(angle / 2) * axis_angle[..., 2:3]
 
     # BS x 4
-    quaternion = ivy.concatenate((e1, e2, e3, n), -1, f=f)
+    quaternion = _ivy.concatenate((e1, e2, e3, n), -1)
     return quaternion
 
 
-def polar_axis_angle_to_quaternion(polar_axis_angle, f=None):
+def polar_axis_angle_to_quaternion(polar_axis_angle):
     """
     Convert polar axis-angle representation, which constitutes the elevation and azimuth angles of the axis as well
     as the rotation angle :math:`\mathbf{θ}_{paa} = [ϕ_e, ϕ_a, θ]`, to quaternion form
@@ -56,29 +49,25 @@ def polar_axis_angle_to_quaternion(polar_axis_angle, f=None):
 
     :param polar_axis_angle: Polar axis angle representation *[batch_shape,3]*
     :type polar_axis_angle: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Quaternion *[batch_shape,4]*
     """
-
-    f = _get_framework(polar_axis_angle, f=f)
 
     # BS x 1
     theta = polar_axis_angle[..., 0:1]
     phi = polar_axis_angle[..., 1:2]
     angle = polar_axis_angle[..., 2:3]
-    x = ivy.sin(theta, f=f) * ivy.cos(phi, f=f)
-    y = ivy.sin(theta, f=f) * ivy.sin(phi, f=f)
-    z = ivy.cos(theta, f=f)
+    x = _ivy.sin(theta) * _ivy.cos(phi)
+    y = _ivy.sin(theta) * _ivy.sin(phi)
+    z = _ivy.cos(theta)
 
     # BS x 3
-    vector = ivy.concatenate((x, y, z), -1, f=f)
+    vector = _ivy.concatenate((x, y, z), -1)
 
     # BS x 4
-    return axis_angle_to_quaternion(ivy.concatenate([vector, angle], -1, f=f))
+    return axis_angle_to_quaternion(_ivy.concatenate([vector, angle], -1))
 
 
-def rot_mat_to_quaternion(rot_mat, f=None):
+def rot_mat_to_quaternion(rot_mat):
     """
     Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
@@ -86,12 +75,8 @@ def rot_mat_to_quaternion(rot_mat, f=None):
 
     :param rot_mat: Rotation matrix *[batch_shape,3,3]*
     :type rot_mat: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Quaternion *[batch_shape,4]*
     """
-
-    f = _get_framework(rot_mat, f=f)
 
     # BS x 1 x 1
     tr = rot_mat[..., 0:1, 0:1] + rot_mat[..., 1:2, 1:2] + rot_mat[..., 2:3, 2:3]
@@ -105,7 +90,7 @@ def rot_mat_to_quaternion(rot_mat, f=None):
     qz_1 = (rot_mat[..., 1:2, 0:1] - rot_mat[..., 0:1, 1:2]) / (s_1 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_1 = ivy.concatenate((qx_1, qy_1, qz_1, qw_1), -2, f=f)
+    quat_1 = _ivy.concatenate((qx_1, qy_1, qz_1, qw_1), -2)
 
     # elif (m[:,0,0] > m[:,1,1]) and (m[:,0,0] > m[:,2,2])
     # BS x 1 x 1
@@ -116,7 +101,7 @@ def rot_mat_to_quaternion(rot_mat, f=None):
     qz_2 = (rot_mat[..., 0:1, 2:3] + rot_mat[..., 2:3, 0:1]) / (s_2 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_2 = ivy.concatenate((qx_2, qy_2, qz_2, qw_2), -2, f=f)
+    quat_2 = _ivy.concatenate((qx_2, qy_2, qz_2, qw_2), -2)
 
     # elif m[:,1,1] > m[:,2,2]
     # BS x 1 x 1
@@ -127,7 +112,7 @@ def rot_mat_to_quaternion(rot_mat, f=None):
     qz_3 = (rot_mat[..., 1:2, 2:3] + rot_mat[..., 2:3, 1:2]) / (s_3 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_3 = ivy.concatenate((qx_3, qy_3, qz_3, qw_3), -2, f=f)
+    quat_3 = _ivy.concatenate((qx_3, qy_3, qz_3, qw_3), -2)
 
     # else
     # BS x 1 x 1
@@ -138,17 +123,17 @@ def rot_mat_to_quaternion(rot_mat, f=None):
     qz_4 = 0.25 * s_4
 
     # BS x 4 x 1
-    quat_4 = ivy.concatenate((qx_4, qy_4, qz_4, qw_4), -2, f=f)
-    quat_3_or_other = ivy.where(rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3], quat_3, quat_4, f=f)
+    quat_4 = _ivy.concatenate((qx_4, qy_4, qz_4, qw_4), -2)
+    quat_3_or_other = _ivy.where(rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3], quat_3, quat_4)
     quat_2_or_other = \
-        ivy.where(ivy.logical_and((rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
-                                  (rot_mat[..., 0:1, 0:1] > rot_mat[..., 2:3, 2:3]), f=f), quat_2, quat_3_or_other, f=f)
+        _ivy.where(_ivy.logical_and((rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
+                                    (rot_mat[..., 0:1, 0:1] > rot_mat[..., 2:3, 2:3])), quat_2, quat_3_or_other)
 
     # BS x 4
-    return ivy.where(tr > 0, quat_1, quat_2_or_other, f=f)[..., 0]
+    return _ivy.where(tr > 0, quat_1, quat_2_or_other)[..., 0]
 
 
-def rotation_vector_to_quaternion(rot_vector, f=None):
+def rotation_vector_to_quaternion(rot_vector):
     """
     Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
@@ -156,24 +141,20 @@ def rotation_vector_to_quaternion(rot_vector, f=None):
 
     :param rot_vector: Rotation vector *[batch_shape,3]*
     :type rot_vector: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Quaternion *[batch_shape,4]*
     """
 
-    f = _get_framework(rot_vector, f=f)
-
     # BS x 1
-    theta = (ivy.reduce_sum(rot_vector ** 2, axis=-1, keepdims=True, f=f)) ** 0.5
+    theta = (_ivy.reduce_sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
 
     # BS x 3
     vector = rot_vector / (theta + MIN_DENOMINATOR)
 
     # BS x 4
-    return axis_angle_to_quaternion(ivy.concatenate([vector, theta], -1, f=f), f=f)
+    return axis_angle_to_quaternion(_ivy.concatenate([vector, theta], -1))
 
 
-def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None, f=None):
+def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None):
     """
     Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
@@ -185,50 +166,40 @@ def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None, f=None
     :type convention: str, optional
     :param batch_shape: Shape of batch. Inferred from inputs if None.
     :type batch_shape: sequence of ints, optional
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Quaternion *[batch_shape,4]*
     """
-
-    f = _get_framework(euler_angles, f=f)
 
     if batch_shape is None:
         batch_shape = euler_angles.shape[:-1]
 
     # BS x 4
-    return rot_mat_to_quaternion(_ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape, f=f))
+    return rot_mat_to_quaternion(_ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape))
 
 
 # Quaternion Operations #
 # ----------------------#
 
-def inverse_quaternion(quaternion, f=None):
+def inverse_quaternion(quaternion):
     """
     Compute inverse quaternion :math:`\mathbf{q}^{-1}.\n
     `[reference] <https://github.com/KieranWynn/pyquaternion/blob/446c31cba66b708e8480871e70b06415c3cb3b0f/pyquaternion/quaternion.py#L473>`_
 
     :param quaternion: Quaternion *[batch_shape,4]*
     :type quaternion: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Inverse quaternion *[batch_shape,4]*
     """
 
-    f = _get_framework(quaternion, f=f)
-
     # BS x 1
-    sum_of_squares = ivy.reduce_sum(quaternion ** 2, -1, f=f)
-    vector_conjugate = ivy.concatenate((-quaternion[..., 0:3], quaternion[..., -1:]), -1, f=f)
+    sum_of_squares = _ivy.reduce_sum(quaternion ** 2, -1)
+    vector_conjugate = _ivy.concatenate((-quaternion[..., 0:3], quaternion[..., -1:]), -1)
     return vector_conjugate/(sum_of_squares + MIN_DENOMINATOR)
 
 
-def get_random_quaternion(f, max_rot_ang=_math.pi, batch_shape=None):
+def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
     """
     Generate random quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`, adhering to maximum absolute rotation angle.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternion>`_
 
-    :param f: Machine learning framework.
-    :type f: ml_framework
     :param max_rot_ang: Absolute value of maximum rotation angle for quaternion. Default value of :math:`π`.
     :type max_rot_ang: float, optional
     :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
@@ -236,25 +207,22 @@ def get_random_quaternion(f, max_rot_ang=_math.pi, batch_shape=None):
     :return: Random quaternion *[batch_shape,4]*
     """
 
-    if f is None:
-        raise Exception('framework f must be specified for calling ivy.get_random_quaternion()')
-
     if batch_shape is None:
         batch_shape = []
 
     # BS x 3
-    quaternion_vector = ivy.random_uniform(0, 1, list(batch_shape) + [3], f=f)
-    vec_len = ivy.norm(quaternion_vector, f=f)
+    quaternion_vector = _ivy.random_uniform(0, 1, list(batch_shape) + [3])
+    vec_len = _ivy.norm(quaternion_vector)
     quaternion_vector /= (vec_len + MIN_DENOMINATOR)
 
     # BS x 1
-    theta = ivy.random_uniform(-max_rot_ang, max_rot_ang, list(batch_shape) + [1], f=f)
+    theta = _ivy.random_uniform(-max_rot_ang, max_rot_ang, list(batch_shape) + [1])
 
     # BS x 4
-    return axis_angle_to_quaternion(ivy.concatenate([quaternion_vector, theta], -1, f=f))
+    return axis_angle_to_quaternion(_ivy.concatenate([quaternion_vector, theta], -1))
 
 
-def scale_quaternion_rotation_angle(quaternion, scale, f=None):
+def scale_quaternion_rotation_angle(quaternion, scale):
     """
     Scale the rotation angle :math:`θ` of a given quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_
@@ -263,25 +231,21 @@ def scale_quaternion_rotation_angle(quaternion, scale, f=None):
     :type quaternion: array
     :param scale: Value to scale by the rotation angle by. Can be negative to change rotation direction.
     :type scale: float
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: Quaternion with rotation angle scaled *[batch_shape,4]*
     """
 
-    f = _get_framework(quaternion, f=f)
-
     # BS x 4
-    vector_and_angle = _ivy_aa.quaternion_to_axis_angle(quaternion, f=f)
+    vector_and_angle = _ivy_aa.quaternion_to_axis_angle(quaternion)
 
     # BS x 1
     scaled_angle = vector_and_angle[..., -1:] * scale
 
     # BS x 4
-    return axis_angle_to_quaternion(ivy.concatenate(
-        [vector_and_angle[..., :-1], scaled_angle], -1, f=f))
+    return axis_angle_to_quaternion(_ivy.concatenate(
+        [vector_and_angle[..., :-1], scaled_angle], -1))
 
 
-def hamilton_product(quaternion1, quaternion2, f=None):
+def hamilton_product(quaternion1, quaternion2):
     """
     Compute hamilton product :math:`\mathbf{h}_p = \mathbf{q}_1 × \mathbf{q}_2` between
     :math:`\mathbf{q}_1 = [q_{1i}, q_{1j}, q_{1k}, q_{1r}]` and
@@ -292,12 +256,8 @@ def hamilton_product(quaternion1, quaternion2, f=None):
     :type quaternion1: array
     :param quaternion2: Quaternion 2 *[batch_shape,4]*
     :type quaternion2: array
-    :param f: Machine learning framework. Inferred from inputs if None.
-    :type f: ml_framework, optional
     :return: New quaternion after product *[batch_shape,4]*
     """
-
-    f = _get_framework(quaternion1, f=f)
 
     # BS x 1
     a1 = quaternion1[..., 3:4]
@@ -315,4 +275,4 @@ def hamilton_product(quaternion1, quaternion2, f=None):
     term_k = a1*d2 + b1*c2 - c1*b2 + d1*a2
 
     # BS x 4
-    return ivy.concatenate((term_i, term_j, term_k, term_r), -1, f=f)
+    return _ivy.concatenate((term_i, term_j, term_k, term_r), -1)

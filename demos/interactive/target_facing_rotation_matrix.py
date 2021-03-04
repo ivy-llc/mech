@@ -1,5 +1,6 @@
 # global
 import os
+import ivy
 import time
 import math
 import ivy_mech
@@ -7,16 +8,16 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from ivy.framework_handler import set_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimObj, BaseSimulator
 from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
 
 class DummyCam:
 
-    def __init__(self, interactive, f):
-        self._pos = f.array([-1, 0.6, 1.45])
+    def __init__(self, interactive):
+        self._pos = ivy.array([-1, 0.6, 1.45])
         self._interactive = interactive
-        self._f = f
 
     def get_pos(self):
         return self._pos
@@ -32,9 +33,8 @@ class DummyCam:
 
 class DummyTarget:
 
-    def __init__(self, f):
-        self._pos = f.array([0.17179595, -0.01713575,  1.02739596])
-        self._f = f
+    def __init__(self):
+        self._pos = ivy.array([0.17179595, -0.01713575,  1.02739596])
 
     def get_pos(self):
         return self._pos
@@ -78,8 +78,8 @@ class Simulator(BaseSimulator):
 
         else:
             # public objects
-            self.cam = DummyCam(interactive, f)
-            self.target = DummyTarget(f)
+            self.cam = DummyCam(interactive)
+            self.target = DummyTarget()
 
             # message
             print('\nInitialized dummy scene with a camera facing away from the plant plot.'
@@ -95,6 +95,7 @@ class Simulator(BaseSimulator):
 
 def main(interactive=True, try_use_sim=True, f=None):
     f = choose_random_framework() if f is None else f
+    set_framework(f)
     sim = Simulator(interactive, try_use_sim, f)
     cam_pos = sim.cam.get_pos()
     iterations = 250 if sim.with_pyrep else 1
@@ -106,7 +107,7 @@ def main(interactive=True, try_use_sim=True, f=None):
         sim.cam.set_rot_mat(tfrm)
         if not interactive:
             sim.target.set_pos(sim.target.get_pos()
-                               + f.array([-0.01, 0.01, 0.]))
+                               + ivy.array([-0.01, 0.01, 0.]))
         time.sleep(0.05)
     sim.close()
 

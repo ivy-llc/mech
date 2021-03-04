@@ -1,6 +1,8 @@
 # global
+import ivy
 import argparse
 import ivy_mech
+from ivy.framework_handler import set_framework
 from ivy_demo_utils.framework_utils import get_framework_from_str, choose_random_framework
 
 
@@ -12,6 +14,7 @@ def main(f=None):
     # choose random framework
 
     f = choose_random_framework() if f is None else f
+    set_framework(f)
 
     # Orientation #
     # ------------#
@@ -19,7 +22,7 @@ def main(f=None):
     # rotation representations
 
     # 3
-    rot_vec = f.array([0., 1., 0.])
+    rot_vec = ivy.array([0., 1., 0.])
 
     # 3 x 3
     rot_mat = ivy_mech.rot_vec_to_rot_mat(rot_vec)
@@ -42,10 +45,10 @@ def main(f=None):
     # pose representations
 
     # 3
-    position = f.ones_like(rot_vec)
+    position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = f.concatenate((position, rot_vec), 0)
+    rot_vec_pose = ivy.concatenate((position, rot_vec), 0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
@@ -65,7 +68,7 @@ def main(f=None):
     # conversions of positional representation
 
     # 3
-    cartesian_coord = f.random_uniform(0., 1., (3,))
+    cartesian_coord = ivy.random_uniform(0., 1., (3,))
 
     # 3
     polar_coord = ivy_mech.cartesian_to_polar_coords(
@@ -78,15 +81,15 @@ def main(f=None):
     # cartesian co-ordinate frame-of-reference transformations
 
     # 3 x 4
-    trans_mat = f.random_uniform(0., 1., (3, 4))
+    trans_mat = ivy.random_uniform(0., 1., (3, 4))
 
     # 4
     cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
         cartesian_coord)
 
     # 3
-    trans_cartesian_coord = f.matmul(
-        trans_mat, f.expand_dims(cartesian_coord_homo, -1))[:, 0]
+    trans_cartesian_coord = ivy.matmul(
+        trans_mat, ivy.expand_dims(cartesian_coord_homo, -1))[:, 0]
 
     # 4
     trans_cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -97,11 +100,11 @@ def main(f=None):
         trans_mat)
 
     # 3 x 4
-    inv_trans_mat = f.inv(trans_mat_homo)[0:3]
+    inv_trans_mat = ivy.inv(trans_mat_homo)[0:3]
 
     # 3
-    cartesian_coord_again = f.matmul(
-        inv_trans_mat, f.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
+    cartesian_coord_again = ivy.matmul(
+        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
 
     # message
     print('End of Run Through Demo!')

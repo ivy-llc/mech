@@ -72,4 +72,4 @@ class QuaternionTestData(OrientationTestData):
 
         downward_facing_quaternion = np.array([0, 1, 0, 0])
         quaternion = ivy_mech.axis_angle_to_quaternion(np.concatenate([axis_vector, theta], -1))
-        self.target_facing_quaternion = ivy_mech.hamilton_product(downward_facing_quaternion, quaternion, f=np)
+        self.target_facing_quaternion = ivy_mech.hamilton_product(downward_facing_quaternion, quaternion)
