@@ -127,13 +127,15 @@ Run Through
 
 We run through some of the different parts of the library via a simple ongoing example script.
 The full script is available in the demos_ folder, as file ``run_through.py``.
-First, we select a random backend framework ``f`` to use for the examples, from the options
-``ivy.jax``, ``ivy.tensorflow``, ``ivy.torch``, ``ivy.mxnd`` or ``ivy.numpy``.
+First, we select a random backend framework to use for the examples, from the options
+``ivy.jax``, ``ivy.tensorflow``, ``ivy.torch``, ``ivy.mxnd`` or ``ivy.numpy``,
+and use this to set the ivy backend framework.
 
 .. code-block:: python
 
     from ivy_demo_utils.framework_utils import choose_random_framework
-    f = choose_random_framework()
+    from ivy.framework_handler import set_framework
+    set_framework(choose_random_framework())
 
 **Orientation Module**
 
@@ -147,7 +149,7 @@ A few of the orientation functions are outlined below.
     # rotation representations
 
     # 3
-    rot_vec = f.array([0., 1., 0.])
+    rot_vec = ivy.array([0., 1., 0.])
 
     # 3 x 3
     rot_mat = ivy_mech.rot_vec_to_rot_mat(rot_vec)
@@ -174,10 +176,10 @@ represent the cartesian position. Again, we give some examples below.
     # pose representations
 
     # 3
-    position = f.ones_like(rot_vec)
+    position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = f.concatenate((position, rot_vec), 0)
+    rot_vec_pose = ivy.concatenate((position, rot_vec), 0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
@@ -204,7 +206,7 @@ We give some examples for conversion of positional representation below.
     # conversions of positional representation
 
     # 3
-    cartesian_coord = f.random_uniform(0., 1., (3,))
+    cartesian_coord = ivy.random_uniform(0., 1., (3,))
 
     # 3
     polar_coord = ivy_mech.cartesian_to_polar_coords(
@@ -221,15 +223,15 @@ Assuming cartesian form, we give an example of a frame-of-reference transformati
     # cartesian co-ordinate frame-of-reference transformations
 
     # 3 x 4
-    trans_mat = f.random_uniform(0., 1., (3, 4))
+    trans_mat = ivy.random_uniform(0., 1., (3, 4))
 
     # 4
     cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
         cartesian_coord)
 
     # 3
-    trans_cartesian_coord = f.matmul(
-        trans_mat, f.expand_dims(cartesian_coord_homo, -1))[:, 0]
+    trans_cartesian_coord = ivy.matmul(
+        trans_mat, ivy.expand_dims(cartesian_coord_homo, -1))[:, 0]
 
     # 4
     trans_cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -240,11 +242,11 @@ Assuming cartesian form, we give an example of a frame-of-reference transformati
         trans_mat)
 
     # 3 x 4
-    inv_trans_mat = f.inv(trans_mat_homo)[0:3]
+    inv_trans_mat = ivy.inv(trans_mat_homo)[0:3]
 
     # 3
-    cartesian_coord_again = f.matmul(
-        inv_trans_mat, f.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
+    cartesian_coord_again = ivy.matmul(
+        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
 
 Interactive Demos
 -----------------
