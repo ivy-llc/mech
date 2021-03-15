@@ -8,8 +8,8 @@ import ivy.numpy
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from ivy.framework_handler import set_framework
 from ivy_demo_utils.open3d_utils import Visualizer
+from ivy.framework_handler import set_framework, unset_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimCam, BaseSimulator
 from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
@@ -123,6 +123,7 @@ def main(interactive=True, try_use_sim=True, f=None):
             sim.omcam.set_pos(sim.omcam.get_pos()
                                + ivy.array([-0.01, 0.01, 0.]))
     sim.close()
+    unset_framework()
 
 
 if __name__ == '__main__':

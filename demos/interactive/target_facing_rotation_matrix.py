@@ -8,7 +8,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from ivy.framework_handler import set_framework
+from ivy.framework_handler import set_framework, unset_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimObj, BaseSimulator
 from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
@@ -110,6 +110,7 @@ def main(interactive=True, try_use_sim=True, f=None):
                                + ivy.array([-0.01, 0.01, 0.]))
         time.sleep(0.05)
     sim.close()
+    unset_framework()
 
 
 if __name__ == '__main__':
