@@ -40,8 +40,8 @@ class DummyOmCam:
 
 class Simulator(BaseSimulator):
 
-    def __init__(self, interactive, try_use_sim, f):
-        super().__init__(interactive, try_use_sim, f)
+    def __init__(self, interactive, try_use_sim):
+        super().__init__(interactive, try_use_sim)
 
         # initialize scene
         if self.with_pyrep:
@@ -99,7 +99,7 @@ class Simulator(BaseSimulator):
 def main(interactive=True, try_use_sim=True, f=None):
     f = choose_random_framework() if f is None else f
     set_framework(f)
-    sim = Simulator(interactive, try_use_sim, f)
+    sim = Simulator(interactive, try_use_sim)
     vis = Visualizer(ivy.to_numpy(sim.default_camera_ext_mat_homo))
     pix_per_deg = 2
     om_pix = sim.get_pix_coords()

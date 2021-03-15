@@ -45,8 +45,8 @@ class DummyTarget:
 
 class Simulator(BaseSimulator):
 
-    def __init__(self, interactive, try_use_sim, f):
-        super().__init__(interactive, try_use_sim, f)
+    def __init__(self, interactive, try_use_sim):
+        super().__init__(interactive, try_use_sim)
 
         # initialize scene
         if self.with_pyrep:
@@ -96,7 +96,7 @@ class Simulator(BaseSimulator):
 def main(interactive=True, try_use_sim=True, f=None):
     f = choose_random_framework() if f is None else f
     set_framework(f)
-    sim = Simulator(interactive, try_use_sim, f)
+    sim = Simulator(interactive, try_use_sim)
     cam_pos = sim.cam.get_pos()
     iterations = 250 if sim.with_pyrep else 1
     msg = 'tracking plant pot for 250 simulator steps...' if sim.with_pyrep else ''
