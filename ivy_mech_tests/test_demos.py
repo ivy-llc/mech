@@ -3,31 +3,29 @@ Collection of tests for ivy mechanics demos
 """
 
 # global
-import ivy_mech_tests.helpers as helpers
+import pytest
+import ivy_tests.helpers as helpers
 
 
-def test_demo_run_through():
+def test_demo_run_through(dev_str, f, call):
     from demos.run_through import main
-    for lib, call in helpers.calls:
-        if call in [helpers.tf_graph_call, helpers.mx_graph_call]:
-            # these particular demos are only implemented in eager mode, without compilation
-            continue
-        main(f=lib)
+    if call in [helpers.tf_graph_call]:
+        # these particular demos are only implemented in eager mode, without compilation
+        pytest.skip()
+    main(f=f)
 
 
-def test_demo_target_facing_rotation_vector():
+def test_demo_target_facing_rotation_vector(dev_str, f, call):
     from demos.interactive.target_facing_rotation_matrix import main
-    for lib, call in helpers.calls:
-        if call in [helpers.tf_graph_call, helpers.mx_graph_call]:
-            # these particular demos are only implemented in eager mode, without compilation
-            continue
-        main(False, False, f=lib)
+    if call in [helpers.tf_graph_call]:
+        # these particular demos are only implemented in eager mode, without compilation
+        pytest.skip()
+    main(False, False, f=f)
 
 
-def test_demo_polar_to_cartesian_coords():
+def test_demo_polar_to_cartesian_coords(dev_str, f, call):
     from demos.interactive.polar_to_cartesian_coords import main
-    for lib, call in helpers.calls:
-        if call in [helpers.tf_graph_call, helpers.mx_graph_call]:
-            # these particular demos are only implemented in eager mode, without compilation
-            continue
-        main(False, False, f=lib)
+    if call in [helpers.tf_graph_call]:
+        # these particular demos are only implemented in eager mode, without compilation
+        pytest.skip()
+    main(False, False, f=f)

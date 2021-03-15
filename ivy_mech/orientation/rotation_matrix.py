@@ -51,7 +51,7 @@ def rot_vec_to_rot_mat(rot_vec):
     """
 
     # BS x 1
-    t = _ivy.reductions.reduce_sum(rot_vec**2, -1)**0.5
+    t = _ivy.reductions.reduce_sum(rot_vec**2, -1, keepdims=True)**0.5
 
     # BS x 3
     u = rot_vec / t
@@ -131,7 +131,7 @@ def quaternion_to_rot_mat(quaternion):
 # Euler Conversions #
 # ------------------#
 
-def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev=None):
+def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev_str=None):
     """
     Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation matrix
     :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
@@ -143,19 +143,19 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev=None)
     :type convention: str, optional
     :param batch_shape: Shape of batch. Inferred from inputs if None.
     :type batch_shape: sequence of ints, optional
-    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev: str, optional
+    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev_str: str, optional
     :return: Rotation matrix *[batch_shape,3,3]*
     """
 
     if batch_shape is None:
         batch_shape = euler_angles.shape[:-1]
         
-    if dev is None:
-        dev = _ivy.get_device(euler_angles)
+    if dev_str is None:
+        dev_str = _ivy.dev_str(euler_angles)
 
     # BS x 1 x 1
-    zeros = _ivy.zeros(list(batch_shape) + [1, 1], dev=dev)
+    zeros = _ivy.zeros(list(batch_shape) + [1, 1], dev_str=dev_str)
 
     alpha = _ivy.expand_dims(euler_angles[..., 0:1], -1)
     beta = _ivy.expand_dims(euler_angles[..., 1:2], -1)
@@ -181,7 +181,7 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev=None)
 
 
 # noinspection PyUnresolvedReferences
-def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev=None):
+def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev_str=None):
     """
     Determine rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` of body which corresponds with
     it's positive z axis facing towards a target world co-ordinate :math:`\mathbf{x}_t = [t_x, t_y, t_z]`, given the body
@@ -195,8 +195,8 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev=No
     :type target_pos: array
     :param batch_shape: Shape of batch. Inferred from inputs if None.
     :type batch_shape: sequence of ints, optional
-    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev: str, optional
+    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev_str: str, optional
     :return: Rotation vector, which faces body towards target *[batch_shape,4]*
     """
 
@@ -207,8 +207,8 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev=No
     batch_shape = list(batch_shape)
     num_batch_dims = len(batch_shape)
 
-    if dev is None:
-        dev = _ivy.get_device(body_pos)
+    if dev_str is None:
+        dev_str = _ivy.dev_str(body_pos)
 
     # BS x 3
     up = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 1.]), [1] * num_batch_dims + [3]), batch_shape + [1])

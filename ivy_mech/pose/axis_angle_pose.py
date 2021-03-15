@@ -10,7 +10,7 @@ from ivy_mech.orientation import quaternion as _ivy_quat
 from ivy_mech.orientation import axis_angle as _ivy_aa
 
 
-def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None, dev=None):
+def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None, dev_str=None):
     """
     Convert :math: Euler angle pose
     :math:`\mathbf{p}_{abc} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]` to
@@ -22,11 +22,11 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
     :type convention: str, optional
     :param batch_shape: Shape of batch. Inferred from inputs if None.
     :type batch_shape: sequence of ints, optional
-    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev: str, optional
+    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev_str: str, optional
     :return: Rotation axis unit vector and angle *[batch_shape,4]*
     """
-    aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, dev)
+    aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, dev_str)
     return _ivy.concatenate([euler_pose[..., :3], aa], -1)
 
 

@@ -30,7 +30,7 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
     return _ivy.concatenate((coords, ones), -1)
 
 
-def make_transformation_homogeneous(matrices, batch_shape=None, dev=None):
+def make_transformation_homogeneous(matrices, batch_shape=None, dev_str=None):
     """
     Append to set of 3x4 non-homogeneous matrices to make them homogeneous.
 
@@ -38,23 +38,23 @@ def make_transformation_homogeneous(matrices, batch_shape=None, dev=None):
     :type matrices: array
     :param batch_shape: Shape of batch. Inferred from inputs if None.
     :type batch_shape: sequence of ints, optional
-    :param dev: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev: str, optional
+    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
+    :type dev_str: str, optional
     :return: 4x4 Homogeneous matrices *[batch_shape,4,4]*
     """
 
     if batch_shape is None:
         batch_shape = matrices.shape[:-2]
 
-    if dev is None:
-        dev = _ivy.get_device(matrices)
+    if dev_str is None:
+        dev_str = _ivy.dev_str(matrices)
 
     # shapes as list
     batch_shape = list(batch_shape)
     num_batch_dims = len(batch_shape)
 
     # BS x 1 x 4
-    last_row = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 0., 1.], dev=dev), [1] * num_batch_dims + [1, 4]),
+    last_row = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 0., 1.], dev_str=dev_str), [1] * num_batch_dims + [1, 4]),
                          batch_shape + [1, 1])
 
     # BS x 4 x 4
