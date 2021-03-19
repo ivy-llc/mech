@@ -61,8 +61,8 @@ class Simulator(BaseSimulator):
             self._default_camera.set_orientation(np.array([i*np.pi/180 for i in [-114.69, 13.702, -173.78]]))
 
             # public objects
-            self.cam = SimObj(self._vision_sensor_body_0, f)
-            self.target = SimObj(self._plant, f)
+            self.cam = SimObj(self._vision_sensor_body_0)
+            self.target = SimObj(self._plant)
 
             # prompt input
             self._user_prompt('\nInitialized scene with a camera facing away from the plant plot.\n\n'

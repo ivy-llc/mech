@@ -55,7 +55,7 @@ class Simulator(BaseSimulator):
             self.default_camera_ext_mat_homo = ivy.inv(ivy_mech.make_transformation_homogeneous(inv_ext_mat))
 
             # public objects
-            self.omcam = SimCam(self._spherical_vision_sensor, f)
+            self.omcam = SimCam(self._spherical_vision_sensor)
 
             # wait for user input
             self._user_prompt('\nInitialized scene with an omni-directional camera in the centre.\n\n'
