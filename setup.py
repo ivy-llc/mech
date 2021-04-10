@@ -17,11 +17,19 @@ from distutils.core import setup
 import setuptools
 
 setup(name='ivy-mech',
-      version='1.1.3',
-      description='Mechanics functions with end-to-end support for deep learning developers, written in Ivy.\n'
-                  'Tested with Ivy 1.1.3',
+      version='1.1.4',
       author='Ivy Team',
       author_email='ivydl.team@gmail.com',
+      description='Mechanics functions with end-to-end support for deep learning developers, written in Ivy',
+      long_description="""# What is Ivy Mechanics?\n\nIvy mechanics provides functions for conversions of orientation,
+      pose, and positional representations, as well as frame-of-reference transformations, and other more applied functions.
+      Ivy currently supports Jax, TensorFlow, PyTorch, MXNet and Numpy. Check out the [docs](https://ivy-dl.org/mech) for more info!""",
+      long_description_content_type='text/markdown',
+      url='https://ivy-dl.org/mech',
+      project_urls={
+            'Docs': 'https://ivy-dl.org/mech/',
+            'Source': 'https://github.com/ivy-dl/mech',
+      },
       packages=setuptools.find_packages(),
       install_requires=['ivy-core'],
       classifiers=['License :: OSI Approved :: Apache Software License'],
