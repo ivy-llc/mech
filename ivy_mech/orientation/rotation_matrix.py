@@ -211,7 +211,8 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev_st
         dev_str = _ivy.dev_str(body_pos)
 
     # BS x 3
-    up = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 1.]), [1] * num_batch_dims + [3]), batch_shape + [1])
+    up = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 1.], dev_str=dev_str),
+                                [1] * num_batch_dims + [3]), batch_shape + [1])
 
     z = target_pos - body_pos
     z = z / _ivy.reduce_sum(z ** 2, -1, keepdims=True) ** 0.5
