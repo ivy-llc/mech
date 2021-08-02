@@ -1,5 +1,7 @@
 FROM ivydl/ivy:latest-copsim
 
+WORKDIR /
+
 # Install Ivy
 RUN git clone https://github.com/ivy-dl/ivy && \
     cd ivy && \
@@ -29,8 +31,3 @@ RUN cat requirements.txt | grep -v "ivy-" | pip3 install --no-cache-dir -r /dev/
 COPY demos/requirements.txt /ivy_mech
 RUN cat requirements.txt | grep -v "ivy-" | pip3 install --no-cache-dir -r /dev/stdin && \
     rm -rf requirements.txt
-
-# Entrypoint
-RUN echo '#!/bin/bash\n/usr/bin/xvfb-run --auto-servernum "$@"' > /entrypoint && \
-    chmod a+x /entrypoint
-ENTRYPOINT ["/entrypoint"]
