@@ -22,6 +22,8 @@ If these are not installed, the demos will all still run, but will display pre-r
 For a local installation, first install the dependencies:
 
 ```bash
+cd ~/ivy_mech
+python3 -m pip install -r requirements.txt
 cd ~/ivy_mech/demos
 python3 -m pip install -r requirements.txt
 ```
