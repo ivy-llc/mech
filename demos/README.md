@@ -5,22 +5,38 @@ Running these demos is quick and simple.
 
 ## Install
 
-First, clone this repo, and install the requirements provided in this demos folder like so:
+First, clone this repo:
 
 ```bash
 git clone https://github.com/ivy-dl/mech.git ~/ivy_mech
-cd ~/ivy_mech/demos
-python3 -m pip install -r requirements.txt
 ```
 
 The interactive demos optionally make use of the simulator
 [CoppeliaSim](https://www.coppeliarobotics.com/),
 and the python wrapper [PyRep](https://github.com/stepjam/PyRep).
 
-To get the full benefit of these demos, CoppeliaSim
-and PyRep should both be installed, following the installation [intructions](https://github.com/stepjam/PyRep#install).
-
 If these are not installed, the demos will all still run, but will display pre-rendered images from the simultator.
+
+### Local
+
+For a local installation, first install the dependencies:
+
+```bash
+cd ~/ivy_mech/demos
+python3 -m pip install -r requirements.txt
+```
+
+To run interactive demos inside a simulator, CoppeliaSim and PyRep should then be installed following the installation [intructions](https://github.com/stepjam/PyRep#install).
+
+### Docker
+
+For a docker installation, first ensure [docker](https://docs.docker.com/get-docker/) and [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) are installed.
+
+Then simply pull the ivy mechanics image:
+
+```bash
+docker pull ivydl/ivy-mech:latest
+```
 
 ## Demos
 
@@ -29,9 +45,8 @@ If a demo script is run without command line arguments, then a random backend fr
 Alternatively, the `--framework` argument can be used to manually specify a framework from the options
 `jax`, `tensorflow`, `torch`, `mxnd` or `numpy`.
 
-To further explore the demos, breakpoints can be added to the scripts at any stage.
-Adding `import pdb; pdb.set_trace()` works for python < 3.7,
-and the built-in `breakpoint()` can be used for python > 3.7.
+The examples below assume a docker installation, but the demo scripts can also
+be run with python directly for local installations.
 
 ### Run Through
 
@@ -39,7 +54,7 @@ For a basic run through the library:
 
 ```bash
 cd ~/ivy_mech/demos
-python3 run_through.py
+./run_demo.sh run_through
 ```
 
 This script, and the various parts of the library, are further discussed in the [Run Through](https://github.com/ivy-dl/mech#run-through) section of the main README.
@@ -49,7 +64,7 @@ and breakpoints added to step in at intermediate points to further explore.
 To run the script using a specific backend, tensorflow for example, then run like so:
 
 ```bash
-python3 run_through.py --framework tensorflow
+./run_demo.sh run_through --framework tensorflow
 ```
 
 ### Target Facing Rotation Matrix
@@ -58,8 +73,8 @@ In this demo, a plant pot is dragged around the scene, and a camera is set to
 dynamically track the plant pot using the function ivy_mech.target_facing_rotation_matrix.
 
 ```bash
-cd ~/ivy_mech/demos/interactive
-python3 target_facing_rotation_matrix.py
+cd ~/ivy_mech/demos
+./run_demo.sh interactive.target_facing_rotation_matrix
 ```
 
 Example output from the simulator is given below:
@@ -75,8 +90,8 @@ and a cartesian point cloud reconstruction is dynamically generated from the omn
 using the method ivy_mech.polar_to_cartesian_coords.
 
 ```bash
-cd ~/ivy_mech/demos/interactive
-python3 polar_to_cartesian_coords.py
+cd ~/ivy_mech/demos
+./run_demo.sh interactive.polar_to_cartesian_coords
 ```
 Example output from the simulator, and Open3D renderings, are given below:
 
