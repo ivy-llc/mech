@@ -3,6 +3,7 @@ test data for pose functions
 """
 
 # global
+import ivy.numpy
 import numpy as np
 
 # local
@@ -46,7 +47,8 @@ class PoseTestData(OrientationTestData):
         self.control_dt = np.array([0.05])
         self.batched_control_dt = np.expand_dims(self.control_dt, 0)
         quaternion_vel = self.velocity[:, 3:7]
-        quaternion_transform = ivy_mech.scale_quaternion_rotation_angle(quaternion_vel, self.control_dt)
+        with ivy.numpy.use:
+            quaternion_transform = ivy_mech.scale_quaternion_rotation_angle(quaternion_vel, self.control_dt)
         new_quaternion = ivy_mech.hamilton_product(current_quaternion, quaternion_transform)
         self.incremented_quaternion = np.concatenate((self.quaternion_pose[:, 0:3] +
                                                       self.velocity[:, 0:3] * self.control_dt, new_quaternion), -1)

@@ -212,7 +212,7 @@ def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
 
     # BS x 3
     quaternion_vector = _ivy.random_uniform(0, 1, list(batch_shape) + [3])
-    vec_len = _ivy.norm(quaternion_vector)
+    vec_len = _ivy.vector_norm(quaternion_vector)
     quaternion_vector /= (vec_len + MIN_DENOMINATOR)
 
     # BS x 1
