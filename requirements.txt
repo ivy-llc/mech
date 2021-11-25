@@ -1,1 +1,1 @@
-ivy-core
+ivy-core # mod_name=ivy
