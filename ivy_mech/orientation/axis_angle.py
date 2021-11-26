@@ -58,9 +58,6 @@ def quaternion_to_axis_angle(quaternion, dev_str=None):
     :return: Rotation axis unit vector and angle *[batch_shape,4]*
     """
 
-    if dev_str is None:
-        dev = _ivy.dev_str(quaternion)
-
     # BS x 1
     e1 = quaternion[..., 0:1]
     e2 = quaternion[..., 1:2]
