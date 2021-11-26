@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ivy_mech.iml" filepath="$PROJECT_DIR$/.idea/ivy_mech.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mech.iml" filepath="$PROJECT_DIR$/.idea/mech.iml" />
     </modules>
   </component>
 </project>

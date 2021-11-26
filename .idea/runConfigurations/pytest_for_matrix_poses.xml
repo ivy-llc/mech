@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="pytest for matrix poses" type="tests" factoryName="py.test" folderName="pose">
-    <module name="ivy_mech" />
+    <module name="mech" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SDK_HOME" value="" />
