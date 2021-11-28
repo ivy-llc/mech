@@ -17,7 +17,7 @@ from distutils.core import setup
 import setuptools
 
 setup(name='ivy-mech',
-      version='1.1.5',
+      version='1.1.6',
       author='Ivy Team',
       author_email='ivydl.team@gmail.com',
       description='Mechanics functions with end-to-end support for deep learning developers, written in Ivy',
