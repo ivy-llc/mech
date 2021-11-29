@@ -106,8 +106,8 @@ Click on the icons below for their respective github pages.
 
 Ivy mechanics can be installed like so: ``pip install ivy-mech``
 
-.. _demos: https://github.com/ivy-dl/mech/tree/master/demos
-.. _interactive: https://github.com/ivy-dl/mech/tree/master/demos/interactive
+.. _demos: https://github.com/ivy-dl/mech/tree/master/ivy_mech_demos
+.. _interactive: https://github.com/ivy-dl/mech/tree/master/ivy_mech_demos/interactive
 
 To quickly see the different aspects of the library, we suggest you check out the demos_!
 We suggest you start by running the script ``run_through.py``,

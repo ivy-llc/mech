@@ -24,7 +24,7 @@ For a local installation, first install the dependencies:
 ```bash
 cd ~/ivy_mech
 python3 -m pip install -r requirements.txt
-cd ~/ivy_mech/demos
+cd ~/ivy_mech/ivy_mech_demos
 python3 -m pip install -r requirements.txt
 ```
 
@@ -55,7 +55,7 @@ be run with python directly for local installations.
 For a basic run through the library:
 
 ```bash
-cd ~/ivy_mech/demos
+cd ~/ivy_mech/ivy_mech_demos
 ./run_demo.sh run_through
 ```
 
@@ -75,7 +75,7 @@ In this demo, a plant pot is dragged around the scene, and a camera is set to
 dynamically track the plant pot using the function ivy_mech.target_facing_rotation_matrix.
 
 ```bash
-cd ~/ivy_mech/demos
+cd ~/ivy_mech/ivy_mech_demos
 ./run_demo.sh interactive.target_facing_rotation_matrix
 ```
 
@@ -92,7 +92,7 @@ and a cartesian point cloud reconstruction is dynamically generated from the omn
 using the method ivy_mech.polar_to_cartesian_coords.
 
 ```bash
-cd ~/ivy_mech/demos
+cd ~/ivy_mech/ivy_mech_demos
 ./run_demo.sh interactive.polar_to_cartesian_coords
 ```
 Example output from the simulator, and Open3D renderings, are given below:
