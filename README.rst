@@ -21,7 +21,7 @@
     </a>
     <br clear="all" />
 
-**Mechanics functions with end-to-end support for deep learning developers, written in Ivy.**
+**Mechanics functions with end-to-end support for machine learning developers, written in Ivy.**
 
 .. raw:: html
 
@@ -66,7 +66,7 @@ Overview
 Ivy mechanics provides functions for conversions of orientation, pose, and positional representations,
 as well as frame-of-reference transformations, and other more applied functions. Check out the docs_ for more info!
 
-The library is built on top of the Ivy deep learning framework.
+The library is built on top of the Ivy machine learning framework.
 This means all functions simultaneously support:
 Jax, Tensorflow, PyTorch, MXNet, and Numpy.
 
@@ -367,7 +367,7 @@ enabling the surrounding geometry to be represented as a point cloud, for intera
 Get Involed
 -----------
 
-We hope the functions in this library are useful to a wide range of deep learning developers.
+We hope the functions in this library are useful to a wide range of machine learning developers.
 However, there are many more areas of mechanics which could be covered by this library.
 
 If there are any particular mechanics functions you feel are missing,
@@ -382,7 +382,7 @@ Citation
 ::
 
     @article{lenton2021ivy,
-      title={Ivy: Templated Deep Learning for Inter-Framework Portability},
+      title={Ivy: Unified Machine Learning for Inter-Framework Portability},
       author={Lenton, Daniel and Pardo, Fabio and Falck, Fabian and James, Stephen and Clark, Ronald},
       journal={arXiv preprint arXiv:2102.02886},
       year={2021}
