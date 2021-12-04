@@ -57,8 +57,8 @@ def rot_vec_to_rot_mat(rot_vec):
     u = rot_vec / t
 
     # BS x 1 x 1
-    cost = _ivy.expand_dims(_ivy.math.cos(t), -1)
-    sint = _ivy.expand_dims(_ivy.math.sin(t), -1)
+    cost = _ivy.expand_dims(_ivy.cos(t), -1)
+    sint = _ivy.expand_dims(_ivy.sin(t), -1)
     ux = _ivy.expand_dims(u[..., 0:1], -1)
     uy = _ivy.expand_dims(u[..., 1:2], -1)
     uz = _ivy.expand_dims(u[..., 2:3], -1)
