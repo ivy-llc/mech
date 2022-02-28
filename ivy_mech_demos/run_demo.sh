@@ -21,7 +21,7 @@ function main() {
   \
   -v /home/"${USER}"/PyRep/pyrep:/PyRep/pyrep \
   \
-   ivydl/ivy-mech:latest python3 -m $demos"$1" "${@:2}"
+   unifyai/ivy-mech:latest python3 -m $demos"$1" "${@:2}"
 }
 
 main "$@" || cleanup

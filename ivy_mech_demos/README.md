@@ -37,7 +37,7 @@ For a docker installation, first ensure [docker](https://docs.docker.com/get-doc
 Then simply pull the ivy mechanics image:
 
 ```bash
-docker pull ivydl/ivy-mech:latest
+docker pull unifyai/ivy-mech:latest
 ```
 
 ## Demos
