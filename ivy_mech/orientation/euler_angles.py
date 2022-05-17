@@ -1,6 +1,4 @@
-"""
-Collection of Rotation Conversion Functions to Euler Angles Format
-"""
+"""Collection of Rotation Conversion Functions to Euler Angles Format"""
 
 # global
 import ivy as _ivy
@@ -18,6 +16,13 @@ VALID_EULER_CONVENTIONS = ['xyx', 'yzy', 'zxz', 'xzx', 'yxy', 'zyz',
 # --------------#
 
 def _rot_mat_to_xyx_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 0, 0:1])
 
@@ -46,6 +51,13 @@ def _rot_mat_to_xyx_euler(rot_mat):
 
 
 def _rot_mat_to_yzy_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 1, 1:2])
 
@@ -74,6 +86,13 @@ def _rot_mat_to_yzy_euler(rot_mat):
 
 
 def _rot_mat_to_zxz_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 2, 2:3])
 
@@ -102,6 +121,13 @@ def _rot_mat_to_zxz_euler(rot_mat):
 
 
 def _rot_mat_to_xzx_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 0, 0:1])
 
@@ -130,6 +156,13 @@ def _rot_mat_to_xzx_euler(rot_mat):
 
 
 def _rot_mat_to_yxy_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 1, 1:2])
 
@@ -158,6 +191,13 @@ def _rot_mat_to_yxy_euler(rot_mat):
 
 
 def _rot_mat_to_zyz_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 2, 2:3])
 
@@ -186,6 +226,13 @@ def _rot_mat_to_zyz_euler(rot_mat):
 
 
 def _rot_mat_to_xyz_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 2, 0:1])
 
@@ -214,6 +261,13 @@ def _rot_mat_to_xyz_euler(rot_mat):
 
 
 def _rot_mat_to_yzx_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 0, 1:2])
 
@@ -242,6 +296,13 @@ def _rot_mat_to_yzx_euler(rot_mat):
 
 
 def _rot_mat_to_zxy_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 1, 2:3])
 
@@ -270,6 +331,13 @@ def _rot_mat_to_zxy_euler(rot_mat):
 
 
 def _rot_mat_to_xzy_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 1, 0:1])
 
@@ -298,6 +366,13 @@ def _rot_mat_to_xzy_euler(rot_mat):
 
 
 def _rot_mat_to_yxz_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 2, 1:2])
 
@@ -326,6 +401,13 @@ def _rot_mat_to_yxz_euler(rot_mat):
 
 
 def _rot_mat_to_zyx_euler(rot_mat):
+    """
+
+    Parameters
+    ----------
+    rot_mat
+
+    """
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 0, 2:3])
 
@@ -371,16 +453,22 @@ ROT_MAT_TO_EULER_DICT = {'xyx': _rot_mat_to_xyx_euler,
 # --------#
 
 def rot_mat_to_euler(rot_mat, convention='zyx'):
-    """
-    Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to :math:`zyx` Euler angles
+    """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to :math:`zyx` Euler angles
     :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.\n
     `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_
 
-    :param rot_mat: Rotation matrix *[batch_shape,3,3]*
-    :type rot_mat: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional`
-    :return: zyx Euler angles *[batch_shape,3]*
+    Parameters
+    ----------
+    rot_mat
+        Rotation matrix *[batch_shape,3,3]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+
+    Returns
+    -------
+    ret
+        zyx Euler angles *[batch_shape,3]*
+
     """
     try:
         return ROT_MAT_TO_EULER_DICT[convention](rot_mat)
@@ -389,16 +477,22 @@ def rot_mat_to_euler(rot_mat, convention='zyx'):
 
 
 def quaternion_to_euler(quaternion, convention='zyx'):
-    """
-    Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to :math:`zyx` Euler angles
+    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to :math:`zyx` Euler angles
     :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.\n
     `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_
 
-    :param quaternion: Input quaternion *[batch_shape,4]*
-    :type quaternion: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional`
-    :return: zyx Euler angles *[batch_shape,3]*
+    Parameters
+    ----------
+    quaternion
+        Input quaternion *[batch_shape,4]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+
+    Returns
+    -------
+    ret
+        zyx Euler angles *[batch_shape,3]*
+
     """
 
     # BS x 3
@@ -406,15 +500,21 @@ def quaternion_to_euler(quaternion, convention='zyx'):
 
 
 def axis_angle_to_euler(axis_angle, convention='zyx'):
-    """
-    Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    """Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
     rotation angle :math:`θ` to :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
 
-    :param axis_angle: Input axis_angle *[batch_shape,4]*
-    :type axis_angle: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional`
-    :return: zyx Euler angles *[batch_shape,3]*
+    Parameters
+    ----------
+    axis_angle
+        Input axis_angle *[batch_shape,4]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+
+    Returns
+    -------
+    ret
+        zyx Euler angles *[batch_shape,3]*
+
     """
 
     # BS x 3
@@ -422,11 +522,18 @@ def axis_angle_to_euler(axis_angle, convention='zyx'):
 
 
 def get_random_euler(batch_shape=None):
-    """
-    Generate random :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
-    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
-    :type batch_shape: sequence of ints, optional
-    :return: Random euler *[batch_shape,3]*
+    """Generate random :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
+
+    Parameters
+    ----------
+    batch_shape
+        Shape of batch. Shape of [1] is assumed if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Random euler *[batch_shape,3]*
+
     """
 
     if batch_shape is None:

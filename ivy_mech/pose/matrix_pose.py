@@ -17,7 +17,7 @@ def quaternion_pose_to_mat_pose(quat_pose):
     `[reference] <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Conversion_to_and_from_the_matrix_representation>`_
 
     :param quat_pose: Quaternion pose *[batch_shape,7]*
-    :type quat_pose: array
+
     :return: Matrix pose *[batch_shape,3,4]*
     """
 
@@ -39,11 +39,11 @@ def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
     `[reference] <https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix>`_
 
     :param euler_pose: Euler angle pose *[batch_shape,6]*
-    :type euler_pose: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
+
     :return: Matrix pose *[batch_shape,3,4]*
     """
 
@@ -64,7 +64,7 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose):
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
 
     :param rot_vec_pose: Rotation vector pose *[batch_shape,6]*
-    :type rot_vec_pose: array
+
     :return: Matrix pose *[batch_shape,3,4]*
     """
 
@@ -84,7 +84,7 @@ def axis_angle_pose_to_mat_pose(axis_angle_pose):
     matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.
 
     :param axis_angle_pose: Quaternion pose *[batch_shape,7]*
-    :type axis_angle_pose: array
+
     :return: Matrix pose *[batch_shape,3,4]*
     """
 

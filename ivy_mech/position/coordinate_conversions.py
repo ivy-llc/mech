@@ -15,7 +15,7 @@ def polar_to_cartesian_coords(polar_coords):
     `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
 
     :param polar_coords: Spherical polar co-ordinates *[batch_shape,3]*
-    :type polar_coords: array
+
     :return: Cartesian co-ordinates *[batch_shape,3]*
     """
 
@@ -39,7 +39,7 @@ def cartesian_to_polar_coords(cartesian_coords):
     `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
 
     :param cartesian_coords: Cartesian co-ordinates *[batch_shape,3]*
-    :type cartesian_coords: array
+
     :return: Spherical polar co-ordinates *[batch_shape,3]*
     """
 

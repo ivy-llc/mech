@@ -11,9 +11,9 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
     Append ones to array of non-homogeneous co-ordinates to make them homogeneous.
 
     :param coords: Array of non-homogeneous co-ordinates *[batch_shape,d]*
-    :type coords: array
+
     :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
+
     :return: Array of Homogeneous co-ordinates *[batch_shape,d+1]*
     """
 
@@ -35,11 +35,11 @@ def make_transformation_homogeneous(matrices, batch_shape=None, dev_str=None):
     Append to set of 3x4 non-homogeneous matrices to make them homogeneous.
 
     :param matrices: set of 3x4 non-homogeneous matrices *[batch_shape,3,4]*
-    :type matrices: array
+
     :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
+
     :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
+
     :return: 4x4 Homogeneous matrices *[batch_shape,4,4]*
     """
 

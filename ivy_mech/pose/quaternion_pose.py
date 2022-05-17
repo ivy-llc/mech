@@ -16,7 +16,7 @@ def axis_angle_pose_to_quaternion_pose(axis_angle_pose):
     to quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`.
 
     :param axis_angle_pose: Axis-angle pose *[batch_shape,7]*
-    :type axis_angle_pose: array
+
     :return: Quaternion pose *[batch_shape,7]*
     """
 
@@ -34,7 +34,7 @@ def mat_pose_to_quaternion_pose(matrix):
     `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_
 
     :param matrix: Matrix pose *[batch_shape,3,4]*
-    :type matrix: array
+
     :return: Quaternion pose *[batch_shape,7]*
     """
 
@@ -51,11 +51,11 @@ def euler_pose_to_quaternion_pose(euler_pose, convention='zyx', batch_shape=None
     `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_
 
     :param euler_pose: Euler angle pose *[batch_shape,6]*
-    :type euler_pose: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
+
     :return: Quaternion pose *[batch_shape,7]*
     """
 
@@ -75,11 +75,11 @@ def increment_quaternion_pose_with_velocity(quat_pose, quat_vel, delta_t):
     `[reference] <https://en.wikipedia.org/wiki/Quaternion>`_
 
     :param quat_pose: Quaternion pose. *[batch_shape,7]*
-    :type quat_pose: array
+
     :param quat_vel: Quaternion velocity. *[batch_shape,7]*
-    :type quat_vel: array
+
     :param delta_t: Time step in seconds, for incrementing the quaternion pose by the velocity quaternion.
-    :type delta_t: float
+
     :return: Incremented quaternion pose *[batch_shape,7]*
     """
 

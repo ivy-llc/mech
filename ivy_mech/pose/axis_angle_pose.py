@@ -17,13 +17,13 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
     axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]`
 
     :param euler_pose: Euler angle pose *[batch_shape,6]*
-    :type euler_pose: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
+
     :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
+
     :return: Rotation axis unit vector and angle *[batch_shape,4]*
     """
     aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, dev_str)
@@ -38,7 +38,7 @@ def mat_pose_to_rot_vec_pose(matrix):
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
 
     :param matrix: Matrix pose *[batch_shape,3,4]*
-    :type matrix: array
+
     :return: Rotation vector pose *[batch_shape,6]*
     """
 
@@ -63,7 +63,7 @@ def quaternion_pose_to_rot_vec_pose(quat_pose):
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
 
     :param quat_pose: Quaternion pose *[batch_shape,7]*
-    :type quat_pose: array
+
     :return: Rotation vector pose *[batch_shape,6]*
     """
 

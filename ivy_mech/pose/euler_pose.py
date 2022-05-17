@@ -17,9 +17,9 @@ def mat_pose_to_euler_pose(matrix, convention='zyx'):
     `[reference] <https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2012/07/euler-angles1.pdf>`_
 
     :param matrix: Matrix pose *[batch_shape,3,4]*
-    :type matrix: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :return: Euler pose *[batch_shape,6]*
     """
 
@@ -41,9 +41,9 @@ def quaternion_pose_to_euler_pose(quaternion_pose, convention='zyx'):
     :math:`\mathbf{p}_{xyz} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]`.
 
     :param quaternion_pose: Quaternion pose *[batch_shape,7]*
-    :type quaternion_pose: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :return: Euler pose *[batch_shape,6]*
     """
 
@@ -64,9 +64,9 @@ def axis_angle_pose_to_euler_pose(axis_angle_pose, convention='zyx'):
      to :math:`abc` Euler angle pose :math:`\mathbf{p}_{xyz} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]`.
 
     :param axis_angle_pose: Axis-angle pose *[batch_shape,7]*
-    :type axis_angle_pose: array
+
     :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
+
     :return: Euler pose *[batch_shape,6]*
     """
 
