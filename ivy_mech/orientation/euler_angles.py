@@ -16,7 +16,6 @@ VALID_EULER_CONVENTIONS = ['xyx', 'yzy', 'zxz', 'xzx', 'yxy', 'zyz',
 # --------------#
 
 def _rot_mat_to_xyx_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 0, 0:1])
 
@@ -45,7 +44,6 @@ def _rot_mat_to_xyx_euler(rot_mat):
 
 
 def _rot_mat_to_yzy_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 1, 1:2])
 
@@ -74,7 +72,6 @@ def _rot_mat_to_yzy_euler(rot_mat):
 
 
 def _rot_mat_to_zxz_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 2, 2:3])
 
@@ -103,7 +100,6 @@ def _rot_mat_to_zxz_euler(rot_mat):
 
 
 def _rot_mat_to_xzx_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 0, 0:1])
 
@@ -132,7 +128,6 @@ def _rot_mat_to_xzx_euler(rot_mat):
 
 
 def _rot_mat_to_yxy_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 1, 1:2])
 
@@ -161,7 +156,6 @@ def _rot_mat_to_yxy_euler(rot_mat):
 
 
 def _rot_mat_to_zyz_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.acos(rot_mat[..., 2, 2:3])
 
@@ -190,7 +184,6 @@ def _rot_mat_to_zyz_euler(rot_mat):
 
 
 def _rot_mat_to_xyz_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 2, 0:1])
 
@@ -219,7 +212,6 @@ def _rot_mat_to_xyz_euler(rot_mat):
 
 
 def _rot_mat_to_yzx_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 0, 1:2])
 
@@ -248,7 +240,6 @@ def _rot_mat_to_yzx_euler(rot_mat):
 
 
 def _rot_mat_to_zxy_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = -_ivy.asin(rot_mat[..., 1, 2:3])
 
@@ -277,7 +268,6 @@ def _rot_mat_to_zxy_euler(rot_mat):
 
 
 def _rot_mat_to_xzy_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 1, 0:1])
 
@@ -306,7 +296,6 @@ def _rot_mat_to_xzy_euler(rot_mat):
 
 
 def _rot_mat_to_yxz_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 2, 1:2])
 
@@ -335,7 +324,6 @@ def _rot_mat_to_yxz_euler(rot_mat):
 
 
 def _rot_mat_to_zyx_euler(rot_mat):
-
     # BS x 1
     euler_angles_1 = _ivy.asin(rot_mat[..., 0, 2:3])
 
