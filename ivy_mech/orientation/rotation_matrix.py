@@ -1,6 +1,4 @@
-"""
-Collection of Rotation Conversion Functions to Rotation Matrix Format
-"""
+"""Collection of Rotation Conversion Functions to Rotation Matrix Format"""
 
 # global
 import ivy as _ivy
@@ -13,6 +11,20 @@ from ivy_mech.orientation import quaternion as _ivy_quat
 # ----------------#
 
 def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
+    """
+
+    Parameters
+    ----------
+    identity_matrix
+
+    zeros
+
+    sin_theta
+
+    cos_theta
+
+
+    """
     rot_x_u = identity_matrix[..., 0:1, :]
     rot_x_m = _ivy.concatenate((zeros, cos_theta, -sin_theta), -1)
     rot_x_l = _ivy.concatenate((zeros, sin_theta, cos_theta), -1)
@@ -20,6 +32,20 @@ def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 
 def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
+    """
+
+    Parameters
+    ----------
+    identity_matrix
+
+    zeros
+
+    sin_theta
+
+    cos_theta
+
+
+    """
     rot_y_u = _ivy.concatenate((cos_theta, zeros, sin_theta), -1)
     rot_y_m = identity_matrix[..., 1:2, :]
     rot_y_l = _ivy.concatenate((-sin_theta, zeros, cos_theta), -1)
@@ -27,6 +53,20 @@ def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 
 def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
+    """
+
+    Parameters
+    ----------
+    identity_matrix
+
+    zeros
+
+    sin_theta
+
+    cos_theta
+
+
+    """
     rot_z_u = _ivy.concatenate((cos_theta, -sin_theta, zeros), -1)
     rot_z_m = _ivy.concatenate((sin_theta, cos_theta, zeros), -1)
     rot_z_l = identity_matrix[..., 2:3, :]
@@ -40,14 +80,21 @@ ROTATION_FUNC_DICT = {'x': _x_axis_rotation_matrix, 'y': _y_axis_rotation_matrix
 # --------#
 
 def rot_vec_to_rot_mat(rot_vec):
-    """
-    Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to rotation matrix
-    :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle>`_
+    """Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to
+    rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n `[reference]
+    <https://en.wikipedia.org/wiki/Rotation_matrix
+    #Rotation_matrix_from_axis_and_angle>`_
 
-    :param rot_vec: Rotation vector *[batch_shape,3]*
-    :type rot_vec: array
-    :return: Rotation matrix *[batch_shape,3,3]*
+    Parameters
+    ----------
+    rot_vec
+        Rotation vector *[batch_shape,3]*
+
+    Returns
+    -------
+    ret
+        Rotation matrix *[batch_shape,3,3]*
+
     """
 
     # BS x 1
@@ -92,14 +139,21 @@ def rot_vec_to_rot_mat(rot_vec):
 
 
 def quaternion_to_rot_mat(quaternion):
-    """
-    Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation matrix
-    :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Conversion_to_and_from_the_matrix_representation>`_
+    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation
+    matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n `[reference]
+    <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
+    #Conversion_to_and_from_the_matrix_representation>`_
 
-    :param quaternion: Quaternion *[batch_shape,4]*
-    :type quaternion: array
-    :return: Rotation matrix *[batch_shape,3,3]*
+    Parameters
+    ----------
+    quaternion
+        Quaternion *[batch_shape,4]*
+
+    Returns
+    -------
+    ret
+        Rotation matrix *[batch_shape,3,3]*
+
     """
 
     # BS x 1 x 1
@@ -132,25 +186,33 @@ def quaternion_to_rot_mat(quaternion):
 # ------------------#
 
 def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev_str=None):
-    """
-    Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation matrix
+    """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation matrix
     :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix>`_
 
-    :param euler_angles: Euler angles *[batch_shape,3]*
-    :type euler_angles: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation matrix *[batch_shape,3,3]*
+    Parameters
+    ----------
+    euler_angles
+        Euler angles *[batch_shape,3]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication.
+        (Default value = 'zyx')
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation matrix *[batch_shape,3,3]*
+
     """
 
     if batch_shape is None:
         batch_shape = euler_angles.shape[:-1]
-        
+
     if dev_str is None:
         dev_str = _ivy.dev_str(euler_angles)
 
@@ -182,25 +244,34 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, dev_str=N
 
 # noinspection PyUnresolvedReferences
 def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev_str=None):
-    """
-    Determine rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` of body which corresponds with
-    it's positive z axis facing towards a target world co-ordinate :math:`\mathbf{x}_t = [t_x, t_y, t_z]`, given the body
-    world co-ordinate :math:`\mathbf{x}_b = [b_x, b_y, b_z]`, while assuming world-space positve-z to correspond to up direction.
-    This is particularly useful for orienting cameras.
-    `[reference] <https://stackoverflow.com/questions/21830340/understanding-glmlookat>`_
+    """Determine rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` of body which
+    corresponds with it's positive z axis facing towards a target world co-ordinate
+    :math:`\mathbf{x}_t = [t_x, t_y, t_z]`, given the body world co-ordinate
+    :math:`\mathbf{x}_b = [b_x, b_y, b_z]`, while assuming world-space positve-z to
+    correspond to up direction. This is particularly useful for orienting cameras. `[
+    reference] <https://stackoverflow.com/questions/21830340/understanding-glmlookat>`_
 
-    :param body_pos: Cartesian position of body *[batch_shape,3]*
-    :type body_pos: array
-    :param target_pos: Cartesian position of target *[batch_shape,3]*
-    :type target_pos: array
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation vector, which faces body towards target *[batch_shape,4]*
+    Parameters
+    ----------
+    body_pos
+        Cartesian position of body *[batch_shape,3]*
+    target_pos
+        Cartesian position of target *[batch_shape,3]*
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation vector, which faces body towards target *[batch_shape,4]*
+
     """
 
-    # ToDo: make this more general, allowing arbitrary view and up direction axes to be specified
+    # ToDo: make this more general, allowing arbitrary view and up direction axes to
+    #  be specified
 
     if batch_shape is None:
         batch_shape = body_pos.shape[:-1]
@@ -234,24 +305,37 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, dev_st
 
 
 def axis_angle_to_rot_mat(axis_angle):
-    """
-    Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    """Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
     rotation angle :math:`θ` to rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
 
-    :param axis_angle: Axis-angle *[batch_shape,4]*
-    :type axis_angle: array
-    :return: Rotation matrix *[batch_shape,3,3]*
+    Parameters
+    ----------
+    axis_angle
+        Axis-angle *[batch_shape,4]*
+
+    Returns
+    -------
+    ret
+        Rotation matrix *[batch_shape,3,3]*
+
     """
 
     return quaternion_to_rot_mat(_ivy_quat.axis_angle_to_quaternion(axis_angle))
 
 
 def get_random_rot_mat(batch_shape=None):
-    """
-    Generate random rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
-    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
-    :type batch_shape: sequence of ints, optional
-    :return: Random rotation matrix *[batch_shape,3,3]*
+    """Generate random rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
+
+    Parameters
+    ----------
+    batch_shape
+        Shape of batch. Shape of [1] is assumed if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Random rotation matrix *[batch_shape,3,3]*
+
     """
 
     return quaternion_to_rot_mat(

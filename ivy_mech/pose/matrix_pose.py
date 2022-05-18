@@ -1,6 +1,4 @@
-"""
-Collection of Pose Conversion Functions to Matrix Format
-"""
+"""Collection of Pose Conversion Functions to Matrix Format"""
 
 # global
 import ivy as _ivy
@@ -11,14 +9,20 @@ from ivy_mech.orientation import quaternion as _ivy_quat
 
 
 def quaternion_pose_to_mat_pose(quat_pose):
-    """
-    Convert quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]` to
+    """Convert quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]` to
     matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Conversion_to_and_from_the_matrix_representation>`_
 
-    :param quat_pose: Quaternion pose *[batch_shape,7]*
-    :type quat_pose: array
-    :return: Matrix pose *[batch_shape,3,4]*
+    Parameters
+    ----------
+    quat_pose
+        Quaternion pose *[batch_shape,7]*
+
+    Returns
+    -------
+    ret
+        Matrix pose *[batch_shape,3,4]*
+
     """
 
     # BS x 3 x 3
@@ -32,19 +36,25 @@ def quaternion_pose_to_mat_pose(quat_pose):
 
 
 def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
-    """
-    Convert :math: Euler angle pose
+    """Convert :math: Euler angle pose
     :math:`\mathbf{p}_{abc} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]` to matrix pose
     :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix>`_
 
-    :param euler_pose: Euler angle pose *[batch_shape,6]*
-    :type euler_pose: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
-    :return: Matrix pose *[batch_shape,3,4]*
+    Parameters
+    ----------
+    euler_pose
+        Euler angle pose *[batch_shape,6]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Matrix pose *[batch_shape,3,4]*
+
     """
 
     if batch_shape is None:
@@ -58,14 +68,20 @@ def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
 
 
 def rot_vec_pose_to_mat_pose(rot_vec_pose):
-    """
-    Convert rotation vector pose :math:`\mathbf{p}_{rv} = [\mathbf{x}_c, \mathbf{θ}_{rv}] = [x, y, z, θe_x, θe_y, θe_z]`
+    """Convert rotation vector pose :math:`\mathbf{p}_{rv} = [\mathbf{x}_c, \mathbf{θ}_{rv}] = [x, y, z, θe_x, θe_y, θe_z]`
     to matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
 
-    :param rot_vec_pose: Rotation vector pose *[batch_shape,6]*
-    :type rot_vec_pose: array
-    :return: Matrix pose *[batch_shape,3,4]*
+    Parameters
+    ----------
+    rot_vec_pose
+        Rotation vector pose *[batch_shape,6]*
+
+    Returns
+    -------
+    ret
+        Matrix pose *[batch_shape,3,4]*
+
     """
 
     # BS x 4
@@ -79,13 +95,19 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose):
 
 
 def axis_angle_pose_to_mat_pose(axis_angle_pose):
-    """
-    Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]` to
+    """Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]` to
     matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}`.
 
-    :param axis_angle_pose: Quaternion pose *[batch_shape,7]*
-    :type axis_angle_pose: array
-    :return: Matrix pose *[batch_shape,3,4]*
+    Parameters
+    ----------
+    axis_angle_pose
+        Quaternion pose *[batch_shape,7]*
+
+    Returns
+    -------
+    ret
+        Matrix pose *[batch_shape,3,4]*
+
     """
 
     # BS x 3 x 3

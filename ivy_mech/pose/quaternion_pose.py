@@ -1,6 +1,4 @@
-"""
-Collection of Pose Conversion Functions to Quaternion Pose Format
-"""
+"""Collection of Pose Conversion Functions to Quaternion Pose Format"""
 
 # global
 import ivy as _ivy
@@ -11,13 +9,19 @@ from ivy_mech.pose import matrix_pose as _ivy_mat_pose
 
 
 def axis_angle_pose_to_quaternion_pose(axis_angle_pose):
-    """
-    Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]`
+    """Convert axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]`
     to quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`.
 
-    :param axis_angle_pose: Axis-angle pose *[batch_shape,7]*
-    :type axis_angle_pose: array
-    :return: Quaternion pose *[batch_shape,7]*
+    Parameters
+    ----------
+    axis_angle_pose
+        Axis-angle pose *[batch_shape,7]*
+
+    Returns
+    -------
+    ret
+        Quaternion pose *[batch_shape,7]*
+
     """
 
     # BS x 3
@@ -28,14 +32,20 @@ def axis_angle_pose_to_quaternion_pose(axis_angle_pose):
 
 
 def mat_pose_to_quaternion_pose(matrix):
-    """
-    Convert matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}` to quaternion pose
+    """Convert matrix pose :math:`\mathbf{P}\in\mathbb{R}^{3×4}` to quaternion pose
     :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`.\n
     `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_
 
-    :param matrix: Matrix pose *[batch_shape,3,4]*
-    :type matrix: array
-    :return: Quaternion pose *[batch_shape,7]*
+    Parameters
+    ----------
+    matrix
+        Matrix pose *[batch_shape,3,4]*
+
+    Returns
+    -------
+    ret
+        Quaternion pose *[batch_shape,7]*
+
     """
 
     # BS x 7
@@ -44,19 +54,25 @@ def mat_pose_to_quaternion_pose(matrix):
 
 
 def euler_pose_to_quaternion_pose(euler_pose, convention='zyx', batch_shape=None):
-    """
-    Convert :math: Euler angle pose
+    """Convert :math: Euler angle pose
     :math:`\mathbf{p}_{abc} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]` to quaternion pose
     :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`.\n
     `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_
 
-    :param euler_pose: Euler angle pose *[batch_shape,6]*
-    :type euler_pose: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
-    :return: Quaternion pose *[batch_shape,7]*
+    Parameters
+    ----------
+    euler_pose
+        Euler angle pose *[batch_shape,6]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Quaternion pose *[batch_shape,7]*
+
     """
 
     if batch_shape is None:
@@ -67,20 +83,26 @@ def euler_pose_to_quaternion_pose(euler_pose, convention='zyx', batch_shape=None
 
 
 def increment_quaternion_pose_with_velocity(quat_pose, quat_vel, delta_t):
-    """
-    Increment a quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`
+    """Increment a quaternion pose :math:`\mathbf{p}_{q} = [\mathbf{x}_c, \mathbf{q}] = [x, y, z, q_i, q_j, q_k, q_r]`
     forward by one time-increment :math:`Δt`, given the velocity represented in quaternion form :math:`\mathbf{V}_q`.
     Where :math:`\mathbf{P}_q (t+1) = \mathbf{P}_q(t) × \mathbf{V}_q`, :math:`t` is in seconds, and :math:`×` denotes
     the hamilton product.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternion>`_
 
-    :param quat_pose: Quaternion pose. *[batch_shape,7]*
-    :type quat_pose: array
-    :param quat_vel: Quaternion velocity. *[batch_shape,7]*
-    :type quat_vel: array
-    :param delta_t: Time step in seconds, for incrementing the quaternion pose by the velocity quaternion.
-    :type delta_t: float
-    :return: Incremented quaternion pose *[batch_shape,7]*
+    Parameters
+    ----------
+    quat_pose
+        Quaternion pose. *[batch_shape,7]*
+    quat_vel
+        Quaternion velocity. *[batch_shape,7]*
+    delta_t
+        Time step in seconds, for incrementing the quaternion pose by the velocity quaternion.
+
+    Returns
+    -------
+    ret
+        Incremented quaternion pose *[batch_shape,7]*
+
     """
 
     # BS x 4

@@ -1,6 +1,4 @@
-"""
-Collection of Rotation Conversion Functions to Axis-Angle Format
-"""
+"""Collection of Rotation Conversion Functions to Axis-Angle Format"""
 
 # global
 import ivy as _ivy
@@ -12,50 +10,68 @@ MIN_DENOMINATOR = 1e-12
 
 
 def rot_mat_to_axis_angle(rot_mat,  dev_str=None):
-    """
-    Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to rotation axis unit vector
+    """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
-    :param rot_mat: Rotation matrix *[batch_shape,3,3]*
-    :type rot_mat: array
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation axis unit vector and angle *[batch_shape,4]*
+    Parameters
+    ----------
+    rot_mat
+        Rotation matrix *[batch_shape,3,3]*
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation axis unit vector and angle *[batch_shape,4]*
+
     """
     quat = _ivy_q.rot_mat_to_quaternion(rot_mat)
     return quaternion_to_axis_angle(quat, dev_str)
 
 
 def euler_to_axis_angle(euler_angles, convention='zyx', batch_shape=None, dev_str=None):
-    """
-    Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation axis unit vector
+    """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
-    :param euler_angles: Input euler angles *[batch_shape,3]*
-    :type euler_angles: array
-    :param convention: The axes for euler rotation, in order of L.H.S. matrix multiplication.
-    :type convention: str, optional
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
-    :type batch_shape: sequence of ints, optional
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation axis unit vector and angle *[batch_shape,4]*
+    Parameters
+    ----------
+    euler_angles
+        Input euler angles *[batch_shape,3]*
+    convention
+        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation axis unit vector and angle *[batch_shape,4]*
+
     """
     quat = _ivy_q.euler_to_quaternion(euler_angles, convention, batch_shape)
     return quaternion_to_axis_angle(quat, dev_str)
 
 
 def quaternion_to_axis_angle(quaternion, dev_str=None):
-    """
-    Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation axis unit vector
+    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.\n
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_
 
-    :param quaternion: Input quaternion *[batch_shape,4]*
-    :type quaternion: array
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation axis unit vector and angle *[batch_shape,4]*
+    Parameters
+    ----------
+    quaternion
+        Input quaternion *[batch_shape,4]*
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation axis unit vector and angle *[batch_shape,4]*
+
     """
 
     # BS x 1
@@ -83,11 +99,18 @@ def quaternion_to_polar_axis_angle(quaternion, dev_str=None):
     :math:`\mathbf{θ}_{paa} = [ϕ_e, ϕ_a, θ]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation>`_
 
-    :param quaternion: Input quaternion *[batch_shape,4]*
-    :type quaternion: array
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Polar axis angle representation *[batch_shape,3]*
+    Parameters
+    ----------
+    quaternion
+        Input quaternion *[batch_shape,4]*
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Polar axis angle representation *[batch_shape,3]*
+
     """
 
     if dev_str is None:
@@ -110,11 +133,18 @@ def quaternion_to_rotation_vector(quaternion, dev_str=None):
     :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
 
-    :param quaternion: Input quaternion *[batch_shape,4]*
-    :type quaternion: array
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-    :type dev_str: str, optional
-    :return: Rotation vector *[batch_shape,3]*
+    Parameters
+    ----------
+    quaternion
+        Input quaternion *[batch_shape,4]*
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Rotation vector *[batch_shape,3]*
+
     """
 
     if dev_str is None:
@@ -128,12 +158,19 @@ def quaternion_to_rotation_vector(quaternion, dev_str=None):
 
 
 def get_random_axis_angle(batch_shape=None):
-    """
-    Generate random axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
+    """Generate random axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
     and rotation angle :math:`θ`
-    :param batch_shape: Shape of batch. Shape of [1] is assumed if None.
-    :type batch_shape: sequence of ints, optional
-    :return: Random rotation axis unit vector and angle *[batch_shape,4]*
+
+    Parameters
+    ----------
+    batch_shape
+        Shape of batch. Shape of [1] is assumed if None. (Default value = None)
+
+    Returns
+    -------
+    ret
+        Random rotation axis unit vector and angle *[batch_shape,4]*
+
     """
 
     return quaternion_to_axis_angle(_ivy_q.get_random_quaternion(batch_shape=batch_shape))
