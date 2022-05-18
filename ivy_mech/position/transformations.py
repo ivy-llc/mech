@@ -1,20 +1,24 @@
-"""
-Collection of Functions for Homogeneous Co-ordinates
-"""
+"""Collection of Functions for Homogeneous Co-ordinates"""
 
 # global
 import ivy as _ivy
 
 
 def make_coordinates_homogeneous(coords, batch_shape=None):
-    """
-    Append ones to array of non-homogeneous co-ordinates to make them homogeneous.
+    """Append ones to array of non-homogeneous co-ordinates to make them homogeneous.
 
-    :param coords: Array of non-homogeneous co-ordinates *[batch_shape,d]*
+    Parameters
+    ----------
+    coords
+        Array of non-homogeneous co-ordinates *[batch_shape,d]*
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
 
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
+    Returns
+    -------
+    ret
+        Array of Homogeneous co-ordinates *[batch_shape,d+1]*
 
-    :return: Array of Homogeneous co-ordinates *[batch_shape,d+1]*
     """
 
     if batch_shape is None:
@@ -31,16 +35,22 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
 
 
 def make_transformation_homogeneous(matrices, batch_shape=None, dev_str=None):
-    """
-    Append to set of 3x4 non-homogeneous matrices to make them homogeneous.
+    """Append to set of 3x4 non-homogeneous matrices to make them homogeneous.
 
-    :param matrices: set of 3x4 non-homogeneous matrices *[batch_shape,3,4]*
+    Parameters
+    ----------
+    matrices
+        set of 3x4 non-homogeneous matrices *[batch_shape,3,4]*
+    batch_shape
+        Shape of batch. Inferred from inputs if None. (Default value = None)
+    dev_str
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
 
-    :param batch_shape: Shape of batch. Inferred from inputs if None.
+    Returns
+    -------
+    ret
+        4x4 Homogeneous matrices *[batch_shape,4,4]*
 
-    :param dev_str: device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None.
-
-    :return: 4x4 Homogeneous matrices *[batch_shape,4,4]*
     """
 
     if batch_shape is None:

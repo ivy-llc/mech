@@ -1,6 +1,4 @@
-"""
-Collection of Position Co-ordinate Conversion Functions
-"""
+"""Collection of Position Co-ordinate Conversion Functions"""
 
 # global
 import ivy as _ivy
@@ -9,14 +7,20 @@ MIN_DENOMINATOR = 1e-12
 
 
 def polar_to_cartesian_coords(polar_coords):
-    """
-    Convert spherical polar co-ordinates :math:`\mathbf{x}_p = [r, α, β]` to cartesian co-ordinates
+    """Convert spherical polar co-ordinates :math:`\mathbf{x}_p = [r, α, β]` to cartesian co-ordinates
     :math:`\mathbf{x}_c = [x, y, z]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
 
-    :param polar_coords: Spherical polar co-ordinates *[batch_shape,3]*
+    Parameters
+    ----------
+    polar_coords
+        Spherical polar co-ordinates *[batch_shape,3]*
 
-    :return: Cartesian co-ordinates *[batch_shape,3]*
+    Returns
+    -------
+    ret
+        Cartesian co-ordinates *[batch_shape,3]*
+
     """
 
     # BS x 1
@@ -33,14 +37,20 @@ def polar_to_cartesian_coords(polar_coords):
 
 
 def cartesian_to_polar_coords(cartesian_coords):
-    """
-    Convert cartesian co-ordinates :math:`\mathbf{x}_c = [x, y, z]` to spherical polar co-ordinates
+    """Convert cartesian co-ordinates :math:`\mathbf{x}_c = [x, y, z]` to spherical polar co-ordinates
     :math:`\mathbf{x}_p = [r, α, β]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
 
-    :param cartesian_coords: Cartesian co-ordinates *[batch_shape,3]*
+    Parameters
+    ----------
+    cartesian_coords
+        Cartesian co-ordinates *[batch_shape,3]*
 
-    :return: Spherical polar co-ordinates *[batch_shape,3]*
+    Returns
+    -------
+    ret
+        Spherical polar co-ordinates *[batch_shape,3]*
+
     """
 
     # BS x 1
