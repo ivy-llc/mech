@@ -1,6 +1,4 @@
-"""
-Collection of Pose Conversion Functions to Quaternion Pose Format
-"""
+"""Collection of Pose Conversion Functions to Quaternion Pose Format"""
 
 # global
 import ivy as _ivy
