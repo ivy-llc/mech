@@ -32,8 +32,8 @@ RUN cat requirements.txt | grep -v "ivy-" | pip3 install --no-cache-dir -r /dev/
 COPY ivy_mech_demos/requirements.txt /
 RUN cat requirements.txt | grep -v "ivy-" | pip3 install --no-cache-dir -r /dev/stdin
 
-RUN python3 test_dependencies.py -fp requirements.txt,optional.txt && \
-    rm -rf requirements.txt && \
-    rm -rf optional.txt
+# RUN python3 test_dependencies.py -fp requirements.txt,optional.txt && \
+#    rm -rf requirements.txt && \
+#    rm -rf optional.txt
 
 WORKDIR /mech
