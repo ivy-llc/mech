@@ -48,7 +48,7 @@ def main(f=None):
     position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = ivy.concatenate((position, rot_vec), 0)
+    rot_vec_pose = ivy.concat((position, rot_vec), 0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
