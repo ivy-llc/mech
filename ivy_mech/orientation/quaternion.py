@@ -172,7 +172,7 @@ def rotation_vector_to_quaternion(rot_vector):
     """
 
     # BS x 1
-    theta = (_ivy.reduce_sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
+    theta = (_ivy.sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
 
     # BS x 3
     vector = rot_vector / (theta + MIN_DENOMINATOR)
@@ -232,7 +232,7 @@ def inverse_quaternion(quaternion):
     """
 
     # BS x 1
-    sum_of_squares = _ivy.reduce_sum(quaternion ** 2, -1)
+    sum_of_squares = _ivy.sum(quaternion ** 2, -1)
     vector_conjugate = _ivy.concat((-quaternion[..., 0:3], quaternion[..., -1:]),
                                         -1)
     return vector_conjugate / (sum_of_squares + MIN_DENOMINATOR)

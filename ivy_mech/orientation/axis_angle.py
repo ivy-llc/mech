@@ -114,7 +114,7 @@ def quaternion_to_polar_axis_angle(quaternion, device=None):
     """
 
     if device is None:
-        device = _ivy.device(quaternion)
+        device = _ivy.dev(quaternion)
 
     # BS x 4
     vector_and_angle = quaternion_to_axis_angle(quaternion, device)
@@ -148,7 +148,7 @@ def quaternion_to_rotation_vector(quaternion, device=None):
     """
 
     if device is None:
-        device = _ivy.device(quaternion)
+        device = _ivy.dev(quaternion)
 
     # BS x 4
     vector_and_angle = quaternion_to_axis_angle(quaternion, device)
