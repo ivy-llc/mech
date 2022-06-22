@@ -13,4 +13,4 @@ jobs:
       - name: Run Tests
         run: |
           cd mech
-          docker run --rm -v `pwd`:/mech unifyai/mech:latest python3 -m pytest mech/ivy_mech_tests/
+          docker run --rm -v `pwd`:/mech unifyai/mech:latest python3 -m pytest ivy_mech_tests/
