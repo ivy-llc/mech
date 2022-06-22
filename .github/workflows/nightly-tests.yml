@@ -1,5 +1,5 @@
 name: nightly-tests
-on: [push]
+on: [push, pull_request]
 jobs:
   run-nightly-tests:
     runs-on: ubuntu-latest
@@ -12,4 +12,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          docker run --rm -v `pwd`/mech:/mech unifyai/ivy-mech:latest python3 -m pytest ivy_mech_tests/
+          cd mech
+          docker run --rm -v `pwd`:/mech unifyai/mech:latest python3 -m pytest mech/ivy_mech_tests/
