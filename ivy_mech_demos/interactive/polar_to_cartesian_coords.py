@@ -4,7 +4,7 @@ import ivy
 import math
 import argparse
 import ivy_mech
-import ivy.numpy
+import ivy.functional.backends.numpy as ivy_np
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -108,13 +108,13 @@ def main(interactive=True, try_use_sim=True, f=None):
     iterations = 10 if sim.with_pyrep else 1
     for _ in range(iterations):
         depth, rgb = sim.omcam.cap()
-        plr = ivy.concatenate([plr_rads, depth], -1)
+        plr = ivy.concat([plr_rads, depth], -1)
         xyz_wrt_cam = ivy_mech.polar_to_cartesian_coords(plr)
         xyz_wrt_cam = ivy.reshape(xyz_wrt_cam, (-1, 3))
         xyz_wrt_cam_homo = ivy_mech.make_coordinates_homogeneous(xyz_wrt_cam)
-        inv_ext_mat_trans = ivy.transpose(sim.omcam.get_inv_ext_mat(), (1, 0))
+        inv_ext_mat_trans = ivy.matrix_transpose(sim.omcam.get_inv_ext_mat(), (1, 0))
         xyz_wrt_world = ivy.matmul(xyz_wrt_cam_homo, inv_ext_mat_trans)[..., 0:3]
-        with ivy.numpy.use:
+        with ivy_np.use:
             omni_cam_inv_ext_mat = ivy_mech.make_transformation_homogeneous(
                 ivy.to_numpy(sim.omcam.get_inv_ext_mat()))
         vis.show_point_cloud(xyz_wrt_world, rgb, interactive,
