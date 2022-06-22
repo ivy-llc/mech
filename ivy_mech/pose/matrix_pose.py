@@ -32,7 +32,7 @@ def quaternion_pose_to_mat_pose(quat_pose):
     rhs = _ivy.expand_dims(quat_pose[..., 0:3], -1)
 
     # BS x 3 x 4
-    return _ivy.concatenate((rot_mat, rhs), -1)
+    return _ivy.concat((rot_mat, rhs), -1)
 
 
 def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
@@ -64,7 +64,7 @@ def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
     rot_mat = _ivy_rot_mat.euler_to_rot_mat(euler_pose[..., 3:], convention, batch_shape)
 
     # BS x 3 x 4
-    return _ivy.concatenate((rot_mat, _ivy.expand_dims(euler_pose[..., 0:3], -1)), -1)
+    return _ivy.concat((rot_mat, _ivy.expand_dims(euler_pose[..., 0:3], -1)), -1)
 
 
 def rot_vec_pose_to_mat_pose(rot_vec_pose):
@@ -91,7 +91,7 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose):
     rot_mat = _ivy_rot_mat.quaternion_to_rot_mat(quaternion)
 
     # BS x 3 x 4
-    return _ivy.concatenate((rot_mat, _ivy.expand_dims(rot_vec_pose[..., 0:3], -1)), -1)
+    return _ivy.concat((rot_mat, _ivy.expand_dims(rot_vec_pose[..., 0:3], -1)), -1)
 
 
 def axis_angle_pose_to_mat_pose(axis_angle_pose):
@@ -114,5 +114,5 @@ def axis_angle_pose_to_mat_pose(axis_angle_pose):
     rot_mat = _ivy_rot_mat.axis_angle_to_rot_mat(axis_angle_pose[..., 3:])
 
     # BS x 3 x 4
-    return _ivy.concatenate(
+    return _ivy.concat(
         (rot_mat, _ivy.expand_dims(axis_angle_pose[..., :3], -1)), -1)
