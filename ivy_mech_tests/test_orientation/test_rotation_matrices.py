@@ -6,7 +6,7 @@ Collection of tests for rotation matrix functions
 import ivy_mech
 import ivy.functional.backends.numpy as ivy_np
 import numpy as np
-import ivy.functional.ivy.general as ivy_gen
+import ivy
 
 # local
 from ivy_mech_tests.test_orientation.orientation_data import OrientationTestData
@@ -41,13 +41,13 @@ def test_euler_to_rot_mat(device, call):
 
 
 def test_target_facing_rotation_vector(device, call):
-    assert np.allclose(call(ivy_mech.target_facing_rotation_matrix, ivy_gen.array([0., 0., 0.]),
-                            ivy_gen.array([0., 1., 0.])),
+    assert np.allclose(call(ivy_mech.target_facing_rotation_matrix, ivy.array([0., 0., 0.]),
+                            ivy.array([0., 1., 0.])),
                        np.array([[-1., 0., 0.],
                                  [0., 0., 1.],
                                  [0., 1., 0.]]), atol=1e-6)
-    assert np.allclose(call(ivy_mech.target_facing_rotation_matrix, ivy_gen.array([[[0., 0., 0.]]]),
-                            ivy_gen.array([[[0., 1., 0.]]])),
+    assert np.allclose(call(ivy_mech.target_facing_rotation_matrix, ivy.array([[[0., 0., 0.]]]),
+                            ivy.array([[[0., 1., 0.]]])),
                        np.array([[[[-1., 0., 0.],
                                    [0., 0., 1.],
                                    [0., 1., 0.]]]]), atol=1e-6)

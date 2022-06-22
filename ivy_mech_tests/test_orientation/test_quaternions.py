@@ -33,7 +33,7 @@ def test_rot_mat_to_quaternion(device, call):
 
 def test_euler_to_quaternion(device, call):
     for conv in ivy_mech.VALID_EULER_CONVENTIONS:
-        with ivy.numpy.use:
+        with ivy_np.use:
             quaternion = ivy_mech.euler_to_quaternion(qtd.euler_angles, conv)
         assert np.allclose(call(ivy_mech.euler_to_quaternion, qtd.euler_angles, conv), quaternion, atol=1e-6)
         assert np.allclose(call(ivy_mech.euler_to_quaternion, qtd.batched_euler_angles, conv)[0], quaternion,
