@@ -10,7 +10,7 @@ from ivy_tests.test_ivy import helpers
 FW_STRS = ['numpy', 'jax', 'tensorflow', 'torch', 'mxnet']
 
 
-TEST_FRAMEWORKS: Dict[str, callable] = {'numpy': lambda: helpers.get_ivy_numpy(),
+TEST_BACKENDS: Dict[str, callable] = {'numpy': lambda: helpers.get_ivy_numpy(),
                                         'jax': lambda: helpers.get_ivy_jax(),
                                         'tensorflow': lambda: helpers.get_ivy_tensorflow(),
                                         'torch': lambda: helpers.get_ivy_torch(),
@@ -35,7 +35,7 @@ def run_around_tests(dev_str, f, wrapped_mode, compile_graph, call):
         pytest.skip()
     ivy.clear_backend_stack()
     with f.use:
-        # f.set_wrapped_mode(wrapped_mode)
+        f.set_wrapped_mode(wrapped_mode)
         ivy.set_default_device(dev_str)
         yield
 
@@ -52,7 +52,7 @@ def pytest_generate_tests(metafunc):
     # framework
     raw_value = metafunc.config.getoption('--framework')
     if raw_value == 'all':
-        f_strs = TEST_FRAMEWORKS.keys()
+        f_strs = TEST_BACKENDS.keys()
     else:
         f_strs = raw_value.split(',')
 
@@ -81,7 +81,7 @@ def pytest_generate_tests(metafunc):
             for wrapped_mode in wrapped_modes:
                 for compile_graph in compile_modes:
                     configs.append(
-                        (dev_str, TEST_FRAMEWORKS[f_str](), wrapped_mode, compile_graph, TEST_CALL_METHODS[f_str]))
+                        (dev_str, TEST_BACKENDS[f_str](), wrapped_mode, compile_graph, TEST_CALL_METHODS[f_str]))
     metafunc.parametrize('dev_str,f,wrapped_mode,compile_graph,call', configs)
 
 
