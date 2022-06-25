@@ -25,9 +25,9 @@ def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
     """
     rot_x_u = identity_matrix[..., 0:1, :]
-    rot_x_m = _ivy.concat((zeros, cos_theta, -sin_theta), -1)
-    rot_x_l = _ivy.concat((zeros, sin_theta, cos_theta), -1)
-    return _ivy.concat((rot_x_u, rot_x_m, rot_x_l), -2)
+    rot_x_m = _ivy.concat([zeros, cos_theta, -sin_theta], -1)
+    rot_x_l = _ivy.concat([zeros, sin_theta, cos_theta], -1)
+    return _ivy.concat([rot_x_u, rot_x_m, rot_x_l], -2)
 
 
 def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
@@ -45,10 +45,10 @@ def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 
     """
-    rot_y_u = _ivy.concat((cos_theta, zeros, sin_theta), -1)
+    rot_y_u = _ivy.concat([cos_theta, zeros, sin_theta], -1)
     rot_y_m = identity_matrix[..., 1:2, :]
-    rot_y_l = _ivy.concat((-sin_theta, zeros, cos_theta), -1)
-    return _ivy.concat((rot_y_u, rot_y_m, rot_y_l), -2)
+    rot_y_l = _ivy.concat([-sin_theta, zeros, cos_theta], -1)
+    return _ivy.concat([rot_y_u, rot_y_m, rot_y_l], -2)
 
 
 def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
@@ -66,10 +66,10 @@ def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 
     """
-    rot_z_u = _ivy.concat((cos_theta, -sin_theta, zeros), -1)
-    rot_z_m = _ivy.concat((sin_theta, cos_theta, zeros), -1)
+    rot_z_u = _ivy.concat([cos_theta, -sin_theta, zeros], -1)
+    rot_z_m = _ivy.concat([sin_theta, cos_theta, zeros], -1)
     rot_z_l = identity_matrix[..., 2:3, :]
-    return _ivy.concat((rot_z_u, rot_z_m, rot_z_l), -2)
+    return _ivy.concat([rot_z_u, rot_z_m, rot_z_l], -2)
 
 
 ROTATION_FUNC_DICT = {'x': _x_axis_rotation_matrix, 'y': _y_axis_rotation_matrix, 'z': _z_axis_rotation_matrix}
@@ -130,11 +130,11 @@ def rot_vec_to_rot_mat(rot_vec):
 
     # BS x 1 x 3
     top_row = _ivy.concat((top_left, top_middle, top_right), -1)
-    middle_row = _ivy.concat((middle_left, middle_middle, middle_right), -1)
-    bottom_row = _ivy.concat((bottom_left, bottom_middle, bottom_right), -1)
+    middle_row = _ivy.concat([middle_left, middle_middle, middle_right], -1)
+    bottom_row = _ivy.concat([bottom_left, bottom_middle, bottom_right], -1)
 
     # BS x 3 x 3
-    return _ivy.concat((top_row, middle_row, bottom_row), -2)
+    return _ivy.concat([top_row, middle_row, bottom_row], -2)
 
 
 def quaternion_to_rot_mat(quaternion):
@@ -173,12 +173,12 @@ def quaternion_to_rot_mat(quaternion):
     bottom_right = a**2 - b**2 - c**2 + d**2
 
     # BS x 1 x 3
-    top_row = _ivy.concat((top_left, top_middle, top_right), -1)
-    middle_row = _ivy.concat((middle_left, middle_middle, middle_right), -1)
-    bottom_row = _ivy.concat((bottom_left, bottom_middle, bottom_right), -1)
+    top_row = _ivy.concat([top_left, top_middle, top_right], -1)
+    middle_row = _ivy.concat([middle_left, middle_middle, middle_right], -1)
+    bottom_row = _ivy.concat([bottom_left, bottom_middle, bottom_right], -1)
 
     # BS x 3 x 3
-    return _ivy.concat((top_row, middle_row, bottom_row), -2)
+    return _ivy.concat([top_row, middle_row, bottom_row], -2)
 
 
 # Euler Conversions #
@@ -300,7 +300,7 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
     z = _ivy.expand_dims(z, -2)
 
     # BS x 3 x 3
-    return _ivy.pinv(_ivy.concat((x, y, z), -2))
+    return _ivy.pinv(_ivy.concat([x, y, z], -2))
 
 
 def axis_angle_to_rot_mat(axis_angle):

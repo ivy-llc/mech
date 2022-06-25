@@ -62,7 +62,7 @@ def mat_pose_to_rot_vec_pose(matrix):
     rot_vector = _ivy_aa.quaternion_to_rotation_vector(quaternion)
 
     # BS x 6
-    return _ivy.concat((translation, rot_vector), -1)
+    return _ivy.concat([translation, rot_vector], -1)
 
 
 # noinspection PyUnresolvedReferences
@@ -90,4 +90,4 @@ def quaternion_pose_to_rot_vec_pose(quat_pose):
     rot_vec = vector_and_angle[..., :-1] * vector_and_angle[..., -1:]
 
     # BS x 6
-    return _ivy.concat((quat_pose[..., 0:3], rot_vec), -1)
+    return _ivy.concat([quat_pose[..., 0:3], rot_vec], -1)

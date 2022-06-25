@@ -27,7 +27,7 @@ def _rot_mat_to_xyx_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r12 = rot_mat[..., 0, 1:2]
@@ -38,7 +38,7 @@ def _rot_mat_to_xyx_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r21, -r31)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -55,7 +55,7 @@ def _rot_mat_to_yzy_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r23 = rot_mat[..., 1, 2:3]
@@ -66,7 +66,7 @@ def _rot_mat_to_yzy_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r32, r12)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -83,7 +83,7 @@ def _rot_mat_to_zxz_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r31 = rot_mat[..., 2, 0:1]
@@ -94,7 +94,7 @@ def _rot_mat_to_zxz_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r13, -r23)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -111,7 +111,7 @@ def _rot_mat_to_xzx_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r13 = rot_mat[..., 0, 2:3]
@@ -122,7 +122,7 @@ def _rot_mat_to_xzx_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r31, r21)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -139,7 +139,7 @@ def _rot_mat_to_yxy_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r21 = rot_mat[..., 1, 0:1]
@@ -150,7 +150,7 @@ def _rot_mat_to_yxy_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r12, r32)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -167,7 +167,7 @@ def _rot_mat_to_zyz_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r32 = rot_mat[..., 2, 1:2]
@@ -178,7 +178,7 @@ def _rot_mat_to_zyz_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r23, r13)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -195,7 +195,7 @@ def _rot_mat_to_xyz_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r32 = rot_mat[..., 2, 1:2]
@@ -206,7 +206,7 @@ def _rot_mat_to_xyz_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r21, r11)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -223,7 +223,7 @@ def _rot_mat_to_yzx_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r13 = rot_mat[..., 0, 2:3]
@@ -234,7 +234,7 @@ def _rot_mat_to_yzx_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r32, r22)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -251,7 +251,7 @@ def _rot_mat_to_zxy_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r21 = rot_mat[..., 1, 0:1]
@@ -262,7 +262,7 @@ def _rot_mat_to_zxy_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(r13, r33)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -279,7 +279,7 @@ def _rot_mat_to_xzy_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r23 = rot_mat[..., 1, 2:3]
@@ -290,7 +290,7 @@ def _rot_mat_to_xzy_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(-r31, r11)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -307,7 +307,7 @@ def _rot_mat_to_yxz_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r31 = rot_mat[..., 2, 0:1]
@@ -318,7 +318,7 @@ def _rot_mat_to_yxz_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(-r12, r22)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
@@ -335,7 +335,7 @@ def _rot_mat_to_zyx_euler(rot_mat):
     gimbal_euler_angles_2 = _ivy.zeros_like(gimbal_euler_angles_0)
 
     # BS x 3
-    gimbal_euler_angles = _ivy.concat((gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2), -1)
+    gimbal_euler_angles = _ivy.concat([gimbal_euler_angles_0, euler_angles_1, gimbal_euler_angles_2], -1)
 
     # BS x 1
     r12 = rot_mat[..., 0, 1:2]
@@ -346,7 +346,7 @@ def _rot_mat_to_zyx_euler(rot_mat):
     normal_euler_angles_2 = _ivy.atan2(-r23, r33)
 
     # BS x 3
-    normal_euler_angles = _ivy.concat((normal_euler_angles_0, euler_angles_1, normal_euler_angles_2), -1)
+    normal_euler_angles = _ivy.concat([normal_euler_angles_0, euler_angles_1, normal_euler_angles_2], -1)
 
     return _ivy.where(gimbal_validity, normal_euler_angles, gimbal_euler_angles)
 
