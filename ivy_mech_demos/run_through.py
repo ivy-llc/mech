@@ -2,7 +2,7 @@
 import ivy
 import argparse
 import ivy_mech
-from ivy.framework_handler import set_framework
+from ivy.backend_handler import set_backend, choose_random_backend
 from ivy_demo_utils.framework_utils import get_framework_from_str, choose_random_framework
 
 
@@ -13,8 +13,8 @@ def main(f=None):
 
     # choose random framework
 
-    f = choose_random_framework() if f is None else f
-    set_framework(f)
+    f = choose_random_backend(excluded='mxnet') if f is None else f
+    set_backend(f)
 
     # Orientation #
     # ------------#
@@ -48,7 +48,7 @@ def main(f=None):
     position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = ivy.concat((position, rot_vec), 0)
+    rot_vec_pose = ivy.concat([position, rot_vec], 0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
