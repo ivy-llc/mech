@@ -28,7 +28,7 @@ def axis_angle_pose_to_quaternion_pose(axis_angle_pose):
     translation = axis_angle_pose[..., :3]
 
     # BS x 7
-    return _ivy.concat([translation, _ivy_quat.axis_angle_to_quaternion(axis_angle_pose[..., 3:])], -1)
+    return _ivy.concat([translation, _ivy_quat.axis_angle_to_quaternion(axis_angle_pose[..., 3:])], axis=-1)
 
 
 def mat_pose_to_quaternion_pose(matrix):
@@ -50,7 +50,7 @@ def mat_pose_to_quaternion_pose(matrix):
 
     # BS x 7
     return _ivy.concat([matrix[..., 0:3, -1],
-                             _ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3, 0:3])], -1)
+                             _ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3, 0:3])], axis=-1)
 
 
 def euler_pose_to_quaternion_pose(euler_pose, convention='zyx', batch_shape=None):
@@ -112,4 +112,4 @@ def increment_quaternion_pose_with_velocity(quat_pose, quat_vel, delta_t):
     new_quaternion = _ivy_quat.hamilton_product(current_quaternion, quaternion_transform)
 
     # BS x 7
-    return _ivy.concat([quat_pose[..., 0:3] + quat_vel[..., 0:3] * delta_t, new_quaternion], -1)
+    return _ivy.concat([quat_pose[..., 0:3] + quat_vel[..., 0:3] * delta_t, new_quaternion], axis=-1)
