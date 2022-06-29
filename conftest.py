@@ -81,7 +81,7 @@ def pytest_generate_tests(metafunc):
             for wrapped_mode in wrapped_modes:
                 for compile_graph in compile_modes:
                     configs.append(
-                        (device, TEST_FRAMEWORKS[f_str](), wrapped_mode, compile_graph, TEST_CALL_METHODS[f_str]))
+                        (device, TEST_BACKENDS[f_str](), wrapped_mode, compile_graph, TEST_CALL_METHODS[f_str]))
     metafunc.parametrize('device,f,wrapped_mode,compile_graph,call', configs)
 
 
