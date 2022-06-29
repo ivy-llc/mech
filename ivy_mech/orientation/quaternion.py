@@ -269,7 +269,7 @@ def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
     theta = _ivy.random_uniform(-max_rot_ang, max_rot_ang, list(batch_shape) + [1])
 
     # BS x 4
-    return axis_angle_to_quaternion(_ivy.concat([quaternion_vector, theta], axxis=-1))
+    return axis_angle_to_quaternion(_ivy.concat([quaternion_vector, theta], axis=-1))
 
 
 def scale_quaternion_rotation_angle(quaternion, scale):
@@ -340,4 +340,4 @@ def hamilton_product(quaternion1, quaternion2):
     term_k = a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
 
     # BS x 4
-    return _ivy.concat([term_i, term_j, term_k, term_r], -1)
+    return _ivy.concat([term_i, term_j, term_k, term_r], axis=-1)
