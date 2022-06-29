@@ -232,7 +232,7 @@ def inverse_quaternion(quaternion):
     """
 
     # BS x 1
-    sum_of_squares = _ivy.sum(quaternion ** 2, -1)
+    sum_of_squares = _ivy.sum(quaternion ** 2, axis=-1)
     vector_conjugate = _ivy.concat([-quaternion[..., 0:3], quaternion[..., -1:]], -1)
     return vector_conjugate / (sum_of_squares + MIN_DENOMINATOR)
 

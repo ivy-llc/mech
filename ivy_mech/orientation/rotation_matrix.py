@@ -27,7 +27,11 @@ def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     rot_x_u = identity_matrix[..., 0:1, :]
     rot_x_m = _ivy.concat([zeros, cos_theta, -sin_theta], -1)
     rot_x_l = _ivy.concat([zeros, sin_theta, cos_theta], -1)
+<<<<<<< HEAD
     return _ivy.concat([rot_x_u, rot_x_m, rot_x_l], -2)
+=======
+    return _ivy.concat([rot_x_u, rot_x_m, rot_x_l], axis=-2)
+>>>>>>> 1b040ef (resolved ivy namespaces)
 
 
 def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
@@ -69,7 +73,7 @@ def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     rot_z_u = _ivy.concat([cos_theta, -sin_theta, zeros], -1)
     rot_z_m = _ivy.concat([sin_theta, cos_theta, zeros], -1)
     rot_z_l = identity_matrix[..., 2:3, :]
-    return _ivy.concat([rot_z_u, rot_z_m, rot_z_l], -2)
+    return _ivy.concat([rot_z_u, rot_z_m, rot_z_l], axis=-2)
 
 
 ROTATION_FUNC_DICT = {'x': _x_axis_rotation_matrix, 'y': _y_axis_rotation_matrix, 'z': _z_axis_rotation_matrix}
@@ -97,7 +101,7 @@ def rot_vec_to_rot_mat(rot_vec):
     """
 
     # BS x 1
-    t = _ivy.sum(rot_vec**2, -1, keepdims=True)**0.5
+    t = _ivy.sum(rot_vec**2, axis=-1, keepdims=True)**0.5
 
     # BS x 3
     u = rot_vec / t
@@ -129,7 +133,7 @@ def rot_vec_to_rot_mat(rot_vec):
     bottom_right = cost + uz**2 * om_cost
 
     # BS x 1 x 3
-    top_row = _ivy.concat((top_left, top_middle, top_right), -1)
+    top_row = _ivy.concat([top_left, top_middle, top_right], -1)
     middle_row = _ivy.concat([middle_left, middle_middle, middle_right], -1)
     bottom_row = _ivy.concat([bottom_left, bottom_middle, bottom_right], -1)
 
@@ -232,7 +236,7 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, device=No
     sin_gamma = _ivy.sin(gamma)
 
     # BS x 3 x 3
-    identity_matrix = _ivy.eye(3, 3, batch_shape=batch_shape)
+    identity_matrix = _ivy.eye(3, 3, device=device)
 
     # BS x 3 x 3
     rot_alpha = ROTATION_FUNC_DICT[convention[0]](identity_matrix, zeros, sin_alpha, cos_alpha)
@@ -285,14 +289,14 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
                                 [1] * num_batch_dims + [3]), batch_shape + [1])
 
     z = target_pos - body_pos
-    z = z / _ivy.sum(z ** 2, -1, keepdims=True) ** 0.5
+    z = z / _ivy.sum(z ** 2, axis=-1, keepdims=True) ** 0.5
 
     x = _ivy.cross(up, z)
 
     y = _ivy.cross(z, x)
 
-    x = x / _ivy.sum(x ** 2, -1, keepdims=True) ** 0.5
-    y = y / _ivy.sum(y ** 2, -1, keepdims=True) ** 0.5
+    x = x / _ivy.sum(x ** 2, axis=-1, keepdims=True) ** 0.5
+    y = y / _ivy.sum(y ** 2, axis=-1, keepdims=True) ** 0.5
 
     # BS x 1 x 3
     x = _ivy.expand_dims(x, -2)
