@@ -24,7 +24,7 @@ def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 
     """
-    rot_x_u = _ivy.expand_dims(identity_matrix[..., 0:1, :], axis=-2)
+    rot_x_u = identity_matrix[..., 0:1, :]
     rot_x_m = _ivy.concat([zeros, cos_theta, -sin_theta], axis=-1)
     rot_x_l = _ivy.concat([zeros, sin_theta, cos_theta], axis=-1)
     return _ivy.concat([rot_x_u, rot_x_m, rot_x_l], axis=-2)
@@ -46,7 +46,7 @@ def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
     """
     rot_y_u = _ivy.concat([cos_theta, zeros, sin_theta], axis=-1)
-    rot_y_m = _ivy.expand_dims(identity_matrix[..., 1:2, :], axis=0)
+    rot_y_m = identity_matrix[..., 1:2, :]
     rot_y_l = _ivy.concat([-sin_theta, zeros, cos_theta], axis=-1)
     return _ivy.concat([rot_y_u, rot_y_m, rot_y_l], axis=-2)
 
@@ -68,7 +68,7 @@ def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     """
     rot_z_u = _ivy.concat([cos_theta, -sin_theta, zeros], axis=-1)
     rot_z_m = _ivy.concat([sin_theta, cos_theta, zeros], axis=-1)
-    rot_z_l = _ivy.expand_dims(identity_matrix[..., 2:3, :], axis=0)
+    rot_z_l = identity_matrix[..., 2:3, :]
     return _ivy.concat([rot_z_u, rot_z_m, rot_z_l], axis=-2)
 
 
