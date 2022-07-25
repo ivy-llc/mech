@@ -23,7 +23,7 @@ TEST_CALL_METHODS: Dict[str, callable] = {'numpy': helpers.np_call,
 
 
 @pytest.fixture(autouse=True)
-def run_around_tests(device, f, wrapped_mode, compile_graph, call):
+def run_around_tests(device, f, wrapped_mode, compile_graph, call, fw):
     if wrapped_mode and call is helpers.tf_graph_call:
         # ToDo: add support for wrapped_mode and tensorflow compilation
         pytest.skip()
@@ -50,11 +50,11 @@ def pytest_generate_tests(metafunc):
         devices = raw_value.split(',')
 
     # framework
-    raw_value = metafunc.config.getoption('--framework')
+    raw_value = metafunc.config.getoption('--backend')
     if raw_value == 'all':
-        f_strs = TEST_BACKENDS.keys()
+        backend_strs = TEST_BACKENDS.keys()
     else:
-        f_strs = raw_value.split(',')
+        backend_strs = raw_value.split(',')
 
     # wrapped_mode
     raw_value = metafunc.config.getoption('--wrapped_mode')
@@ -76,17 +76,22 @@ def pytest_generate_tests(metafunc):
 
     # create test configs
     configs = list()
-    for f_str in f_strs:
+    for backend_str in backend_strs:
         for device in devices:
             for wrapped_mode in wrapped_modes:
                 for compile_graph in compile_modes:
                     configs.append(
-                        (device, TEST_BACKENDS[f_str](), wrapped_mode, compile_graph, TEST_CALL_METHODS[f_str]))
-    metafunc.parametrize('device,f,wrapped_mode,compile_graph,call', configs)
+                        (device,
+                        TEST_BACKENDS[backend_str](),
+                        wrapped_mode,
+                        compile_graph,
+                        TEST_CALL_METHODS[backend_str],
+                        backend_str))
+    metafunc.parametrize('device,f,wrapped_mode,compile_graph,call,fw', configs)
 
 
 def pytest_addoption(parser):
     parser.addoption('--device', action="store", default="cpu")
-    parser.addoption('--framework', action="store", default="numpy,jax,tensorflow,torch")
+    parser.addoption('--backend', action="store", default="numpy,jax,tensorflow,torch")
     parser.addoption('--wrapped_mode', action="store", default="false")
     parser.addoption('--compile_graph', action="store", default="true")
