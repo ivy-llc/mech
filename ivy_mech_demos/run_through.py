@@ -11,7 +11,7 @@ def main(f=None, fw=None):
 
     # choose random framework
 
-    fw = choose_random_backend(excluded='mxnet') if fw is None else fw
+    fw = ivy.choose_random_backend(excluded='mxnet') if fw is None else fw
     ivy.set_backend(fw)
     f=ivy.get_backend(fw) if f is None else f
 
