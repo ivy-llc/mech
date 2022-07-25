@@ -9,9 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from ivy_demo_utils.open3d_utils import Visualizer
-from ivy.framework_handler import set_framework, unset_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimCam, BaseSimulator
-from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
 
 class DummyOmCam:
@@ -97,8 +95,8 @@ class Simulator(BaseSimulator):
 
 
 def main(interactive=True, try_use_sim=True, f=None):
-    f = choose_random_framework() if f is None else f
-    set_framework(f)
+    f = ivy.choose_random_backend() if f is None else f
+    ivy.set_backend(f)
     sim = Simulator(interactive, try_use_sim)
     vis = Visualizer(ivy.to_numpy(sim.default_camera_ext_mat_homo))
     pix_per_deg = 2
@@ -123,7 +121,7 @@ def main(interactive=True, try_use_sim=True, f=None):
             sim.omcam.set_pos(sim.omcam.get_pos()
                                + ivy.array([-0.01, 0.01, 0.]))
     sim.close()
-    unset_framework()
+    ivy.unset_backend()
 
 
 if __name__ == '__main__':

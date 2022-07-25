@@ -2,19 +2,18 @@
 import ivy
 import argparse
 import ivy_mech
-from ivy.backend_handler import set_backend, choose_random_backend
-from ivy_demo_utils.framework_utils import get_framework_from_str, choose_random_framework
 
 
-def main(f=None):
+def main(f=None, fw=None):
 
     # Framework Setup #
     # ----------------#
 
     # choose random framework
 
-    f = choose_random_backend(excluded='mxnet') if f is None else f
-    set_backend(f)
+    fw = choose_random_backend(excluded='mxnet') if fw is None else fw
+    ivy.set_backend(fw)
+    f=ivy.get_backend(fw) if f is None else f
 
     # Orientation #
     # ------------#
@@ -112,8 +111,9 @@ def main(f=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--framework', type=str, default=None,
-                        help='which framework to use. Chooses a random framework if unspecified.')
+    parser.add_argument('--backend', type=str, default=None,
+                        help='which backend to use. Chooses a random backend if unspecified.')
     parsed_args = parser.parse_args()
-    framework = None if parsed_args.framework is None else get_framework_from_str(parsed_args.framework)
-    main(framework)
+    fw = parsed_args.backend()
+    f = None if fw is None else ivy.get_backend(fw)
+    main(f, fw)

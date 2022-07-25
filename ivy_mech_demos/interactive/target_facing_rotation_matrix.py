@@ -8,9 +8,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from ivy.framework_handler import set_framework, unset_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimObj, BaseSimulator
-from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
 
 class DummyCam:
@@ -94,8 +92,8 @@ class Simulator(BaseSimulator):
 
 
 def main(interactive=True, try_use_sim=True, f=None):
-    f = choose_random_framework() if f is None else f
-    set_framework(f)
+    f = ivy.choose_random_backend() if f is None else f
+    ivy.set_backend(f)
     sim = Simulator(interactive, try_use_sim)
     cam_pos = sim.cam.get_pos()
     iterations = 250 if sim.with_pyrep else 1
@@ -110,7 +108,7 @@ def main(interactive=True, try_use_sim=True, f=None):
                                + ivy.array([-0.01, 0.01, 0.]))
         time.sleep(0.05)
     sim.close()
-    unset_framework()
+    ivy.unset_backend()
 
 
 if __name__ == '__main__':

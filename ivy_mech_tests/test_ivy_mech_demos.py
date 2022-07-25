@@ -12,7 +12,7 @@ def test_demo_run_through(device, f, call):
     if call in [helpers.tf_graph_call]:
         # these particular demos are only implemented in eager mode, without compilation
         pytest.skip()
-    main(f=f)
+    main(f=f,)
 
 
 @pytest.mark.parametrize(
