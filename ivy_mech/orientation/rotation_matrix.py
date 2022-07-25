@@ -232,7 +232,7 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, device=No
     sin_gamma = _ivy.sin(gamma)
 
     # BS x 3 x 3
-    identity_matrix = _ivy.eye(3, 3, device=device)
+    identity_matrix = _ivy.eye(3, 3, batch_shape=batch_shape, device=device)
 
     # BS x 3 x 3
     rot_alpha = ROTATION_FUNC_DICT[convention[0]](identity_matrix, zeros, sin_alpha, cos_alpha)
