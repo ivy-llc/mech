@@ -91,9 +91,10 @@ class Simulator(BaseSimulator):
                 plt.show()
 
 
-def main(interactive=True, try_use_sim=True, f=None):
-    f = ivy.choose_random_backend() if f is None else f
-    ivy.set_backend(f)
+def main(interactive=True, try_use_sim=True, f=None, fw=None):
+    fw = ivy.choose_random_backend() if fw is None else fw
+    ivy.set_backend(fw)
+    f = ivy.get_backend(fw)
     sim = Simulator(interactive, try_use_sim)
     cam_pos = sim.cam.get_pos()
     iterations = 250 if sim.with_pyrep else 1
