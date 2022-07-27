@@ -4,14 +4,12 @@ import ivy
 import math
 import argparse
 import ivy_mech
-import ivy.numpy
+import ivy.functional.backends.numpy as ivy_np
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from ivy_demo_utils.open3d_utils import Visualizer
-from ivy.framework_handler import set_framework, unset_framework
 from ivy_demo_utils.ivy_scene.scene_utils import SimCam, BaseSimulator
-from ivy_demo_utils.framework_utils import choose_random_framework, get_framework_from_str
 
 
 class DummyOmCam:
@@ -96,9 +94,10 @@ class Simulator(BaseSimulator):
                 plt.show()
 
 
-def main(interactive=True, try_use_sim=True, f=None):
-    f = choose_random_framework() if f is None else f
-    set_framework(f)
+def main(interactive=True, try_use_sim=True, f=None, fw=None):
+    fw = ivy.choose_random_backend() if fw is None else fw
+    ivy.set_backend(fw)
+    f = ivy.get_backend(fw)
     sim = Simulator(interactive, try_use_sim)
     vis = Visualizer(ivy.to_numpy(sim.default_camera_ext_mat_homo))
     pix_per_deg = 2
@@ -108,13 +107,13 @@ def main(interactive=True, try_use_sim=True, f=None):
     iterations = 10 if sim.with_pyrep else 1
     for _ in range(iterations):
         depth, rgb = sim.omcam.cap()
-        plr = ivy.concatenate([plr_rads, depth], -1)
+        plr = ivy.concat([plr_rads, depth], -1)
         xyz_wrt_cam = ivy_mech.polar_to_cartesian_coords(plr)
         xyz_wrt_cam = ivy.reshape(xyz_wrt_cam, (-1, 3))
         xyz_wrt_cam_homo = ivy_mech.make_coordinates_homogeneous(xyz_wrt_cam)
-        inv_ext_mat_trans = ivy.transpose(sim.omcam.get_inv_ext_mat(), (1, 0))
+        inv_ext_mat_trans = ivy.matrix_transpose(sim.omcam.get_inv_ext_mat(), (1, 0))
         xyz_wrt_world = ivy.matmul(xyz_wrt_cam_homo, inv_ext_mat_trans)[..., 0:3]
-        with ivy.numpy.use:
+        with ivy_np.use:
             omni_cam_inv_ext_mat = ivy_mech.make_transformation_homogeneous(
                 ivy.to_numpy(sim.omcam.get_inv_ext_mat()))
         vis.show_point_cloud(xyz_wrt_world, rgb, interactive,
@@ -123,7 +122,7 @@ def main(interactive=True, try_use_sim=True, f=None):
             sim.omcam.set_pos(sim.omcam.get_pos()
                                + ivy.array([-0.01, 0.01, 0.]))
     sim.close()
-    unset_framework()
+    ivy.unset_backend()
 
 
 if __name__ == '__main__':
@@ -132,8 +131,9 @@ if __name__ == '__main__':
                         help='whether to run the demo in non-interactive mode.')
     parser.add_argument('--no_sim', action='store_true',
                         help='whether to run the demo without attempt to use the PyRep simulator.')
-    parser.add_argument('--framework', type=str, default=None,
-                        help='which framework to use. Chooses a random framework if unspecified.')
+    parser.add_argument('--backend', type=str, default=None,
+                        help='which backend to use. Chooses a random backend if unspecified.')
     parsed_args = parser.parse_args()
-    framework = None if parsed_args.framework is None else get_framework_from_str(parsed_args.framework)
-    main(not parsed_args.non_interactive, not parsed_args.no_sim, framework)
+    fw = parsed_args.backend
+    f = None if fw is None else ivy.get_backend(fw)
+    main(not parsed_args.non_interactive, not parsed_args.no_sim, f, fw)
