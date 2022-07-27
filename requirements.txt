@@ -1,1 +1,2 @@
 ivy-core # mod_name=ivy
+ivy-demo-utils # mod_name=ivy_demo_utils
