@@ -103,11 +103,11 @@ def rot_vec_to_rot_mat(rot_vec):
     u = rot_vec / t
 
     # BS x 1 x 1
-    cost = _ivy.expand_dims(_ivy.cos(t), -1)
-    sint = _ivy.expand_dims(_ivy.sin(t), -1)
-    ux = _ivy.expand_dims(u[..., 0:1], -1)
-    uy = _ivy.expand_dims(u[..., 1:2], -1)
-    uz = _ivy.expand_dims(u[..., 2:3], -1)
+    cost = _ivy.expand_dims(_ivy.cos(t), axis=-1)
+    sint = _ivy.expand_dims(_ivy.sin(t), axis=-1)
+    ux = _ivy.expand_dims(u[..., 0:1], axis=-1)
+    uy = _ivy.expand_dims(u[..., 1:2], axis=-1)
+    uz = _ivy.expand_dims(u[..., 2:3], axis=-1)
 
     om_cost = 1 - cost
     ux_sint = ux * sint
@@ -156,10 +156,10 @@ def quaternion_to_rot_mat(quaternion):
     """
 
     # BS x 1 x 1
-    a = _ivy.expand_dims(quaternion[..., 3:4], -1)
-    b = _ivy.expand_dims(quaternion[..., 0:1], -1)
-    c = _ivy.expand_dims(quaternion[..., 1:2], -1)
-    d = _ivy.expand_dims(quaternion[..., 2:3], -1)
+    a = _ivy.expand_dims(quaternion[..., 3:4], axis=-1)
+    b = _ivy.expand_dims(quaternion[..., 0:1], axis=-1)
+    c = _ivy.expand_dims(quaternion[..., 1:2], axis=-1)
+    d = _ivy.expand_dims(quaternion[..., 2:3], axis=-1)
 
     # BS x 1 x 1
     top_left = a**2 + b**2 - c**2 - d**2
@@ -218,9 +218,9 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, device=No
     # BS x 1 x 1
     zeros = _ivy.zeros(list(batch_shape) + [1, 1], device=device)
 
-    alpha = _ivy.expand_dims(euler_angles[..., 0:1], -1)
-    beta = _ivy.expand_dims(euler_angles[..., 1:2], -1)
-    gamma = _ivy.expand_dims(euler_angles[..., 2:3], -1)
+    alpha = _ivy.expand_dims(euler_angles[..., 0:1], axis=-1)
+    beta = _ivy.expand_dims(euler_angles[..., 1:2], axis=-1)
+    gamma = _ivy.expand_dims(euler_angles[..., 2:3], axis=-1)
 
     cos_alpha = _ivy.cos(alpha)
     sin_alpha = _ivy.sin(alpha)
@@ -295,9 +295,9 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
     y = y / _ivy.sum(y ** 2, axis=-1, keepdims=True) ** 0.5
 
     # BS x 1 x 3
-    x = _ivy.expand_dims(x, -2)
-    y = _ivy.expand_dims(y, -2)
-    z = _ivy.expand_dims(z, -2)
+    x = _ivy.expand_dims(x, axis=-2)
+    y = _ivy.expand_dims(y, axis=-2)
+    z = _ivy.expand_dims(z, axis=-2)
 
     # BS x 3 x 3
     return _ivy.pinv(_ivy.concat([x, y, z], axis=-2))

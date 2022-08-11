@@ -261,12 +261,12 @@ def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
         batch_shape = []
 
     # BS x 3
-    quaternion_vector = _ivy.random_uniform(0, 1, list(batch_shape) + [3])
+    quaternion_vector = _ivy.random_uniform(low=0, high=1, shape=list(batch_shape) + [3])
     vec_len = _ivy.vector_norm(quaternion_vector)
     quaternion_vector /= (vec_len + MIN_DENOMINATOR)
 
     # BS x 1
-    theta = _ivy.random_uniform(-max_rot_ang, max_rot_ang, list(batch_shape) + [1])
+    theta = _ivy.random_uniform(low=-max_rot_ang, high=max_rot_ang, shape=list(batch_shape) + [1])
 
     # BS x 4
     return axis_angle_to_quaternion(_ivy.concat([quaternion_vector, theta], axis=-1))

@@ -90,7 +90,7 @@ def quaternion_to_axis_angle(quaternion, device=None):
                           _ivy.zeros_like(theta, device=device))
 
     # BS x 4
-    return _ivy.concat([vector_x, vector_y, vector_z, theta], -1)
+    return _ivy.concat([vector_x, vector_y, vector_z, theta], axis=-1)
 
 
 def quaternion_to_polar_axis_angle(quaternion, device=None):
@@ -124,7 +124,7 @@ def quaternion_to_polar_axis_angle(quaternion, device=None):
     phi = _ivy.atan2(vector_and_angle[..., 1:2], vector_and_angle[..., 0:1])
 
     # BS x 3
-    return _ivy.concat([theta, phi, vector_and_angle[..., -1:]], -1)
+    return _ivy.concat([theta, phi, vector_and_angle[..., -1:]], axis=-1)
 
 
 # noinspection PyUnusedLocal
