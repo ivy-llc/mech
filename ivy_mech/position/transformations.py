@@ -31,7 +31,7 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
     ones = _ivy.ones_like(coords[..., 0:1])
 
     # BS x (D+1)
-    return _ivy.concat([coords, ones], -1)
+    return _ivy.concat([coords, ones], axis=-1)
 
 
 def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
@@ -68,4 +68,4 @@ def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
                          batch_shape + [1, 1])
 
     # BS x 4 x 4
-    return _ivy.concat([matrices, last_row], -2)
+    return _ivy.concat([matrices, last_row], axis=-2)
