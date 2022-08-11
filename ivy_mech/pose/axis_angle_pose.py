@@ -1,11 +1,11 @@
 """Collection of Pose Conversion Functions to Axis-Angle Pose Format"""
 
 # global
-import ivy as _ivy
+import ivy
 
 # local
-from ivy_mech.orientation import quaternion as _ivy_quat
-from ivy_mech.orientation import axis_angle as _ivy_aa
+from ivy_mech.orientation import quaternion as ivy_quat
+from ivy_mech.orientation import axis_angle as ivy_aa
 
 
 def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None, device=None):
@@ -30,8 +30,8 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
         Rotation axis unit vector and angle *[batch_shape,4]*
 
     """
-    aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, device=None)
-    return _ivy.concat([euler_pose[..., :3], aa], axis=-1)
+    aa = ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, device=None)
+    return ivy.concat([euler_pose[..., :3], aa], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -56,13 +56,13 @@ def mat_pose_to_rot_vec_pose(matrix):
     translation = matrix[..., -1]
 
     # BS x 4
-    quaternion = _ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3])
+    quaternion = ivy_quat.rot_mat_to_quaternion(matrix[..., 0:3])
 
     # BS x 3
-    rot_vector = _ivy_aa.quaternion_to_rotation_vector(quaternion)
+    rot_vector = ivy_aa.quaternion_to_rotation_vector(quaternion)
 
     # BS x 6
-    return _ivy.concat([translation, rot_vector], axis=-1)
+    return ivy.concat([translation, rot_vector], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -84,10 +84,10 @@ def quaternion_pose_to_rot_vec_pose(quat_pose):
     """
 
     # BS x 4
-    vector_and_angle = _ivy_aa.quaternion_to_axis_angle(quat_pose[..., 3:])
+    vector_and_angle = ivy_aa.quaternion_to_axis_angle(quat_pose[..., 3:])
 
     # BS x 3
     rot_vec = vector_and_angle[..., :-1] * vector_and_angle[..., -1:]
 
     # BS x 6
-    return _ivy.concat([quat_pose[..., 0:3], rot_vec], axis=-1)
+    return ivy.concat([quat_pose[..., 0:3], rot_vec], axis=-1)

@@ -1,7 +1,7 @@
 """Collection of Functions for Homogeneous Co-ordinates"""
 
 # global
-import ivy as _ivy
+import ivy 
 
 
 def make_coordinates_homogeneous(coords, batch_shape=None):
@@ -28,10 +28,10 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
     batch_shape = list(batch_shape)
 
     # BS x 1
-    ones = _ivy.ones_like(coords[..., 0:1])
+    ones = ivy.ones_like(coords[..., 0:1])
 
     # BS x (D+1)
-    return _ivy.concat([coords, ones], axis=-1)
+    return ivy.concat([coords, ones], axis=-1)
 
 
 def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
@@ -57,15 +57,15 @@ def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
         batch_shape = matrices.shape[:-2]
 
     if device is None:
-        device = _ivy.dev(matrices)
+        device = ivy.dev(matrices)
 
     # shapes as list
     batch_shape = list(batch_shape)
     num_batch_dims = len(batch_shape)
 
     # BS x 1 x 4
-    last_row = _ivy.tile(_ivy.reshape(_ivy.array([0., 0., 0., 1.], device=device), [1] * num_batch_dims + [1, 4]),
+    last_row = ivy.tile(ivy.reshape(ivy.array([0., 0., 0., 1.], device=device), [1] * num_batch_dims + [1, 4]),
                          batch_shape + [1, 1])
 
     # BS x 4 x 4
-    return _ivy.concat([matrices, last_row], axis=-2)
+    return ivy.concat([matrices, last_row], axis=-2)

@@ -1,10 +1,10 @@
 """Collection of Pose Conversion Functions to Euler Pose Format"""
 
 # global
-import ivy as _ivy
+import ivy
 
 # local
-from ivy_mech.orientation import euler_angles as _ivy_ea
+from ivy_mech.orientation import euler_angles as ivy_ea
 
 
 # noinspection PyUnresolvedReferences
@@ -31,10 +31,10 @@ def mat_pose_to_euler_pose(matrix, convention='zyx'):
     translation = matrix[..., 3]
 
     # BS x 3
-    euler_angles = _ivy_ea.rot_mat_to_euler(matrix[..., 0:3], convention)
+    euler_angles = ivy_ea.rot_mat_to_euler(matrix[..., 0:3], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], axis=-1)
+    return ivy.concat([translation, euler_angles], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -61,10 +61,10 @@ def quaternion_pose_to_euler_pose(quaternion_pose, convention='zyx'):
     translation = quaternion_pose[..., :3]
 
     # BS x 3
-    euler_angles = _ivy_ea.quaternion_to_euler(quaternion_pose[..., 3:], convention)
+    euler_angles = ivy_ea.quaternion_to_euler(quaternion_pose[..., 3:], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], axis=-1)
+    return ivy.concat([translation, euler_angles], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -90,7 +90,7 @@ def axis_angle_pose_to_euler_pose(axis_angle_pose, convention='zyx'):
     translation = axis_angle_pose[..., :3]
 
     # BS x 3
-    euler_angles = _ivy_ea.axis_angle_to_euler(axis_angle_pose[..., 3:], convention)
+    euler_angles = ivy_ea.axis_angle_to_euler(axis_angle_pose[..., 3:], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], axis=-1)
+    return ivy.concat([translation, euler_angles], axis=-1)

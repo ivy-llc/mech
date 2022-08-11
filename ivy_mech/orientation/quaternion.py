@@ -1,12 +1,12 @@
 """Collection of Rotation Conversion Functions to Quaternion Format"""
 
 # global
-import ivy as _ivy
-import math as _math
+import ivy
+import math
 
 # local
-from ivy_mech.orientation import rotation_matrix as _ivy_rot_mat
-from ivy_mech.orientation import axis_angle as _ivy_aa
+from ivy_mech.orientation import rotation_matrix as ivy_rot_mat
+from ivy_mech.orientation import axis_angle as ivy_aa
 
 MIN_DENOMINATOR = 1e-12
 
@@ -34,13 +34,13 @@ def axis_angle_to_quaternion(axis_angle):
 
     # BS x 1
     angle = axis_angle[..., -1:]
-    n = _ivy.cos(angle / 2)
-    e1 = _ivy.sin(angle / 2) * axis_angle[..., 0:1]
-    e2 = _ivy.sin(angle / 2) * axis_angle[..., 1:2]
-    e3 = _ivy.sin(angle / 2) * axis_angle[..., 2:3]
+    n = ivy.cos(angle / 2)
+    e1 = ivy.sin(angle / 2) * axis_angle[..., 0:1]
+    e2 = ivy.sin(angle / 2) * axis_angle[..., 1:2]
+    e3 = ivy.sin(angle / 2) * axis_angle[..., 2:3]
 
     # BS x 4
-    quaternion = _ivy.concat([e1, e2, e3, n], axis=-1)
+    quaternion = ivy.concat([e1, e2, e3, n], axis=-1)
     return quaternion
 
 
@@ -66,15 +66,15 @@ def polar_axis_angle_to_quaternion(polar_axis_angle):
     theta = polar_axis_angle[..., 0:1]
     phi = polar_axis_angle[..., 1:2]
     angle = polar_axis_angle[..., 2:3]
-    x = _ivy.sin(theta) * _ivy.cos(phi)
-    y = _ivy.sin(theta) * _ivy.sin(phi)
-    z = _ivy.cos(theta)
+    x = ivy.sin(theta) * ivy.cos(phi)
+    y = ivy.sin(theta) * ivy.sin(phi)
+    z = ivy.cos(theta)
 
     # BS x 3
-    vector = _ivy.concat([x, y, z], axis=-1)
+    vector = ivy.concat([x, y, z], axis=-1)
 
     # BS x 4
-    return axis_angle_to_quaternion(_ivy.concat([vector, angle], axis=-1))
+    return axis_angle_to_quaternion(ivy.concat([vector, angle], axis=-1))
 
 
 def rot_mat_to_quaternion(rot_mat):
@@ -106,7 +106,7 @@ def rot_mat_to_quaternion(rot_mat):
     qz_1 = (rot_mat[..., 1:2, 0:1] - rot_mat[..., 0:1, 1:2]) / (s_1 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_1 = _ivy.concat([qx_1, qy_1, qz_1, qw_1], axis=-2)
+    quat_1 = ivy.concat([qx_1, qy_1, qz_1, qw_1], axis=-2)
 
     # elif (m[:,0,0] > m[:,1,1]) and (m[:,0,0] > m[:,2,2])
     # BS x 1 x 1
@@ -118,7 +118,7 @@ def rot_mat_to_quaternion(rot_mat):
     qz_2 = (rot_mat[..., 0:1, 2:3] + rot_mat[..., 2:3, 0:1]) / (s_2 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_2 = _ivy.concat([qx_2, qy_2, qz_2, qw_2], axis=-2)
+    quat_2 = ivy.concat([qx_2, qy_2, qz_2, qw_2], axis=-2)
 
     # elif m[:,1,1] > m[:,2,2]
     # BS x 1 x 1
@@ -130,7 +130,7 @@ def rot_mat_to_quaternion(rot_mat):
     qz_3 = (rot_mat[..., 1:2, 2:3] + rot_mat[..., 2:3, 1:2]) / (s_3 + MIN_DENOMINATOR)
 
     # BS x 4 x 1
-    quat_3 = _ivy.concat([qx_3, qy_3, qz_3, qw_3], axis=-2)
+    quat_3 = ivy.concat([qx_3, qy_3, qz_3, qw_3], axis=-2)
 
     # else
     # BS x 1 x 1
@@ -142,16 +142,16 @@ def rot_mat_to_quaternion(rot_mat):
     qz_4 = 0.25 * s_4
 
     # BS x 4 x 1
-    quat_4 = _ivy.concat([qx_4, qy_4, qz_4, qw_4], axis=-2)
-    quat_3_or_other = _ivy.where(rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3],
+    quat_4 = ivy.concat([qx_4, qy_4, qz_4, qw_4], axis=-2)
+    quat_3_or_other = ivy.where(rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3],
                                  quat_3, quat_4)
     quat_2_or_other = \
-        _ivy.where(_ivy.logical_and((rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
+        ivy.where(ivy.logical_and((rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
                                     (rot_mat[..., 0:1, 0:1] > rot_mat[..., 2:3, 2:3])),
                    quat_2, quat_3_or_other)
 
     # BS x 4
-    return _ivy.where(tr > 0, quat_1, quat_2_or_other)[..., 0]
+    return ivy.where(tr > 0, quat_1, quat_2_or_other)[..., 0]
 
 
 def rotation_vector_to_quaternion(rot_vector):
@@ -172,13 +172,13 @@ def rotation_vector_to_quaternion(rot_vector):
     """
 
     # BS x 1
-    theta = (_ivy.sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
+    theta = (ivy.sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
 
     # BS x 3
     vector = rot_vector / (theta + MIN_DENOMINATOR)
 
     # BS x 4
-    return axis_angle_to_quaternion(_ivy.concat([vector, theta], axis=-1))
+    return axis_angle_to_quaternion(ivy.concat([vector, theta], axis=-1))
 
 
 def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None):
@@ -208,7 +208,7 @@ def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None):
 
     # BS x 4
     return rot_mat_to_quaternion(
-        _ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape))
+        ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape))
 
 
 # Quaternion Operations #
@@ -232,12 +232,12 @@ def inverse_quaternion(quaternion):
     """
 
     # BS x 1
-    sum_of_squares = _ivy.sum(quaternion ** 2, axis=-1)
-    vector_conjugate = _ivy.concat([-quaternion[..., 0:3], quaternion[..., -1:]], axis=-1)
+    sum_of_squares = ivy.sum(quaternion ** 2, axis=-1)
+    vector_conjugate = ivy.concat([-quaternion[..., 0:3], quaternion[..., -1:]], axis=-1)
     return vector_conjugate / (sum_of_squares + MIN_DENOMINATOR)
 
 
-def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
+def get_random_quaternion(max_rot_ang=math.pi, batch_shape=None):
     """Generate random quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`,
     adhering to maximum absolute rotation angle.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternion>`_
@@ -261,15 +261,15 @@ def get_random_quaternion(max_rot_ang=_math.pi, batch_shape=None):
         batch_shape = []
 
     # BS x 3
-    quaternion_vector = _ivy.random_uniform(low=0, high=1, shape=list(batch_shape) + [3])
-    vec_len = _ivy.vector_norm(quaternion_vector)
+    quaternion_vector = ivy.random_uniform(low=0, high=1, shape=list(batch_shape) + [3])
+    vec_len = ivy.vector_norm(quaternion_vector)
     quaternion_vector /= (vec_len + MIN_DENOMINATOR)
 
     # BS x 1
-    theta = _ivy.random_uniform(low=-max_rot_ang, high=max_rot_ang, shape=list(batch_shape) + [1])
+    theta = ivy.random_uniform(low=-max_rot_ang, high=max_rot_ang, shape=list(batch_shape) + [1])
 
     # BS x 4
-    return axis_angle_to_quaternion(_ivy.concat([quaternion_vector, theta], axis=-1))
+    return axis_angle_to_quaternion(ivy.concat([quaternion_vector, theta], axis=-1))
 
 
 def scale_quaternion_rotation_angle(quaternion, scale):
@@ -294,13 +294,13 @@ def scale_quaternion_rotation_angle(quaternion, scale):
     """
 
     # BS x 4
-    vector_and_angle = _ivy_aa.quaternion_to_axis_angle(quaternion)
+    vector_and_angle = ivy_aa.quaternion_to_axis_angle(quaternion)
 
     # BS x 1
     scaled_angle = vector_and_angle[..., -1:] * scale
 
     # BS x 4
-    return axis_angle_to_quaternion(_ivy.concat(
+    return axis_angle_to_quaternion(ivy.concat(
         [vector_and_angle[..., :-1], scaled_angle], axis=-1))
 
 
@@ -340,4 +340,4 @@ def hamilton_product(quaternion1, quaternion2):
     term_k = a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2
 
     # BS x 4
-    return _ivy.concat([term_i, term_j, term_k, term_r], axis=-1)
+    return ivy.concat([term_i, term_j, term_k, term_r], axis=-1)

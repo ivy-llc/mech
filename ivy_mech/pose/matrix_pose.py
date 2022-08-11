@@ -1,11 +1,11 @@
 """Collection of Pose Conversion Functions to Matrix Format"""
 
 # global
-import ivy as _ivy
+import ivy
 
 # local
-from ivy_mech.orientation import rotation_matrix as _ivy_rot_mat
-from ivy_mech.orientation import quaternion as _ivy_quat
+from ivy_mech.orientation import rotation_matrix as ivy_rot_mat
+from ivy_mech.orientation import quaternion as ivy_quat
 
 
 def quaternion_pose_to_mat_pose(quat_pose):
@@ -26,13 +26,13 @@ def quaternion_pose_to_mat_pose(quat_pose):
     """
 
     # BS x 3 x 3
-    rot_mat = _ivy_rot_mat.quaternion_to_rot_mat(quat_pose[..., 3:])
+    rot_mat = ivy_rot_mat.quaternion_to_rot_mat(quat_pose[..., 3:])
 
     # BS x 3 x 1
-    rhs = _ivy.expand_dims(quat_pose[..., 0:3], axis=-1)
+    rhs = ivy.expand_dims(quat_pose[..., 0:3], axis=-1)
 
     # BS x 3 x 4
-    return _ivy.concat([rot_mat, rhs], axis=-1)
+    return ivy.concat([rot_mat, rhs], axis=-1)
 
 
 def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
@@ -61,10 +61,10 @@ def euler_pose_to_mat_pose(euler_pose, convention='zyx', batch_shape=None):
         batch_shape = euler_pose.shape[:-1]
 
     # BS x 3 x 3
-    rot_mat = _ivy_rot_mat.euler_to_rot_mat(euler_pose[..., 3:], convention, batch_shape)
+    rot_mat = ivy_rot_mat.euler_to_rot_mat(euler_pose[..., 3:], convention, batch_shape)
 
     # BS x 3 x 4
-    return _ivy.concat([rot_mat, _ivy.expand_dims(euler_pose[..., 0:3], axis=-1)], axis=-1)
+    return ivy.concat([rot_mat, ivy.expand_dims(euler_pose[..., 0:3], axis=-1)], axis=-1)
 
 
 def rot_vec_pose_to_mat_pose(rot_vec_pose):
@@ -85,13 +85,13 @@ def rot_vec_pose_to_mat_pose(rot_vec_pose):
     """
 
     # BS x 4
-    quaternion = _ivy_quat.rotation_vector_to_quaternion(rot_vec_pose[..., 3:])
+    quaternion = ivy_quat.rotation_vector_to_quaternion(rot_vec_pose[..., 3:])
 
     # BS x 3 x 3
-    rot_mat = _ivy_rot_mat.quaternion_to_rot_mat(quaternion)
+    rot_mat = ivy_rot_mat.quaternion_to_rot_mat(quaternion)
 
     # BS x 3 x 4
-    return _ivy.concat([rot_mat, _ivy.expand_dims(rot_vec_pose[..., 0:3], axis=-1)], axis=-1)
+    return ivy.concat([rot_mat, ivy.expand_dims(rot_vec_pose[..., 0:3], axis=-1)], axis=-1)
 
 
 def axis_angle_pose_to_mat_pose(axis_angle_pose):
@@ -111,8 +111,8 @@ def axis_angle_pose_to_mat_pose(axis_angle_pose):
     """
 
     # BS x 3 x 3
-    rot_mat = _ivy_rot_mat.axis_angle_to_rot_mat(axis_angle_pose[..., 3:])
+    rot_mat = ivy_rot_mat.axis_angle_to_rot_mat(axis_angle_pose[..., 3:])
 
     # BS x 3 x 4
-    return _ivy.concat(
-        [rot_mat, _ivy.expand_dims(axis_angle_pose[..., :3], axis=-1)], axis=-1)
+    return ivy.concat(
+        [rot_mat, ivy.expand_dims(axis_angle_pose[..., :3], axis=-1)], axis=-1)
