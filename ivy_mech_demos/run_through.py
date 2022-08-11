@@ -13,7 +13,7 @@ def main(f=None, fw=None):
 
     fw = ivy.choose_random_backend() if fw is None else fw
     ivy.set_backend(fw)
-    f=ivy.get_backend(fw) if f is None else f
+    f=ivy.get_backend(backend=fw) if f is None else f
 
     # Orientation #
     # ------------#
@@ -47,7 +47,7 @@ def main(f=None, fw=None):
     position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = ivy.concat([position, rot_vec], 0)
+    rot_vec_pose = ivy.concat([position, rot_vec], axis=0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
@@ -67,7 +67,7 @@ def main(f=None, fw=None):
     # conversions of positional representation
 
     # 3
-    cartesian_coord = ivy.random_uniform(0., 1., (3,))
+    cartesian_coord = ivy.random_uniform(low=0., high=1., shape=(3,))
 
     # 3
     polar_coord = ivy_mech.cartesian_to_polar_coords(
@@ -80,7 +80,7 @@ def main(f=None, fw=None):
     # cartesian co-ordinate frame-of-reference transformations
 
     # 3 x 4
-    trans_mat = ivy.random_uniform(0., 1., (3, 4))
+    trans_mat = ivy.random_uniform(low=0., high=1., shape=(3, 4))
 
     # 4
     cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -88,7 +88,7 @@ def main(f=None, fw=None):
 
     # 3
     trans_cartesian_coord = ivy.matmul(
-        trans_mat, ivy.expand_dims(cartesian_coord_homo, -1))[:, 0]
+        trans_mat, ivy.expand_dims(cartesian_coord_homo, axis=-1))[:, 0]
 
     # 4
     trans_cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -103,7 +103,7 @@ def main(f=None, fw=None):
 
     # 3
     cartesian_coord_again = ivy.matmul(
-        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
+        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, axis=-1))[:, 0]
 
     # message
     print('End of Run Through Demo!')
@@ -115,5 +115,5 @@ if __name__ == '__main__':
                         help='which backend to use. Chooses a random backend if unspecified.')
     parsed_args = parser.parse_args()
     fw = parsed_args.backend()
-    f = None if fw is None else ivy.get_backend(fw)
+    f = None if fw is None else ivy.get_backend(backend=fw)
     main(f, fw)

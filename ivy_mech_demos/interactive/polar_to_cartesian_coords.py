@@ -49,7 +49,7 @@ class Simulator(BaseSimulator):
                 [item.remove() for item in self._vision_sensor_rays[i]]
             self._default_camera.set_position(np.array([-2.3518, 4.3953, 2.8949]))
             self._default_camera.set_orientation(np.array([i*np.pi/180 for i in [112.90, 27.329, -10.978]]))
-            inv_ext_mat = ivy.reshape(ivy.array(self._default_vision_sensor.get_matrix(), 'float32')[0:3, :], (3, 4))
+            inv_ext_mat = ivy.reshape(ivy.array(self._default_vision_sensor.get_matrix(), dtype='float32')[0:3, :], (3, 4))
             self.default_camera_ext_mat_homo = ivy.inv(ivy_mech.make_transformation_homogeneous(inv_ext_mat))
 
             # public objects
@@ -97,7 +97,7 @@ class Simulator(BaseSimulator):
 def main(interactive=True, try_use_sim=True, f=None, fw=None):
     fw = ivy.choose_random_backend() if fw is None else fw
     ivy.set_backend(fw)
-    f = ivy.get_backend(fw)
+    f = ivy.get_backend(backend=fw)
     sim = Simulator(interactive, try_use_sim)
     vis = Visualizer(ivy.to_numpy(sim.default_camera_ext_mat_homo))
     pix_per_deg = 2
@@ -107,11 +107,11 @@ def main(interactive=True, try_use_sim=True, f=None, fw=None):
     iterations = 10 if sim.with_pyrep else 1
     for _ in range(iterations):
         depth, rgb = sim.omcam.cap()
-        plr = ivy.concat([plr_rads, depth], -1)
+        plr = ivy.concat([plr_rads, depth], axis=-1)
         xyz_wrt_cam = ivy_mech.polar_to_cartesian_coords(plr)
         xyz_wrt_cam = ivy.reshape(xyz_wrt_cam, (-1, 3))
         xyz_wrt_cam_homo = ivy_mech.make_coordinates_homogeneous(xyz_wrt_cam)
-        inv_ext_mat_trans = ivy.matrix_transpose(sim.omcam.get_inv_ext_mat(), (1, 0))
+        inv_ext_mat_trans = ivy.permute_dims(sim.omcam.get_inv_ext_mat(), axes=(1, 0))
         xyz_wrt_world = ivy.matmul(xyz_wrt_cam_homo, inv_ext_mat_trans)[..., 0:3]
         with ivy_np.use:
             omni_cam_inv_ext_mat = ivy_mech.make_transformation_homogeneous(
@@ -135,5 +135,5 @@ if __name__ == '__main__':
                         help='which backend to use. Chooses a random backend if unspecified.')
     parsed_args = parser.parse_args()
     fw = parsed_args.backend
-    f = None if fw is None else ivy.get_backend(fw)
+    f = None if fw is None else ivy.get_backend(backend=fw)
     main(not parsed_args.non_interactive, not parsed_args.no_sim, f, fw)
