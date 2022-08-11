@@ -34,7 +34,7 @@ def mat_pose_to_euler_pose(matrix, convention='zyx'):
     euler_angles = _ivy_ea.rot_mat_to_euler(matrix[..., 0:3], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], -1)
+    return _ivy.concat([translation, euler_angles], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -64,7 +64,7 @@ def quaternion_pose_to_euler_pose(quaternion_pose, convention='zyx'):
     euler_angles = _ivy_ea.quaternion_to_euler(quaternion_pose[..., 3:], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], -1)
+    return _ivy.concat([translation, euler_angles], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
@@ -93,4 +93,4 @@ def axis_angle_pose_to_euler_pose(axis_angle_pose, convention='zyx'):
     euler_angles = _ivy_ea.axis_angle_to_euler(axis_angle_pose[..., 3:], convention)
 
     # BS x 6
-    return _ivy.concat([translation, euler_angles], -1)
+    return _ivy.concat([translation, euler_angles], axis=-1)

@@ -31,7 +31,7 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
 
     """
     aa = _ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, device=None)
-    return _ivy.concat([euler_pose[..., :3], aa], -1)
+    return _ivy.concat([euler_pose[..., :3], aa], axis=-1)
 
 
 # noinspection PyUnresolvedReferences
