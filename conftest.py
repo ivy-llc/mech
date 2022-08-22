@@ -15,27 +15,21 @@ TEST_BACKENDS: Dict[str, callable] = {'numpy': lambda: helpers.get_ivy_numpy(),
                                         'tensorflow': lambda: helpers.get_ivy_tensorflow(),
                                         'torch': lambda: helpers.get_ivy_torch(),
                                         'mxnet': lambda: helpers.get_ivy_mxnet()}
-TEST_CALL_METHODS: Dict[str, callable] = {'numpy': helpers.np_call,
-                                          'jax': helpers.jnp_call,
-                                          'tensorflow': helpers.tf_call,
-                                          'torch': helpers.torch_call,
-                                          'mxnet': helpers.mx_call}
 
 
 @pytest.fixture(autouse=True)
-def run_around_tests(device, f, wrapped_mode, compile_graph, call, fw):
-    if wrapped_mode and call is helpers.tf_graph_call:
+def run_around_tests(device, f, wrapped_mode, compile_graph, fw):
+    if wrapped_mode and fw == 'tensorflow_graph':
         # ToDo: add support for wrapped_mode and tensorflow compilation
         pytest.skip()
-    if wrapped_mode and call is helpers.jnp_call:
+    if wrapped_mode and fw == 'jax':
         # ToDo: add support for wrapped_mode with jax, presumably some errenously wrapped jax methods
         pytest.skip()
-    if 'gpu' in device and call is helpers.np_call:
+    if 'gpu' in device and fw == 'numpy':
         # Numpy does not support GPU
         pytest.skip()
     ivy.clear_backend_stack()
     with f.use:
-        # f.set_wrapped_mode(wrapped_mode)
         ivy.set_default_device(device)
         yield
 
@@ -85,9 +79,8 @@ def pytest_generate_tests(metafunc):
                         TEST_BACKENDS[backend_str](),
                         wrapped_mode,
                         compile_graph,
-                        TEST_CALL_METHODS[backend_str],
                         backend_str))
-    metafunc.parametrize('device,f,wrapped_mode,compile_graph,call,fw', configs)
+    metafunc.parametrize('device,f,wrapped_mode,compile_graph,fw', configs)
 
 
 def pytest_addoption(parser):
