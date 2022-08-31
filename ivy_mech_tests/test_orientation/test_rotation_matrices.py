@@ -16,24 +16,24 @@ otd = OrientationTestData()
 
 def test_axis_angle_to_rot_mat(device, fw):
     ivy.set_backend(fw)
-    assert np.allclose(ivy_mech.axis_angle_to_rot_mat(otd.axis_angle), otd.rotation_matrix, atol=1e-6)
-    assert np.allclose(ivy_mech.axis_angle_to_rot_mat(otd.batched_axis_angle)[0],
+    assert np.allclose(ivy_mech.axis_angle_to_rot_mat(ivy.array(otd.axis_angle)), otd.rotation_matrix, atol=1e-6)
+    assert np.allclose(ivy_mech.axis_angle_to_rot_mat(ivy.array(otd.batched_axis_angle))[0],
                        otd.rotation_matrix, atol=1e-6)
     ivy.unset_backend()
 
 
 def test_rot_vec_to_rot_mat(device, fw):
     ivy.set_backend(fw)
-    assert np.allclose(ivy_mech.rot_vec_to_rot_mat(otd.rotation_vector), otd.rotation_matrix, atol=1e-6)
-    assert np.allclose(ivy_mech.rot_vec_to_rot_mat(otd.batched_rotation_vector)[0],
+    assert np.allclose(ivy_mech.rot_vec_to_rot_mat(ivy.array(otd.rotation_vector)), otd.rotation_matrix, atol=1e-6)
+    assert np.allclose(ivy_mech.rot_vec_to_rot_mat(ivy.array(otd.batched_rotation_vector))[0],
                        otd.rotation_matrix, atol=1e-6)
     ivy.unset_backend()
 
 
 def test_quaternion_to_rot_mat(device, fw):
     ivy.set_backend(fw)
-    assert np.allclose(ivy_mech.quaternion_to_rot_mat(otd.quaternion), otd.rotation_matrix, atol=1e-6)
-    assert np.allclose(ivy_mech.quaternion_to_rot_mat(otd.batched_quaternion)[0], otd.rotation_matrix, atol=1e-6)
+    assert np.allclose(ivy_mech.quaternion_to_rot_mat(ivy.array(otd.quaternion)), otd.rotation_matrix, atol=1e-6)
+    assert np.allclose(ivy_mech.quaternion_to_rot_mat(ivy.array(otd.batched_quaternion))[0], otd.rotation_matrix, atol=1e-6)
     ivy.unset_backend()
 
 
@@ -42,8 +42,8 @@ def test_euler_to_rot_mat(device, fw):
         with ivy_np.use:
             rotation_matrix = ivy_mech.euler_to_rot_mat(otd.euler_angles, conv)
         ivy.set_backend(fw)
-        assert np.allclose(ivy_mech.euler_to_rot_mat(otd.euler_angles, conv), rotation_matrix, atol=1e-6)
-        assert np.allclose(ivy_mech.euler_to_rot_mat(otd.batched_euler_angles, conv)[0], rotation_matrix,
+        assert np.allclose(ivy_mech.euler_to_rot_mat(ivy.array(otd.euler_angles), conv), rotation_matrix, atol=1e-6)
+        assert np.allclose(ivy_mech.euler_to_rot_mat(ivy.array(otd.batched_euler_angles), conv)[0], rotation_matrix,
                            atol=1e-6)
         ivy.unset_backend()
 
