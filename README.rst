@@ -1,4 +1,4 @@
-.. image:: https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/repos/mech/logo.png?raw=true
+.. image:: https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/ivy_mech/logo.png?raw=true
    :width: 100%
 
 .. raw:: html
