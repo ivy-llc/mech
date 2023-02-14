@@ -46,7 +46,7 @@ Contents
 * `Overview`_
 * `Run Through`_
 * `Interactive Demos`_
-* `Get Involed`_
+* `Get Involved`_
 
 Overview
 --------
@@ -355,8 +355,8 @@ enabling the surrounding geometry to be represented as a point cloud, for intera
         <img width="75%" style="display: block;" src='https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/ivy_mech/demo_b.gif?raw=true'>
     </p>
 
-Get Involed
------------
+Get Involved
+------------
 
 We hope the functions in this library are useful to a wide range of machine learning developers.
 However, there are many more areas of mechanics which could be covered by this library.
