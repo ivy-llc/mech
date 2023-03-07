@@ -7,7 +7,6 @@ import pytest
 import ivy_tests.test_ivy.helpers as helpers
 
 
-
 def test_demo_run_through(device, f, fw):
     from ivy_mech_demos.run_through import main
     if fw == 'tensorflow_graph':
