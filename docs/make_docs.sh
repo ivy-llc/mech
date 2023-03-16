@@ -6,4 +6,4 @@ if [ -z "$1" ]
   else
     user="$1"
 fi
-docker run --rm -v "$(pwd)"/..:/home/"$user"/project unifyai/doc-builder:latest "../ivy"
+docker run --rm -v "$(pwd)"/..:/home/"$user"/project unifyai/doc-builder:latest "../ivy_mech"
