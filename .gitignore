@@ -4,6 +4,7 @@
 **/.idea/usage.statistics.xml
 **/.idea/shelf/
 **/.idea/markdown-navigator*
+*.DS_Store
 .run
 __pycache__/
 .pytest_cache/
