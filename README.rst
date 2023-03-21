@@ -190,6 +190,7 @@ neural memory, pre-trained models + implementations, and builder tools with trai
     </div>
     <br clear="all" />
 
+
 **Quick Start**
 
 Ivy mechanics can be installed like so: ``pip install ivy-mech``
