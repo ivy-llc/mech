@@ -19,7 +19,7 @@ def test_axis_angle_pose_to_mat_pose(device, fw):
     assert np.allclose(ivy_mech.axis_angle_pose_to_mat_pose(ivy.array(ptd.axis_angle_pose)), ptd.matrix_pose, atol=1e-6)
     assert np.allclose(ivy_mech.axis_angle_pose_to_mat_pose(ivy.array(ptd.batched_axis_angle_pose))[0],
                        ptd.matrix_pose, atol=1e-6)
-    ivy.unset_backend()
+    ivy.previous_backend()
     
 
 def test_quaternion_pose_to_mat_pose(device, fw):
@@ -27,7 +27,7 @@ def test_quaternion_pose_to_mat_pose(device, fw):
     assert np.allclose(ivy_mech.quaternion_pose_to_mat_pose(ivy.array(ptd.quaternion_pose)), ptd.matrix_pose, atol=1e-6)
     assert np.allclose(ivy_mech.quaternion_pose_to_mat_pose(ivy.array(ptd.batched_quaternion_pose))[0],
                        ptd.matrix_pose, atol=1e-6)
-    ivy.unset_backend()
+    ivy.previous_backend()
 
 
 def test_euler_pose_to_mat_pose(device, fw):
@@ -36,11 +36,11 @@ def test_euler_pose_to_mat_pose(device, fw):
     ivy.set_backend(fw)
     assert np.allclose(ivy_mech.euler_pose_to_mat_pose(ivy.array(ptd.euler_pose)), matrix_pose, atol=1e-6)
     assert np.allclose(ivy_mech.euler_pose_to_mat_pose(ivy.array(ptd.batched_euler_pose))[0], matrix_pose, atol=1e-6)
-    ivy.unset_backend()
+    ivy.previous_backend()
 
 
 def test_rot_vec_pose_to_mat_pose(device, fw):
     ivy.set_backend(fw)
     assert np.allclose(ivy_mech.rot_vec_pose_to_mat_pose(ivy.array(ptd.rot_vec_pose)), ptd.matrix_pose, atol=1e-6)
     assert np.allclose(ivy_mech.rot_vec_pose_to_mat_pose(ivy.array(ptd.batched_rot_vec_pose))[0], ptd.matrix_pose, atol=1e-6)
-    ivy.unset_backend()
+    ivy.previous_backend()
