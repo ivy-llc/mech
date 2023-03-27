@@ -76,7 +76,7 @@ neural memory, pre-trained models + implementations, and builder tools with trai
 
 .. raw:: html
 
-    <div style="display: block; align: center;">
+    <div align="center style="display: block;">
         <img width="9%" style="float: left;" src="https://raw.githubusercontent.com/unifyai/unifyai.github.io/master/img/externally_linked/logos/empty.png">
         <a href="https://github.com/unifyai/mech">
             <img width="15%" style="float: left;" src="https://raw.githubusercontent.com/unifyai/unifyai.github.io/master/img/externally_linked/logos/ivy_mech.png">
