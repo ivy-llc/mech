@@ -14,9 +14,7 @@ jobs:
 
       - name: Build Docs
         run: |
-          cd docs
-          bash make_docs.sh
-          cd ..
+          docker run --rm -v "$(pwd)":/project unifyai/doc-builder:latest
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
