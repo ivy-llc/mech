@@ -6,20 +6,21 @@ jobs:
   update-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️ Ivy Mech
-        uses: actions/checkout@v3
+      - name: Checkout 🛎️Ivy Mech
+        uses: actions/checkout@v2
         with:
-          repository: unifyai/mech
+          path: ivy_mech
           persist-credentials: false
 
       - name: Build Docs
         run: |
+          cd ivy_mech
           docker run --rm -v "$(pwd)":/project unifyai/doc-builder:latest
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
-          folder: docs/build
+          folder: ivy_mech/docs/build
           target-folder: mech
           ssh-key: ${{ secrets.SSH_GH_PAGES }}
           branch: master
