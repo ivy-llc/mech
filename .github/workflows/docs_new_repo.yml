@@ -44,7 +44,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           folder: docs/build
-          target-folder: "$(git tag | sort -V | tail -1)/mech"
+          target-folder: "`git tag | sort -V | tail -1`/mech"
           ssh-key: ${{ secrets.SSH_GH_PAGES }}
           branch: test1
           git-config-name: ivy-seed
