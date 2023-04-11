@@ -13,7 +13,7 @@ def main(f=None, fw=None):
 
     fw = ivy.choose_random_backend() if fw is None else fw
     ivy.set_backend(fw)
-    f=ivy.get_backend(backend=fw) if f is None else f
+    f=ivy.with_backend(backend=fw) if f is None else f
 
     # Orientation #
     # ------------#
@@ -115,5 +115,5 @@ if __name__ == '__main__':
                         help='which backend to use. Chooses a random backend if unspecified.')
     parsed_args = parser.parse_args()
     fw = parsed_args.backend()
-    f = None if fw is None else ivy.get_backend(backend=fw)
+    f = None if fw is None else ivy.with_backend(backend=fw)
     main(f, fw)
