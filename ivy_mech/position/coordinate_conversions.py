@@ -58,7 +58,7 @@ def cartesian_to_polar_coords(cartesian_coords):
     y = cartesian_coords[..., 1:2]
     z = cartesian_coords[..., 2:3]
 
-    r = (x**2 + y**2 + z**2)**0.5
+    r = (x**2 + y**2 + z**2) ** 0.5
     phi = ivy.atan2(y, x)
     theta = ivy.acos(z / (r + MIN_DENOMINATOR))
 

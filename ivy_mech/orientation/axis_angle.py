@@ -9,7 +9,7 @@ from ivy_mech.orientation import quaternion as ivy_q
 MIN_DENOMINATOR = 1e-12
 
 
-def rot_mat_to_axis_angle(rot_mat,  device=None):
+def rot_mat_to_axis_angle(rot_mat, device=None):
     """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
@@ -30,7 +30,7 @@ def rot_mat_to_axis_angle(rot_mat,  device=None):
     return quaternion_to_axis_angle(quat, device)
 
 
-def euler_to_axis_angle(euler_angles, convention='zyx', batch_shape=None, device=None):
+def euler_to_axis_angle(euler_angles, convention="zyx", batch_shape=None, device=None):
     """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
@@ -82,12 +82,21 @@ def quaternion_to_axis_angle(quaternion, device=None):
 
     # BS x 1
     theta = 2 * ivy.acos(ivy.clip(n, 0, 1))
-    vector_x = ivy.where(theta != 0, e1 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
-                          ivy.zeros_like(theta, device=device))
-    vector_y = ivy.where(theta != 0, e2 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
-                          ivy.zeros_like(theta, device=device))
-    vector_z = ivy.where(theta != 0, e3 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
-                          ivy.zeros_like(theta, device=device))
+    vector_x = ivy.where(
+        theta != 0,
+        e1 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
+        ivy.zeros_like(theta, device=device),
+    )
+    vector_y = ivy.where(
+        theta != 0,
+        e2 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
+        ivy.zeros_like(theta, device=device),
+    )
+    vector_z = ivy.where(
+        theta != 0,
+        e3 / (ivy.sin(theta / 2) + MIN_DENOMINATOR),
+        ivy.zeros_like(theta, device=device),
+    )
 
     # BS x 4
     return ivy.concat([vector_x, vector_y, vector_z, theta], axis=-1)
@@ -173,4 +182,6 @@ def get_random_axis_angle(batch_shape=None):
 
     """
 
-    return quaternion_to_axis_angle(ivy_q.get_random_quaternion(batch_shape=batch_shape))
+    return quaternion_to_axis_angle(
+        ivy_q.get_random_quaternion(batch_shape=batch_shape)
+    )

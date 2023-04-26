@@ -7,13 +7,11 @@ import numpy as np
 
 
 class PositionTestData:
-
     def __init__(self):
-
         # Co-ordinate Conversions #
 
         # cartesian co-ordinates
-        self.cartesian_coords = np.array([[-1., 2., 3.]])
+        self.cartesian_coords = np.array([[-1.0, 2.0, 3.0]])
         self.batched_cartesian_coords = np.expand_dims(self.cartesian_coords, 0)
 
         # polar co-ordinates
@@ -23,7 +21,7 @@ class PositionTestData:
 
         r = np.sqrt(x**2 + y**2 + z**2)
         phi = np.arctan2(y, x)
-        theta = np.arccos(z/r)
+        theta = np.arccos(z / r)
 
         # B x 3
         self.polar_coords = np.concatenate((phi, theta, r), 1)
@@ -32,8 +30,10 @@ class PositionTestData:
         # Homogeneous Co-ordinates #
 
         # homogeneous coords
-        self.cartesian_coords_homo = np.array([[-1., 2., 3., 1.]])
-        self.batched_cartesian_coords_homo = np.expand_dims(self.cartesian_coords_homo, 0)
+        self.cartesian_coords_homo = np.array([[-1.0, 2.0, 3.0, 1.0]])
+        self.batched_cartesian_coords_homo = np.expand_dims(
+            self.cartesian_coords_homo, 0
+        )
 
         # transformation matrices
         self.ext_mat = np.eye(4)[0:3]

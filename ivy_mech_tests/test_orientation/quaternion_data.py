@@ -11,12 +11,11 @@ from ivy_mech_tests.test_orientation.orientation_data import OrientationTestData
 
 
 class QuaternionTestData(OrientationTestData):
-
     def __init__(self):
         super(QuaternionTestData, self).__init__()
 
         # scaled angle
-        self.scale_factor = np.array([2.])
+        self.scale_factor = np.array([2.0])
         self.batched_scale_factor = np.expand_dims(self.scale_factor, 0)
         self.scaled_angle = self.angle * self.scale_factor
         self.batched_scaled_angle = np.expand_dims(self.scaled_angle, 0)
@@ -51,9 +50,9 @@ class QuaternionTestData(OrientationTestData):
         self.batched_hp_quaternion = np.expand_dims(self.hp_quaternion, 0)
 
         # target facing quaternion
-        self.body_pos = np.array([0., 1., 2.])
+        self.body_pos = np.array([0.0, 1.0, 2.0])
         self.batched_body_pos = np.expand_dims(self.body_pos, 0)
-        self.target_pos = np.array([-1., -2., -3.])
+        self.target_pos = np.array([-1.0, -2.0, -3.0])
         self.batched_target_pos = np.expand_dims(self.target_pos, 0)
 
         rel_body_pos = self.body_pos - self.target_pos
@@ -64,12 +63,16 @@ class QuaternionTestData(OrientationTestData):
         rel_body_pos_z = rel_body_pos[2:3]
 
         axis_vector = np.concatenate((rel_body_pos_y, -rel_body_pos_x, zeros), -1)
-        axis_vector /= (np.linalg.norm(axis_vector))
+        axis_vector /= np.linalg.norm(axis_vector)
 
         rel_body_pos_xy_dist = np.linalg.norm(rel_body_pos[..., 0:2])
         sign = rel_body_pos[..., 1:2] >= 0
         theta = np.arctan(sign * rel_body_pos_xy_dist / rel_body_pos_z)
 
         downward_facing_quaternion = np.array([0, 1, 0, 0])
-        quaternion = ivy_mech.axis_angle_to_quaternion(np.concatenate([axis_vector, theta], -1))
-        self.target_facing_quaternion = ivy_mech.hamilton_product(downward_facing_quaternion, quaternion)
+        quaternion = ivy_mech.axis_angle_to_quaternion(
+            np.concatenate([axis_vector, theta], -1)
+        )
+        self.target_facing_quaternion = ivy_mech.hamilton_product(
+            downward_facing_quaternion, quaternion
+        )

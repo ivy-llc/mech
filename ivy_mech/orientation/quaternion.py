@@ -110,8 +110,10 @@ def rot_mat_to_quaternion(rot_mat):
 
     # elif (m[:,0,0] > m[:,1,1]) and (m[:,0,0] > m[:,2,2])
     # BS x 1 x 1
-    s_2 = ((1 + rot_mat[..., 0:1, 0:1] - rot_mat[..., 1:2, 1:2] - rot_mat[..., 2:3,
-                                                                  2:3]) ** 0.5) * 2
+    s_2 = (
+        (1 + rot_mat[..., 0:1, 0:1] - rot_mat[..., 1:2, 1:2] - rot_mat[..., 2:3, 2:3])
+        ** 0.5
+    ) * 2
     qw_2 = (rot_mat[..., 2:3, 1:2] - rot_mat[..., 1:2, 2:3]) / (s_2 + MIN_DENOMINATOR)
     qx_2 = 0.25 * s_2
     qy_2 = (rot_mat[..., 0:1, 1:2] + rot_mat[..., 1:2, 0:1]) / (s_2 + MIN_DENOMINATOR)
@@ -122,8 +124,10 @@ def rot_mat_to_quaternion(rot_mat):
 
     # elif m[:,1,1] > m[:,2,2]
     # BS x 1 x 1
-    s_3 = ((1 + rot_mat[..., 1:2, 1:2] - rot_mat[..., 0:1, 0:1] - rot_mat[..., 2:3,
-                                                                  2:3]) ** 0.5) * 2
+    s_3 = (
+        (1 + rot_mat[..., 1:2, 1:2] - rot_mat[..., 0:1, 0:1] - rot_mat[..., 2:3, 2:3])
+        ** 0.5
+    ) * 2
     qw_3 = (rot_mat[..., 0:1, 2:3] - rot_mat[..., 2:3, 0:1]) / (s_3 + MIN_DENOMINATOR)
     qx_3 = (rot_mat[..., 0:1, 1:2] + rot_mat[..., 1:2, 0:1]) / (s_3 + MIN_DENOMINATOR)
     qy_3 = 0.25 * s_3
@@ -134,8 +138,10 @@ def rot_mat_to_quaternion(rot_mat):
 
     # else
     # BS x 1 x 1
-    s_4 = ((1 + rot_mat[..., 2:3, 2:3] - rot_mat[..., 0:1, 0:1] - rot_mat[..., 1:2,
-                                                                  1:2]) ** 0.5) * 2
+    s_4 = (
+        (1 + rot_mat[..., 2:3, 2:3] - rot_mat[..., 0:1, 0:1] - rot_mat[..., 1:2, 1:2])
+        ** 0.5
+    ) * 2
     qw_4 = (rot_mat[..., 1:2, 0:1] - rot_mat[..., 0:1, 1:2]) / (s_4 + MIN_DENOMINATOR)
     qx_4 = (rot_mat[..., 0:1, 2:3] + rot_mat[..., 2:3, 0:1]) / (s_4 + MIN_DENOMINATOR)
     qy_4 = (rot_mat[..., 1:2, 2:3] + rot_mat[..., 2:3, 1:2]) / (s_4 + MIN_DENOMINATOR)
@@ -143,12 +149,17 @@ def rot_mat_to_quaternion(rot_mat):
 
     # BS x 4 x 1
     quat_4 = ivy.concat([qx_4, qy_4, qz_4, qw_4], axis=-2)
-    quat_3_or_other = ivy.where(rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3],
-                                 quat_3, quat_4)
-    quat_2_or_other = \
-        ivy.where(ivy.logical_and((rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
-                                    (rot_mat[..., 0:1, 0:1] > rot_mat[..., 2:3, 2:3])),
-                   quat_2, quat_3_or_other)
+    quat_3_or_other = ivy.where(
+        rot_mat[..., 1:2, 1:2] > rot_mat[..., 2:3, 2:3], quat_3, quat_4
+    )
+    quat_2_or_other = ivy.where(
+        ivy.logical_and(
+            (rot_mat[..., 0:1, 0:1] > rot_mat[..., 1:2, 1:2]),
+            (rot_mat[..., 0:1, 0:1] > rot_mat[..., 2:3, 2:3]),
+        ),
+        quat_2,
+        quat_3_or_other,
+    )
 
     # BS x 4
     return ivy.where(tr > 0, quat_1, quat_2_or_other)[..., 0]
@@ -172,7 +183,7 @@ def rotation_vector_to_quaternion(rot_vector):
     """
 
     # BS x 1
-    theta = (ivy.sum(rot_vector ** 2, axis=-1, keepdims=True)) ** 0.5
+    theta = (ivy.sum(rot_vector**2, axis=-1, keepdims=True)) ** 0.5
 
     # BS x 3
     vector = rot_vector / (theta + MIN_DENOMINATOR)
@@ -181,7 +192,7 @@ def rotation_vector_to_quaternion(rot_vector):
     return axis_angle_to_quaternion(ivy.concat([vector, theta], axis=-1))
 
 
-def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None):
+def euler_to_quaternion(euler_angles, convention="zyx", batch_shape=None):
     """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to
     quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n `[reference]
     <https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles>`_
@@ -208,11 +219,13 @@ def euler_to_quaternion(euler_angles, convention='zyx', batch_shape=None):
 
     # BS x 4
     return rot_mat_to_quaternion(
-        ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape))
+        ivy_rot_mat.euler_to_rot_mat(euler_angles, convention, batch_shape)
+    )
 
 
 # Quaternion Operations #
 # ----------------------#
+
 
 def inverse_quaternion(quaternion):
     """Compute inverse quaternion :math:`\mathbf{q}^{-1}.\n `[reference]
@@ -232,8 +245,10 @@ def inverse_quaternion(quaternion):
     """
 
     # BS x 1
-    sum_of_squares = ivy.sum(quaternion ** 2, axis=-1)
-    vector_conjugate = ivy.concat([-quaternion[..., 0:3], quaternion[..., -1:]], axis=-1)
+    sum_of_squares = ivy.sum(quaternion**2, axis=-1)
+    vector_conjugate = ivy.concat(
+        [-quaternion[..., 0:3], quaternion[..., -1:]], axis=-1
+    )
     return vector_conjugate / (sum_of_squares + MIN_DENOMINATOR)
 
 
@@ -263,10 +278,12 @@ def get_random_quaternion(max_rot_ang=math.pi, batch_shape=None):
     # BS x 3
     quaternion_vector = ivy.random_uniform(low=0, high=1, shape=list(batch_shape) + [3])
     vec_len = ivy.vector_norm(quaternion_vector)
-    quaternion_vector /= (vec_len + MIN_DENOMINATOR)
+    quaternion_vector /= vec_len + MIN_DENOMINATOR
 
     # BS x 1
-    theta = ivy.random_uniform(low=-max_rot_ang, high=max_rot_ang, shape=list(batch_shape) + [1])
+    theta = ivy.random_uniform(
+        low=-max_rot_ang, high=max_rot_ang, shape=list(batch_shape) + [1]
+    )
 
     # BS x 4
     return axis_angle_to_quaternion(ivy.concat([quaternion_vector, theta], axis=-1))
@@ -300,8 +317,9 @@ def scale_quaternion_rotation_angle(quaternion, scale):
     scaled_angle = vector_and_angle[..., -1:] * scale
 
     # BS x 4
-    return axis_angle_to_quaternion(ivy.concat(
-        [vector_and_angle[..., :-1], scaled_angle], axis=-1))
+    return axis_angle_to_quaternion(
+        ivy.concat([vector_and_angle[..., :-1], scaled_angle], axis=-1)
+    )
 
 
 def hamilton_product(quaternion1, quaternion2):

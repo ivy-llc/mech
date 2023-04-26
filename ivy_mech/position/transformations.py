@@ -1,7 +1,7 @@
 """Collection of Functions for Homogeneous Co-ordinates"""
 
 # global
-import ivy 
+import ivy
 
 
 def make_coordinates_homogeneous(coords, batch_shape=None):
@@ -64,8 +64,13 @@ def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
     num_batch_dims = len(batch_shape)
 
     # BS x 1 x 4
-    last_row = ivy.tile(ivy.reshape(ivy.array([0., 0., 0., 1.], device=device), [1] * num_batch_dims + [1, 4]),
-                         batch_shape + [1, 1])
+    last_row = ivy.tile(
+        ivy.reshape(
+            ivy.array([0.0, 0.0, 0.0, 1.0], device=device),
+            [1] * num_batch_dims + [1, 4],
+        ),
+        batch_shape + [1, 1],
+    )
 
     # BS x 4 x 4
     return ivy.concat([matrices, last_row], axis=-2)

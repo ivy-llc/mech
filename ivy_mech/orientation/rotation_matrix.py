@@ -2,12 +2,14 @@
 
 # global
 import ivy
+
 # local
 from ivy_mech.orientation import quaternion as ivy_quat
 
 
 # Private Helpers #
 # ----------------#
+
 
 def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     """
@@ -72,11 +74,16 @@ def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     return ivy.concat([rot_z_u, rot_z_m, rot_z_l], axis=-2)
 
 
-ROTATION_FUNC_DICT = {'x': _x_axis_rotation_matrix, 'y': _y_axis_rotation_matrix, 'z': _z_axis_rotation_matrix}
+ROTATION_FUNC_DICT = {
+    "x": _x_axis_rotation_matrix,
+    "y": _y_axis_rotation_matrix,
+    "z": _z_axis_rotation_matrix,
+}
 
 
 # General #
 # --------#
+
 
 def rot_vec_to_rot_mat(rot_vec):
     """Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to
@@ -97,7 +104,7 @@ def rot_vec_to_rot_mat(rot_vec):
     """
 
     # BS x 1
-    t = ivy.sum(rot_vec**2, axis=-1, keepdims=True)**0.5
+    t = ivy.sum(rot_vec**2, axis=-1, keepdims=True) ** 0.5
 
     # BS x 3
     u = rot_vec / t
@@ -163,13 +170,13 @@ def quaternion_to_rot_mat(quaternion):
 
     # BS x 1 x 1
     top_left = a**2 + b**2 - c**2 - d**2
-    top_middle = 2*b*c - 2*a*d
-    top_right = 2*b*d + 2*a*c
-    middle_left = 2*b*c + 2*a*d
+    top_middle = 2 * b * c - 2 * a * d
+    top_right = 2 * b * d + 2 * a * c
+    middle_left = 2 * b * c + 2 * a * d
     middle_middle = a**2 - b**2 + c**2 - d**2
-    middle_right = 2*c*d - 2*a*b
-    bottom_left = 2*b*d - 2*a*c
-    bottom_middle = 2*c*d + 2*a*b
+    middle_right = 2 * c * d - 2 * a * b
+    bottom_left = 2 * b * d - 2 * a * c
+    bottom_middle = 2 * c * d + 2 * a * b
     bottom_right = a**2 - b**2 - c**2 + d**2
 
     # BS x 1 x 3
@@ -184,7 +191,8 @@ def quaternion_to_rot_mat(quaternion):
 # Euler Conversions #
 # ------------------#
 
-def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, device=None):
+
+def euler_to_rot_mat(euler_angles, convention="zyx", batch_shape=None, device=None):
     """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation matrix
     :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix>`_
@@ -235,9 +243,15 @@ def euler_to_rot_mat(euler_angles, convention='zyx', batch_shape=None, device=No
     identity_matrix = ivy.eye(3, 3, batch_shape=batch_shape, device=device)
 
     # BS x 3 x 3
-    rot_alpha = ROTATION_FUNC_DICT[convention[0]](identity_matrix, zeros, sin_alpha, cos_alpha)
-    rot_beta = ROTATION_FUNC_DICT[convention[1]](identity_matrix, zeros, sin_beta, cos_beta)
-    rot_gamma = ROTATION_FUNC_DICT[convention[2]](identity_matrix, zeros, sin_gamma, cos_gamma)
+    rot_alpha = ROTATION_FUNC_DICT[convention[0]](
+        identity_matrix, zeros, sin_alpha, cos_alpha
+    )
+    rot_beta = ROTATION_FUNC_DICT[convention[1]](
+        identity_matrix, zeros, sin_beta, cos_beta
+    )
+    rot_gamma = ROTATION_FUNC_DICT[convention[2]](
+        identity_matrix, zeros, sin_gamma, cos_gamma
+    )
     return ivy.matmul(rot_gamma, ivy.matmul(rot_beta, rot_alpha))
 
 
@@ -281,18 +295,22 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
         device = ivy.dev(body_pos)
 
     # BS x 3
-    up = ivy.tile(ivy.reshape(ivy.array([0., 0., 1.], device=device),
-                                [1] * num_batch_dims + [3]), batch_shape + [1])
+    up = ivy.tile(
+        ivy.reshape(
+            ivy.array([0.0, 0.0, 1.0], device=device), [1] * num_batch_dims + [3]
+        ),
+        batch_shape + [1],
+    )
 
     z = target_pos - body_pos
-    z = z / ivy.sum(z ** 2, axis=-1, keepdims=True) ** 0.5
+    z = z / ivy.sum(z**2, axis=-1, keepdims=True) ** 0.5
 
     x = ivy.cross(up, z)
 
     y = ivy.cross(z, x)
 
-    x = x / ivy.sum(x ** 2, axis=-1, keepdims=True) ** 0.5
-    y = y / ivy.sum(y ** 2, axis=-1, keepdims=True) ** 0.5
+    x = x / ivy.sum(x**2, axis=-1, keepdims=True) ** 0.5
+    y = y / ivy.sum(y**2, axis=-1, keepdims=True) ** 0.5
 
     # BS x 1 x 3
     x = ivy.expand_dims(x, axis=-2)
@@ -338,4 +356,5 @@ def get_random_rot_mat(batch_shape=None):
     """
 
     return quaternion_to_rot_mat(
-        ivy_quat.get_random_quaternion(batch_shape=batch_shape))
+        ivy_quat.get_random_quaternion(batch_shape=batch_shape)
+    )

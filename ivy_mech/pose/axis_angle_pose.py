@@ -8,7 +8,9 @@ from ivy_mech.orientation import quaternion as ivy_quat
 from ivy_mech.orientation import axis_angle as ivy_aa
 
 
-def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None, device=None):
+def euler_pose_to_axis_angle_pose(
+    euler_pose, convention="zyx", batch_shape=None, device=None
+):
     """Convert :math: Euler angle pose
     :math:`\mathbf{p}_{abc} = [\mathbf{x}_c, \mathbf{θ}_{xyz}] = [x, y, z, ϕ_a, ϕ_b, ϕ_c]` to
     axis-angle pose :math:`\mathbf{p}_{aa} = [\mathbf{x}_c, \mathbf{e}, θ] = [x, y, z, e_x, e_y, e_z, θ]`
@@ -30,7 +32,9 @@ def euler_pose_to_axis_angle_pose(euler_pose, convention='zyx', batch_shape=None
         Rotation axis unit vector and angle *[batch_shape,4]*
 
     """
-    aa = ivy_aa.euler_to_axis_angle(euler_pose[..., 3:], convention, batch_shape, device=None)
+    aa = ivy_aa.euler_to_axis_angle(
+        euler_pose[..., 3:], convention, batch_shape, device=None
+    )
     return ivy.concat([euler_pose[..., :3], aa], axis=-1)
 
 

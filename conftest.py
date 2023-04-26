@@ -7,18 +7,20 @@ import ivy
 from ivy_tests.test_ivy import helpers
 
 
-FW_STRS = ['numpy', 'jax', 'tensorflow', 'torch']
+FW_STRS = ["numpy", "jax", "tensorflow", "torch"]
 
 
-TEST_BACKENDS: Dict[str, callable] = {'numpy': lambda: helpers.globals._get_ivy_numpy(),
-                                        'jax': lambda: helpers.globals._get_ivy_jax(),
-                                        'tensorflow': lambda: helpers.globals._get_ivy_tensorflow(),
-                                        'torch': lambda: helpers.globals._get_ivy_torch()}
+TEST_BACKENDS: Dict[str, callable] = {
+    "numpy": lambda: helpers.globals._get_ivy_numpy(),
+    "jax": lambda: helpers.globals._get_ivy_jax(),
+    "tensorflow": lambda: helpers.globals._get_ivy_tensorflow(),
+    "torch": lambda: helpers.globals._get_ivy_torch(),
+}
 
 
 @pytest.fixture(autouse=True)
 def run_around_tests(device, f, compile_graph, fw):
-    if 'gpu' in device and fw == 'numpy':
+    if "gpu" in device and fw == "numpy":
         # Numpy does not support GPU
         pytest.skip()
     with f.use:
@@ -27,26 +29,25 @@ def run_around_tests(device, f, compile_graph, fw):
 
 
 def pytest_generate_tests(metafunc):
-
     # dev_str
-    raw_value = metafunc.config.getoption('--device')
-    if raw_value == 'all':
-        devices = ['cpu', 'gpu:0', 'tpu:0']
+    raw_value = metafunc.config.getoption("--device")
+    if raw_value == "all":
+        devices = ["cpu", "gpu:0", "tpu:0"]
     else:
-        devices = raw_value.split(',')
+        devices = raw_value.split(",")
 
     # framework
-    raw_value = metafunc.config.getoption('--backend')
-    if raw_value == 'all':
+    raw_value = metafunc.config.getoption("--backend")
+    if raw_value == "all":
         backend_strs = TEST_BACKENDS.keys()
     else:
-        backend_strs = raw_value.split(',')
+        backend_strs = raw_value.split(",")
 
     # compile_graph
-    raw_value = metafunc.config.getoption('--compile_graph')
-    if raw_value == 'both':
+    raw_value = metafunc.config.getoption("--compile_graph")
+    if raw_value == "both":
         compile_modes = [True, False]
-    elif raw_value == 'true':
+    elif raw_value == "true":
         compile_modes = [True]
     else:
         compile_modes = [False]
@@ -57,14 +58,12 @@ def pytest_generate_tests(metafunc):
         for device in devices:
             for compile_graph in compile_modes:
                 configs.append(
-                    (device,
-                    TEST_BACKENDS[backend_str](),
-                    compile_graph,
-                    backend_str))
-    metafunc.parametrize('device,f,compile_graph,fw', configs)
+                    (device, TEST_BACKENDS[backend_str](), compile_graph, backend_str)
+                )
+    metafunc.parametrize("device,f,compile_graph,fw", configs)
 
 
 def pytest_addoption(parser):
-    parser.addoption('--device', action="store", default="cpu")
-    parser.addoption('--backend', action="store", default="numpy,jax,tensorflow,torch")
-    parser.addoption('--compile_graph', action="store", default="true")
+    parser.addoption("--device", action="store", default="cpu")
+    parser.addoption("--backend", action="store", default="numpy,jax,tensorflow,torch")
+    parser.addoption("--compile_graph", action="store", default="true")
