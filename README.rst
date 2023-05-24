@@ -78,7 +78,7 @@ neural memory, pre-trained models + implementations, and builder tools with trai
 
     <div style="display: block;">
         <a href="https://github.com/unifyai/mech">
-            <picture>
+            <picture class="dark-light">
                 <source width="15%" style="float: left; margin: 0% 5%;" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/unifyai/unifyai.github.io/master/img/externally_linked/logos/ivy_mech_dark.png">
                 <img width="15%" style="float: left; margin: 0% 5%;" src="https://raw.githubusercontent.com/unifyai/unifyai.github.io/master/img/externally_linked/logos/ivy_mech.png">
             </picture>
