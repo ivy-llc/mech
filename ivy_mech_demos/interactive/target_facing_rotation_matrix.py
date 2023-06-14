@@ -75,14 +75,18 @@ class Simulator(BaseSimulator):
             # prompt input
             self._user_prompt(
                 "\nInitialized scene with a camera facing away from the plant plot.\n\n"
-                "The visualizer can be translated and rotated by clicking either the left mouse button or the wheel, "
+                "The visualizer can be translated and rotated by clicking "
+                "either the left mouse button or the wheel, "
                 "and then dragging the mouse.\n"
                 "Scrolling the mouse wheel zooms the view in and out.\n\n"
                 "You can click on the plant pot, "
-                "then select the box icon with four arrows in the top panel of the simulator, "
+                "then select the box icon with four arrows in the top panel "
+                "of the simulator, "
                 "and then drag the plant pot around dynamically.\n"
-                "Starting to drag and then holding ctrl allows you to also drag the pot up and down. \n\n"
-                "Press enter in the terminal to use method ivy_mech.target_facing_rotation_vector "
+                "Starting to drag and then holding ctrl allows you to also "
+                "drag the pot up and down. \n\n"
+                "Press enter in the terminal to use method "
+                "ivy_mech.target_facing_rotation_vector "
                 "to rotate the camera to track the plant pot as you move it...\n\n"
             )
 
@@ -93,8 +97,10 @@ class Simulator(BaseSimulator):
 
             # message
             print(
-                "\nInitialized dummy scene with a camera facing away from the plant plot."
-                "\nClose the visualization window to use method ivy_mech.target_facing_rotation_vector "
+                "\nInitialized dummy scene with a camera facing "
+                "away from the plant plot."
+                "\nClose the visualization window to use method "
+                "ivy_mech.target_facing_rotation_vector "
                 "to rotate the camera to face towards the plant pot...\n"
             )
 
@@ -115,7 +121,6 @@ class Simulator(BaseSimulator):
 def main(interactive=True, try_use_sim=True, f=None, fw=None):
     fw = ivy.choose_random_backend() if fw is None else fw
     ivy.set_backend(fw)
-    f = ivy.with_backend(backend=fw)
     sim = Simulator(interactive, try_use_sim)
     cam_pos = sim.cam.get_pos()
     iterations = 250 if sim.with_pyrep else 1

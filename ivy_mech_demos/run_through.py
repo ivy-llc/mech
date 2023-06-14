@@ -32,10 +32,7 @@ def main(f=None, fw=None):
     quat = ivy_mech.euler_to_quaternion(euler_angles)
 
     # 4
-    axis_and_angle = ivy_mech.quaternion_to_axis_angle(quat)
-
-    # 3
-    rot_vec_again = axis_and_angle[..., :-1] * axis_and_angle[..., -1:]
+    ivy_mech.quaternion_to_axis_angle(quat)
 
     # Pose #
     # -----#
@@ -72,7 +69,7 @@ def main(f=None, fw=None):
     polar_coord = ivy_mech.cartesian_to_polar_coords(cartesian_coord)
 
     # 3
-    cartesian_coord_again = ivy_mech.polar_to_cartesian_coords(polar_coord)
+    ivy_mech.polar_to_cartesian_coords(polar_coord)
 
     # cartesian co-ordinate frame-of-reference transformations
 
@@ -80,28 +77,10 @@ def main(f=None, fw=None):
     trans_mat = ivy.random_uniform(low=0.0, high=1.0, shape=(3, 4))
 
     # 4
-    cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(cartesian_coord)
-
-    # 3
-    trans_cartesian_coord = ivy.matmul(
-        trans_mat, ivy.expand_dims(cartesian_coord_homo, axis=-1)
-    )[:, 0]
-
-    # 4
-    trans_cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
-        trans_cartesian_coord
-    )
+    ivy_mech.make_coordinates_homogeneous(cartesian_coord)
 
     # 4 x 4
-    trans_mat_homo = ivy_mech.make_transformation_homogeneous(trans_mat)
-
-    # 3 x 4
-    inv_trans_mat = ivy.inv(trans_mat_homo)[0:3]
-
-    # 3
-    cartesian_coord_again = ivy.matmul(
-        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, axis=-1)
-    )[:, 0]
+    ivy_mech.make_transformation_homogeneous(trans_mat)
 
     # message
     print("End of Run Through Demo!")

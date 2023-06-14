@@ -66,20 +66,28 @@ class Simulator(BaseSimulator):
             # wait for user input
             self._user_prompt(
                 "\nInitialized scene with an omni-directional camera in the centre.\n\n"
-                "You can click on the omni directional camera, which appears as a small floating black sphere, "
-                "then select the box icon with four arrows in the top panel of the simulator, "
+                "You can click on the omni directional camera, which appears as a "
+                "small floating black sphere, "
+                "then select the box icon with four arrows in the top panel "
+                "of the simulator, "
                 "and then drag the camera around dynamically.\n"
-                "Starting to drag and then holding ctrl allows you to also drag the camera up and down. \n\n"
-                "This demo enables you to capture 10 different omni-directional images from the camera, "
+                "Starting to drag and then holding ctrl allows you to also "
+                "drag the camera up and down. \n\n"
+                "This demo enables you to capture 10 different omni-directional "
+                "images from the camera, "
                 "and render the associated 10 point clouds in an open3D visualizer.\n\n"
-                "Both visualizers can be translated and rotated by clicking either the left mouse button or the wheel, "
+                "Both visualizers can be translated and rotated by clicking "
+                "either the left mouse button or the wheel, "
                 "and then dragging the mouse.\n"
                 "Scrolling the mouse wheel zooms the view in and out.\n\n"
-                "Both visualizers can be rotated and zoomed by clicking either the left mouse button or the wheel, "
+                "Both visualizers can be rotated and zoomed by clicking "
+                "either the left mouse button or the wheel, "
                 "and then dragging with the mouse.\n\n"
-                "Press enter in the terminal to use method ivy_mech.polar_coords_to_cartesian_coords and "
+                "Press enter in the terminal to use method "
+                "ivy_mech.polar_coords_to_cartesian_coords and "
                 "show the first cartesian point cloud reconstruction of the scene, "
-                "converted from the polar co-ordinates captured from the omni-directional camera.\n\n"
+                "converted from the polar co-ordinates captured "
+                "from the omni-directional camera.\n\n"
             )
 
         else:
@@ -96,8 +104,10 @@ class Simulator(BaseSimulator):
 
             # message
             print(
-                "\nInitialized dummy scene with an omni-directional camera in the centre."
-                "\nClose the visualization window to use method ivy_mech.polar_coords_to_cartesian_coords and show"
+                "\nInitialized dummy scene with an omni-directional "
+                "camera in the centre."
+                "\nClose the visualization window to use method "
+                "ivy_mech.polar_coords_to_cartesian_coords and show"
                 "a cartesian point cloud reconstruction of the scene, "
                 "converted from the omni-directional camera polar co-ordinates\n"
             )
@@ -119,7 +129,6 @@ class Simulator(BaseSimulator):
 def main(interactive=True, try_use_sim=True, f=None, fw=None):
     fw = ivy.choose_random_backend() if fw is None else fw
     ivy.set_backend(fw)
-    f = ivy.with_backend(backend=fw)
     sim = Simulator(interactive, try_use_sim)
     vis = Visualizer(ivy.to_numpy(sim.default_camera_ext_mat_homo))
     pix_per_deg = 2
