@@ -1,7 +1,4 @@
-"""
-Collection of tests for quaternion pose functions
-"""
-
+"""Collection of tests for quaternion pose functions"""
 # global
 import ivy
 import ivy_mech

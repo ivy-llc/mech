@@ -1,7 +1,4 @@
-"""
-Collection of tests for ivy mechanics demos
-"""
-
+"""Collection of tests for ivy mechanics demos"""
 # global
 import pytest
 

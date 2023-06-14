@@ -1,5 +1,4 @@
 """Collection of Rotation Conversion Functions to Axis-Angle Format"""
-
 # global
 import ivy
 
@@ -10,7 +9,8 @@ MIN_DENOMINATOR = 1e-12
 
 
 def rot_mat_to_axis_angle(rot_mat, device=None):
-    """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to rotation axis unit vector
+    r"""Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to
+    rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
     Parameters
@@ -18,7 +18,8 @@ def rot_mat_to_axis_angle(rot_mat, device=None):
     rot_mat
         Rotation matrix *[batch_shape,3,3]*
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -31,7 +32,8 @@ def rot_mat_to_axis_angle(rot_mat, device=None):
 
 
 def euler_to_axis_angle(euler_angles, convention="zyx", batch_shape=None, device=None):
-    """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation axis unit vector
+    r"""Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]`
+    to rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.
 
     Parameters
@@ -39,11 +41,13 @@ def euler_to_axis_angle(euler_angles, convention="zyx", batch_shape=None, device
     euler_angles
         Input euler angles *[batch_shape,3]*
     convention
-        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+        The axes for euler rotation, in order of L.H.S. matrix multiplication.
+        (Default value = 'zyx')
     batch_shape
         Shape of batch. Inferred from inputs if None. (Default value = None)
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -56,16 +60,18 @@ def euler_to_axis_angle(euler_angles, convention="zyx", batch_shape=None, device
 
 
 def quaternion_to_axis_angle(quaternion, device=None):
-    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation axis unit vector
+    r"""Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to
+    rotation axis unit vector
     :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_
+    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_ # noqa
 
     Parameters
     ----------
     quaternion
         Input quaternion *[batch_shape,4]*
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -73,7 +79,6 @@ def quaternion_to_axis_angle(quaternion, device=None):
         Rotation axis unit vector and angle *[batch_shape,4]*
 
     """
-
     # BS x 1
     e1 = quaternion[..., 0:1]
     e2 = quaternion[..., 1:2]
@@ -103,8 +108,10 @@ def quaternion_to_axis_angle(quaternion, device=None):
 
 
 def quaternion_to_polar_axis_angle(quaternion, device=None):
-    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to a polar axis angle representation, which
-    constitutes the elevation and azimuth angles of the axis, as well as the rotation angle
+    r"""Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to a
+    polar axis angle representation, which
+    constitutes the elevation and azimuth angles of the axis, as well as the rotation
+    angle
     :math:`\mathbf{θ}_{paa} = [ϕ_e, ϕ_a, θ]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation>`_
 
@@ -113,7 +120,8 @@ def quaternion_to_polar_axis_angle(quaternion, device=None):
     quaternion
         Input quaternion *[batch_shape,4]*
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -121,7 +129,6 @@ def quaternion_to_polar_axis_angle(quaternion, device=None):
         Polar axis angle representation *[batch_shape,3]*
 
     """
-
     if device is None:
         device = ivy.dev(quaternion)
 
@@ -138,16 +145,17 @@ def quaternion_to_polar_axis_angle(quaternion, device=None):
 
 # noinspection PyUnusedLocal
 def quaternion_to_rotation_vector(quaternion, device=None):
-    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation vector
+    r"""Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation vector
     :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
+    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_ # noqa
 
     Parameters
     ----------
     quaternion
         Input quaternion *[batch_shape,4]*
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -155,7 +163,6 @@ def quaternion_to_rotation_vector(quaternion, device=None):
         Rotation vector *[batch_shape,3]*
 
     """
-
     if device is None:
         device = ivy.dev(quaternion)
 
@@ -167,7 +174,7 @@ def quaternion_to_rotation_vector(quaternion, device=None):
 
 
 def get_random_axis_angle(batch_shape=None):
-    """Generate random axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
+    r"""Generate random axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
     and rotation angle :math:`θ`
 
     Parameters
@@ -181,7 +188,6 @@ def get_random_axis_angle(batch_shape=None):
         Random rotation axis unit vector and angle *[batch_shape,4]*
 
     """
-
     return quaternion_to_axis_angle(
         ivy_q.get_random_quaternion(batch_shape=batch_shape)
     )

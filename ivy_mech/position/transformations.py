@@ -1,5 +1,4 @@
 """Collection of Functions for Homogeneous Co-ordinates"""
-
 # global
 import ivy
 
@@ -20,7 +19,6 @@ def make_coordinates_homogeneous(coords, batch_shape=None):
         Array of Homogeneous co-ordinates *[batch_shape,d+1]*
 
     """
-
     if batch_shape is None:
         batch_shape = coords.shape[:-1]
 
@@ -44,7 +42,8 @@ def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
     batch_shape
         Shape of batch. Inferred from inputs if None. (Default value = None)
     device
-        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc. Same as x if None. (Default value = None)
+        device on which to create the array 'cuda:0', 'cuda:1', 'cpu' etc.
+        Same as x if None. (Default value = None)
 
     Returns
     -------
@@ -52,7 +51,6 @@ def make_transformation_homogeneous(matrices, batch_shape=None, device=None):
         4x4 Homogeneous matrices *[batch_shape,4,4]*
 
     """
-
     if batch_shape is None:
         batch_shape = matrices.shape[:-2]
 

@@ -1,5 +1,4 @@
 """Collection of Rotation Conversion Functions to Rotation Matrix Format"""
-
 # global
 import ivy
 
@@ -13,7 +12,6 @@ from ivy_mech.orientation import quaternion as ivy_quat
 
 def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     """
-
     Parameters
     ----------
     identity_matrix
@@ -34,7 +32,6 @@ def _x_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     """
-
     Parameters
     ----------
     identity_matrix
@@ -55,7 +52,6 @@ def _y_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
 
 def _z_axis_rotation_matrix(identity_matrix, zeros, sin_theta, cos_theta):
     """
-
     Parameters
     ----------
     identity_matrix
@@ -86,7 +82,7 @@ ROTATION_FUNC_DICT = {
 
 
 def rot_vec_to_rot_mat(rot_vec):
-    """Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to
+    r"""Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to
     rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n `[reference]
     <https://en.wikipedia.org/wiki/Rotation_matrix
     #Rotation_matrix_from_axis_and_angle>`_
@@ -102,7 +98,6 @@ def rot_vec_to_rot_mat(rot_vec):
         Rotation matrix *[batch_shape,3,3]*
 
     """
-
     # BS x 1
     t = ivy.sum(rot_vec**2, axis=-1, keepdims=True) ** 0.5
 
@@ -145,7 +140,7 @@ def rot_vec_to_rot_mat(rot_vec):
 
 
 def quaternion_to_rot_mat(quaternion):
-    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation
+    r"""Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to rotation
     matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n `[reference]
     <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
     #Conversion_to_and_from_the_matrix_representation>`_
@@ -161,7 +156,6 @@ def quaternion_to_rot_mat(quaternion):
         Rotation matrix *[batch_shape,3,3]*
 
     """
-
     # BS x 1 x 1
     a = ivy.expand_dims(quaternion[..., 3:4], axis=-1)
     b = ivy.expand_dims(quaternion[..., 0:1], axis=-1)
@@ -193,7 +187,8 @@ def quaternion_to_rot_mat(quaternion):
 
 
 def euler_to_rot_mat(euler_angles, convention="zyx", batch_shape=None, device=None):
-    """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to rotation matrix
+    r"""Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to
+    rotation matrix
     :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.\n
     `[reference] <https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix>`_
 
@@ -216,7 +211,6 @@ def euler_to_rot_mat(euler_angles, convention="zyx", batch_shape=None, device=No
         Rotation matrix *[batch_shape,3,3]*
 
     """
-
     if batch_shape is None:
         batch_shape = euler_angles.shape[:-1]
 
@@ -257,7 +251,7 @@ def euler_to_rot_mat(euler_angles, convention="zyx", batch_shape=None, device=No
 
 # noinspection PyUnresolvedReferences
 def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device=None):
-    """Determine rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` of body which
+    r"""Determine rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` of body which
     corresponds with it's positive z axis facing towards a target world co-ordinate
     :math:`\mathbf{x}_t = [t_x, t_y, t_z]`, given the body world co-ordinate
     :math:`\mathbf{x}_b = [b_x, b_y, b_z]`, while assuming world-space positve-z to
@@ -282,7 +276,6 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
         Rotation vector, which faces body towards target *[batch_shape,4]*
 
     """
-
     # ToDo: make this more general, allowing arbitrary view and up direction axes to
     #  be specified
 
@@ -322,7 +315,7 @@ def target_facing_rotation_matrix(body_pos, target_pos, batch_shape=None, device
 
 
 def axis_angle_to_rot_mat(axis_angle):
-    """Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    r"""Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
     rotation angle :math:`θ` to rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
 
     Parameters
@@ -336,12 +329,11 @@ def axis_angle_to_rot_mat(axis_angle):
         Rotation matrix *[batch_shape,3,3]*
 
     """
-
     return quaternion_to_rot_mat(ivy_quat.axis_angle_to_quaternion(axis_angle))
 
 
 def get_random_rot_mat(batch_shape=None):
-    """Generate random rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
+    r"""Generate random rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`.
 
     Parameters
     ----------
@@ -354,7 +346,6 @@ def get_random_rot_mat(batch_shape=None):
         Random rotation matrix *[batch_shape,3,3]*
 
     """
-
     return quaternion_to_rot_mat(
         ivy_quat.get_random_quaternion(batch_shape=batch_shape)
     )

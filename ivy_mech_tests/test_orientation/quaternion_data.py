@@ -1,7 +1,4 @@
-"""
-test data for quaternion functions
-"""
-
+"""test data for quaternion functions"""
 # global
 import numpy as np
 

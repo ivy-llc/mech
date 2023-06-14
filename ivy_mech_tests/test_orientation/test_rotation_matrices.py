@@ -1,7 +1,4 @@
-"""
-Collection of tests for rotation matrix functions
-"""
-
+"""Collection of tests for rotation matrix functions"""
 # global
 import ivy_mech
 import ivy.functional.backends.numpy as ivy_np

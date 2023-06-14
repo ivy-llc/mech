@@ -1,5 +1,4 @@
 """Collection of Position Co-ordinate Conversion Functions"""
-
 # global
 import ivy
 
@@ -7,9 +6,10 @@ MIN_DENOMINATOR = 1e-12
 
 
 def polar_to_cartesian_coords(polar_coords):
-    """Convert spherical polar co-ordinates :math:`\mathbf{x}_p = [r, α, β]` to cartesian co-ordinates
+    r"""Convert spherical polar co-ordinates
+    :math:`\mathbf{x}_p = [r, α, β]` to cartesian co-ordinates
     :math:`\mathbf{x}_c = [x, y, z]`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
+    `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_ # noqa
 
     Parameters
     ----------
@@ -22,7 +22,6 @@ def polar_to_cartesian_coords(polar_coords):
         Cartesian co-ordinates *[batch_shape,3]*
 
     """
-
     # BS x 1
     phi = polar_coords[..., 0:1]
     theta = polar_coords[..., 1:2]
@@ -37,9 +36,10 @@ def polar_to_cartesian_coords(polar_coords):
 
 
 def cartesian_to_polar_coords(cartesian_coords):
-    """Convert cartesian co-ordinates :math:`\mathbf{x}_c = [x, y, z]` to spherical polar co-ordinates
+    r"""Convert cartesian co-ordinates
+    :math:`\mathbf{x}_c = [x, y, z]` to spherical polar co-ordinates
     :math:`\mathbf{x}_p = [r, α, β]`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_
+    `[reference] <https://en.wikipedia.org/wiki/Spherical_coordinate_system#Cartesian_coordinates>`_ # noqa
 
     Parameters
     ----------
@@ -52,7 +52,6 @@ def cartesian_to_polar_coords(cartesian_coords):
         Spherical polar co-ordinates *[batch_shape,3]*
 
     """
-
     # BS x 1
     x = cartesian_coords[..., 0:1]
     y = cartesian_coords[..., 1:2]

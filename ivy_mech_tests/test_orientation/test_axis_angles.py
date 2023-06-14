@@ -1,7 +1,4 @@
-"""
-Collection of tests for axis-angle functions
-"""
-
+"""Collection of tests for axis-angle functions"""
 # global
 import ivy
 import ivy_mech

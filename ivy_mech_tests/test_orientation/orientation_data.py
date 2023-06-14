@@ -1,7 +1,4 @@
-"""
-test data for orientation functions
-"""
-
+"""test data for orientation functions"""
 # global
 import numpy as np
 

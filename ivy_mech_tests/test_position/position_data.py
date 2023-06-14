@@ -1,7 +1,4 @@
-"""
-test data for position functions
-"""
-
+"""test data for position functions"""
 # global
 import numpy as np
 

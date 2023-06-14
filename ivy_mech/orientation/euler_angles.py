@@ -1,5 +1,4 @@
 """Collection of Rotation Conversion Functions to Euler Angles Format"""
-
 # global
 import ivy
 import math
@@ -433,16 +432,18 @@ ROT_MAT_TO_EULER_DICT = {
 
 
 def rot_mat_to_euler(rot_mat, convention="zyx"):
-    """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to :math:`zyx` Euler angles
+    r"""Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}`
+    to :math:`zyx` Euler angles
     :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.\n
-    `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_
+    `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_ # noqa
 
     Parameters
     ----------
     rot_mat
         Rotation matrix *[batch_shape,3,3]*
     convention
-        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+        The axes for euler rotation, in order of L.H.S. matrix multiplication.
+        (Default value = 'zyx')
 
     Returns
     -------
@@ -457,16 +458,18 @@ def rot_mat_to_euler(rot_mat, convention="zyx"):
 
 
 def quaternion_to_euler(quaternion, convention="zyx"):
-    """Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]` to :math:`zyx` Euler angles
+    r"""Convert quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`
+    to :math:`zyx` Euler angles
     :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.\n
-    `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_
+    `[reference] <https://github.com/alisterburt/eulerangles/blob/master/eulerangles/conversions.py>`_ # noqa
 
     Parameters
     ----------
     quaternion
         Input quaternion *[batch_shape,4]*
     convention
-        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+        The axes for euler rotation, in order of L.H.S. matrix multiplication.
+        (Default value = 'zyx')
 
     Returns
     -------
@@ -474,21 +477,22 @@ def quaternion_to_euler(quaternion, convention="zyx"):
         zyx Euler angles *[batch_shape,3]*
 
     """
-
     # BS x 3
     return rot_mat_to_euler(ivy_rot_mat.quaternion_to_rot_mat(quaternion), convention)
 
 
 def axis_angle_to_euler(axis_angle, convention="zyx"):
-    """Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
-    rotation angle :math:`θ` to :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
+    r"""Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and
+    rotation angle :math:`θ` to :math:`zyx` Euler angles
+    :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
 
     Parameters
     ----------
     axis_angle
         Input axis_angle *[batch_shape,4]*
     convention
-        The axes for euler rotation, in order of L.H.S. matrix multiplication. (Default value = 'zyx')
+        The axes for euler rotation, in order of L.H.S. matrix multiplication.
+        (Default value = 'zyx')
 
     Returns
     -------
@@ -496,13 +500,13 @@ def axis_angle_to_euler(axis_angle, convention="zyx"):
         zyx Euler angles *[batch_shape,3]*
 
     """
-
     # BS x 3
     return rot_mat_to_euler(ivy_rot_mat.axis_angle_to_rot_mat(axis_angle), convention)
 
 
 def get_random_euler(batch_shape=None):
-    """Generate random :math:`zyx` Euler angles :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
+    r"""Generate random :math:`zyx` Euler angles
+    :math:`\mathbf{θ}_{xyz} = [ϕ_z, ϕ_y, ϕ_x]`.
 
     Parameters
     ----------
@@ -515,7 +519,6 @@ def get_random_euler(batch_shape=None):
         Random euler *[batch_shape,3]*
 
     """
-
     if batch_shape is None:
         batch_shape = []
 

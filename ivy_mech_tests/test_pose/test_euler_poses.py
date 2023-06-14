@@ -1,7 +1,4 @@
-"""
-Collection of tests for euler pose functions
-"""
-
+"""Collection of tests for euler pose functions"""
 # global
 import ivy
 import ivy_mech

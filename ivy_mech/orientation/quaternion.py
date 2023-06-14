@@ -1,5 +1,4 @@
 """Collection of Rotation Conversion Functions to Quaternion Format"""
-
 # global
 import ivy
 import math
@@ -16,9 +15,10 @@ MIN_DENOMINATOR = 1e-12
 
 
 def axis_angle_to_quaternion(axis_angle):
-    """Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]` and rotation angle :math:`θ` to quaternion
+    r"""Convert rotation axis unit vector :math:`\mathbf{e} = [e_x, e_y, e_z]`
+    and rotation angle :math:`θ` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_
+    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Quaternions>`_ # noqa
 
     Parameters
     ----------
@@ -31,7 +31,6 @@ def axis_angle_to_quaternion(axis_angle):
         Quaternion *[batch_shape,4]*
 
     """
-
     # BS x 1
     angle = axis_angle[..., -1:]
     n = ivy.cos(angle / 2)
@@ -45,7 +44,8 @@ def axis_angle_to_quaternion(axis_angle):
 
 
 def polar_axis_angle_to_quaternion(polar_axis_angle):
-    """Convert polar axis-angle representation, which constitutes the elevation and azimuth angles of the axis as well
+    r"""Convert polar axis-angle representation, which constitutes the elevation and
+    azimuth angles of the axis as well
     as the rotation angle :math:`\mathbf{θ}_{paa} = [ϕ_e, ϕ_a, θ]`, to quaternion form
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation>`_
@@ -61,7 +61,6 @@ def polar_axis_angle_to_quaternion(polar_axis_angle):
         Quaternion *[batch_shape,4]*
 
     """
-
     # BS x 1
     theta = polar_axis_angle[..., 0:1]
     phi = polar_axis_angle[..., 1:2]
@@ -78,9 +77,9 @@ def polar_axis_angle_to_quaternion(polar_axis_angle):
 
 
 def rot_mat_to_quaternion(rot_mat):
-    """Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to quaternion
+    r"""Convert rotation matrix :math:`\mathbf{R}\in\mathbb{R}^{3×3}` to quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
-    `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_
+    `[reference] <http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/>`_ # noqa
 
     Parameters
     ----------
@@ -93,7 +92,6 @@ def rot_mat_to_quaternion(rot_mat):
         Quaternion *[batch_shape,4]*
 
     """
-
     # BS x 1 x 1
     tr = rot_mat[..., 0:1, 0:1] + rot_mat[..., 1:2, 1:2] + rot_mat[..., 2:3, 2:3]
 
@@ -166,9 +164,10 @@ def rot_mat_to_quaternion(rot_mat):
 
 
 def rotation_vector_to_quaternion(rot_vector):
-    """Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to quaternion
+    r"""Convert rotation vector :math:`\mathbf{θ}_{rv} = [θe_x, θe_y, θe_z]` to
+    quaternion
     :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n
-    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_
+    `[reference] <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions#Euler_axis_and_angle_(rotation_vector)>`_ # noqa
 
     Parameters
     ----------
@@ -181,7 +180,6 @@ def rotation_vector_to_quaternion(rot_vector):
         Quaternion *[batch_shape,4]*
 
     """
-
     # BS x 1
     theta = (ivy.sum(rot_vector**2, axis=-1, keepdims=True)) ** 0.5
 
@@ -193,7 +191,7 @@ def rotation_vector_to_quaternion(rot_vector):
 
 
 def euler_to_quaternion(euler_angles, convention="zyx", batch_shape=None):
-    """Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to
+    r"""Convert :math:`zyx` Euler angles :math:`\mathbf{θ}_{abc} = [ϕ_a, ϕ_b, ϕ_c]` to
     quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`.\n `[reference]
     <https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles>`_
 
@@ -213,7 +211,6 @@ def euler_to_quaternion(euler_angles, convention="zyx", batch_shape=None):
         Quaternion *[batch_shape,4]*
 
     """
-
     if batch_shape is None:
         batch_shape = euler_angles.shape[:-1]
 
@@ -228,7 +225,7 @@ def euler_to_quaternion(euler_angles, convention="zyx", batch_shape=None):
 
 
 def inverse_quaternion(quaternion):
-    """Compute inverse quaternion :math:`\mathbf{q}^{-1}.\n `[reference]
+    r"""Compute inverse quaternion :math:`\mathbf{q}^{-1}.\n `[reference]
     <https://github.com/KieranWynn/pyquaternion/blob
     /446c31cba66b708e8480871e70b06415c3cb3b0f/pyquaternion/quaternion.py#L473>`_
 
@@ -243,7 +240,6 @@ def inverse_quaternion(quaternion):
         Inverse quaternion *[batch_shape,4]*
 
     """
-
     # BS x 1
     sum_of_squares = ivy.sum(quaternion**2, axis=-1)
     vector_conjugate = ivy.concat(
@@ -253,7 +249,7 @@ def inverse_quaternion(quaternion):
 
 
 def get_random_quaternion(max_rot_ang=math.pi, batch_shape=None):
-    """Generate random quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`,
+    r"""Generate random quaternion :math:`\mathbf{q} = [q_i, q_j, q_k, q_r]`,
     adhering to maximum absolute rotation angle.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternion>`_
 
@@ -271,7 +267,6 @@ def get_random_quaternion(max_rot_ang=math.pi, batch_shape=None):
         Random quaternion *[batch_shape,4]*
 
     """
-
     if batch_shape is None:
         batch_shape = []
 
@@ -290,7 +285,7 @@ def get_random_quaternion(max_rot_ang=math.pi, batch_shape=None):
 
 
 def scale_quaternion_rotation_angle(quaternion, scale):
-    """Scale the rotation angle :math:`θ` of a given quaternion :math:`\mathbf{q} = [
+    r"""Scale the rotation angle :math:`θ` of a given quaternion :math:`\mathbf{q} = [
     q_i, q_j, q_k, q_r]`.\n `[reference]
     <https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions
     #Quaternions>`_
@@ -309,7 +304,6 @@ def scale_quaternion_rotation_angle(quaternion, scale):
         Quaternion with rotation angle scaled *[batch_shape,4]*
 
     """
-
     # BS x 4
     vector_and_angle = ivy_aa.quaternion_to_axis_angle(quaternion)
 
@@ -323,7 +317,8 @@ def scale_quaternion_rotation_angle(quaternion, scale):
 
 
 def hamilton_product(quaternion1, quaternion2):
-    """Compute hamilton product :math:`\mathbf{h}_p = \mathbf{q}_1 × \mathbf{q}_2` between
+    r"""Compute hamilton product
+    :math:`\mathbf{h}_p = \mathbf{q}_1 × \mathbf{q}_2` between
     :math:`\mathbf{q}_1 = [q_{1i}, q_{1j}, q_{1k}, q_{1r}]` and
     :math:`\mathbf{q}_2 = [q_{2i}, q_{2j}, q_{2k}, q_{2r}]`.\n
     `[reference] <https://en.wikipedia.org/wiki/Quaternion#Hamilton_product>`_
@@ -341,7 +336,6 @@ def hamilton_product(quaternion1, quaternion2):
         New quaternion after product *[batch_shape,4]*
 
     """
-
     # BS x 1
     a1 = quaternion1[..., 3:4]
     a2 = quaternion2[..., 3:4]

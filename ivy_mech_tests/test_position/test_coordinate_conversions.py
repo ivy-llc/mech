@@ -1,7 +1,4 @@
-"""
-Collection of tests for co-ordinate conversion functions
-"""
-
+"""Collection of tests for co-ordinate conversion functions"""
 # global
 import ivy
 import ivy_mech

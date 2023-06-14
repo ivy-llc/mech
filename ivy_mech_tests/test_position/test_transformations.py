@@ -1,7 +1,4 @@
-"""
-Collection of tests for homogeneous co-ordinate functions
-"""
-
+"""Collection of tests for homogeneous co-ordinate functions"""
 # global
 import ivy
 import ivy_mech

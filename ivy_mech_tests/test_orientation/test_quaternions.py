@@ -1,7 +1,4 @@
-"""
-Collection of tests for quaternion functions
-"""
-
+"""Collection of tests for quaternion functions"""
 # global
 import ivy
 import ivy_mech
