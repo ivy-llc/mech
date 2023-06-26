@@ -217,9 +217,8 @@ and use this to set the ivy backend framework.
 
 .. code-block:: python
 
-    import   ivy
-    from ivy_demo_utils.framework_utils import   choose_random_framework
-    ivy.set_framework(choose_random_framework())
+    import ivy
+    ivy.set_backend(ivy.choose_random_backend())
 
 **Orientation Module**
 
@@ -263,7 +262,7 @@ represent the cartesian position. Again, we give some examples below.
     position = ivy.ones_like(rot_vec)
 
     # 6
-    rot_vec_pose = ivy.concatenate((position, rot_vec), 0)
+    rot_vec_pose = ivy.concat((position, rot_vec), axis=0)
 
     # 3 x 4
     mat_pose = ivy_mech.rot_vec_pose_to_mat_pose(rot_vec_pose)
@@ -290,7 +289,7 @@ We give some examples for conversion of positional representation below.
     # conversions of positional representation
 
     # 3
-    cartesian_coord = ivy.random_uniform(0., 1., (3,))
+    cartesian_coord = ivy.random_uniform(low=0., high=1., shape=(3,))
 
     # 3
     polar_coord = ivy_mech.cartesian_to_polar_coords(
@@ -307,7 +306,7 @@ Assuming cartesian form, we give an example of a frame-of-reference transformati
     # cartesian co-ordinate frame-of-reference transformations
 
     # 3 x 4
-    trans_mat = ivy.random_uniform(0., 1., (3, 4))
+    trans_mat = ivy.random_uniform(low=0., high=1., shape=(3, 4))
 
     # 4
     cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -315,7 +314,7 @@ Assuming cartesian form, we give an example of a frame-of-reference transformati
 
     # 3
     trans_cartesian_coord = ivy.matmul(
-        trans_mat, ivy.expand_dims(cartesian_coord_homo, -1))[:, 0]
+        trans_mat, ivy.expand_dims(cartesian_coord_homo, axis=-1))[:, 0]
 
     # 4
     trans_cartesian_coord_homo = ivy_mech.make_coordinates_homogeneous(
@@ -330,7 +329,7 @@ Assuming cartesian form, we give an example of a frame-of-reference transformati
 
     # 3
     cartesian_coord_again = ivy.matmul(
-        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, -1))[:, 0]
+        inv_trans_mat, ivy.expand_dims(trans_cartesian_coord_homo, axis=-1))[:, 0]
 
 Interactive Demos
 -----------------
