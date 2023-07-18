@@ -112,7 +112,7 @@ lines = [line for line in lines if not (_is_html(line) or _is_raw_block(line))]
 long_description = "\n".join(lines)
 
 setup(
-    name="ivy_mech",
+    name="ivymech",
     version="0.0.0",
     author="Unify",
     author_email="hello@unify.ai",
