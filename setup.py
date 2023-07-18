@@ -112,19 +112,19 @@ lines = [line for line in lines if not (_is_html(line) or _is_raw_block(line))]
 long_description = "\n".join(lines)
 
 setup(
-    name="ivy-mech",
-    version="1.1.9",
-    author="Ivy Team",
-    author_email="ivydl.team@gmail.com",
+    name="ivy_mech",
+    version="0.0.0",
+    author="Unify",
+    author_email="hello@unify.ai",
     description=(
         "Mechanics functions with end-to-end support for "
         "machine learning developers, written in Ivy"
     ),
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url="https://lets-unify.ai/mech",
+    url="https://unify.ai/ivy",
     project_urls={
-        "Docs": "https://lets-unify.ai/mech/",
+        "Docs": "https://unify.ai/docs/mech/",
         "Source": "https://github.com/unifyai/mech",
     },
     packages=setuptools.find_packages(),
