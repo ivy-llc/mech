@@ -1,29 +1,22 @@
 # global
 import pytest
-from typing import Dict
 
 # local
 import ivy
-from ivy_tests.test_ivy import helpers
+import jax
+
+jax.config.update("jax_enable_x64", True)
 
 
 FW_STRS = ["numpy", "jax", "tensorflow", "torch"]
 
 
-TEST_BACKENDS: Dict[str, callable] = {
-    "numpy": lambda: helpers.globals._get_ivy_numpy(),
-    "jax": lambda: helpers.globals._get_ivy_jax(),
-    "tensorflow": lambda: helpers.globals._get_ivy_tensorflow(),
-    "torch": lambda: helpers.globals._get_ivy_torch(),
-}
-
-
 @pytest.fixture(autouse=True)
-def run_around_tests(device, f, compile_graph, fw):
+def run_around_tests(device, compile_graph, fw):
     if "gpu" in device and fw == "numpy":
         # Numpy does not support GPU
         pytest.skip()
-    with f.use:
+    with ivy.utils.backend.ContextManager(fw):
         with ivy.DefaultDevice(device):
             yield
 
@@ -39,7 +32,7 @@ def pytest_generate_tests(metafunc):
     # framework
     raw_value = metafunc.config.getoption("--backend")
     if raw_value == "all":
-        backend_strs = TEST_BACKENDS.keys()
+        backend_strs = FW_STRS
     else:
         backend_strs = raw_value.split(",")
 
@@ -57,10 +50,8 @@ def pytest_generate_tests(metafunc):
     for backend_str in backend_strs:
         for device in devices:
             for compile_graph in compile_modes:
-                configs.append(
-                    (device, TEST_BACKENDS[backend_str](), compile_graph, backend_str)
-                )
-    metafunc.parametrize("device,f,compile_graph,fw", configs)
+                configs.append((device, compile_graph, backend_str))
+    metafunc.parametrize("device,compile_graph,fw", configs)
 
 
 def pytest_addoption(parser):
