@@ -1,21 +1,11 @@
 # global
 import pytest
-from typing import Dict
 
 # local
 import ivy
-from ivy_tests.test_ivy import helpers
 
 
 FW_STRS = ["numpy", "jax", "tensorflow", "torch"]
-
-
-TEST_BACKENDS: Dict[str, callable] = {
-    "numpy": lambda: helpers.globals._get_ivy_numpy(),
-    "jax": lambda: helpers.globals._get_ivy_jax(),
-    "tensorflow": lambda: helpers.globals._get_ivy_tensorflow(),
-    "torch": lambda: helpers.globals._get_ivy_torch(),
-}
 
 
 @pytest.fixture(autouse=True)
@@ -39,7 +29,7 @@ def pytest_generate_tests(metafunc):
     # framework
     raw_value = metafunc.config.getoption("--backend")
     if raw_value == "all":
-        backend_strs = TEST_BACKENDS.keys()
+        backend_strs = FW_STRS
     else:
         backend_strs = raw_value.split(",")
 
@@ -58,7 +48,7 @@ def pytest_generate_tests(metafunc):
         for device in devices:
             for compile_graph in compile_modes:
                 configs.append(
-                    (device, TEST_BACKENDS[backend_str](), compile_graph, backend_str)
+                    (device, ivy.with_backend(backend_str), compile_graph, backend_str)
                 )
     metafunc.parametrize("device,f,compile_graph,fw", configs)
 
