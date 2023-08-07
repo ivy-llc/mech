@@ -113,7 +113,7 @@ long_description = "\n".join(lines)
 
 setup(
     name="ivy-mech",
-    version="0.0.0.dev0",
+    version="0.0.1.post0",
     author="Unify",
     author_email="hello@unify.ai",
     description=(
