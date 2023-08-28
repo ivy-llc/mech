@@ -58,7 +58,7 @@ Contents
 Overview
 --------
 
-.. _docs: https://unify.ai/docs/mech/
+.. _docs: https://lets-unify.ai/mech
 
 **What is Ivy Mechanics?**
 
