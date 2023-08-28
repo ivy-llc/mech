@@ -1,3 +1,5 @@
+.. title:: Ivy Mech
+
 .. include:: ../README.rst
 
 .. autosummary::
